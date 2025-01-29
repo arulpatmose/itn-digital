@@ -1,0 +1,9 @@
+/* Global Logo Customization */
+
+.hero-static .site-logo {
+    width: 33%;
+}
+
+#sidebar .site-logo {
+    width: 100px;
+}
