@@ -35,9 +35,13 @@
                                 <label class="form-label" for="commercial-id">Commercial ID</label>
                                 <input type="text" class="form-control" id="commercial-id" name="commercial-id" placeholder="Commercial ID" value="<?php echo $commercial['ucom_id']; ?>" disabled readonly>
                             </div>
+                            <?php
+                            $user = auth()->user();
+                            $isEditable = $user->inGroup('admin') || $user->inGroup('superadmin');
+                            ?>
                             <div class="mb-4">
                                 <label class="form-label" for="commercial-name">Commercial Name</label>
-                                <input type="text" class="form-control" id="commercial-name" name="commercial-name" placeholder="Commercial Name" value="<?php echo $commercial['name']; ?>" required>
+                                <input type="text" class="form-control" id="commercial-name" name="commercial-name" placeholder="Commercial Name" value="<?php echo $commercial['name']; ?>" required <?= $isEditable ? '' : 'disabled readonly' ?>>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="commercial-duration">Duration</label>
