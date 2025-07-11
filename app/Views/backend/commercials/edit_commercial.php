@@ -42,7 +42,7 @@
                                 ?>
                                 <div class="mb-4">
                                     <label class="form-label" for="commercial-name">Commercial Name</label>
-                                    <input type="text" class="form-control" id="commercial-name" name="commercial-name" placeholder="Commercial Name" value="<?php echo $commercial['name']; ?>" required <?= $isEditable ? '' : 'disabled readonly' ?>>
+                                    <input type="text" class="form-control" id="commercial-name" name="commercial-name" placeholder="Commercial Name" value="<?php echo $commercial['name']; ?>" required <?= $isEditable ? '' : 'readonly' ?>>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="commercial-duration">Duration</label>
