@@ -67,93 +67,80 @@
                                         </div>
                                         <div class="col-md-9 col-lg-9 col-sm-12" data-table-id="<?php echo $index + 1; ?>">
                                             <div class="table-responsive">
-                                                <table class="table table-striped table-hover w-100 daily-schedule-items-table" id="<?php echo 'data-table-' . $index + 1; ?>">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-center"></th>
-                                                            <th class="text-center"><input type="checkbox" class="form-check-input select-all" data-bs-toggle="tooltip" aria-label="Select All" data-bs-title="Select All" data-bs-placement="top"></th>
-                                                            <th class="text-center">#</th>
-                                                            <th>Commercial</th>
-                                                            <th>Format</th>
-                                                            <th>Platform</th>
-                                                            <th>Spot</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php for ($i = 0; $i < count($schedule['schedule']); $i++) { ?>
+                                                <?php foreach ($schedule['schedule'] as $platform): ?>
+                                                    <?php
+                                                    $platformNameLower = strtolower($platform['platform_name']);
+                                                    $platformIcon = match ($platformNameLower) {
+                                                        'facebook' => '<i class="fab fa-facebook"></i>',
+                                                        'youtube'  => '<i class="fab fa-youtube"></i>',
+                                                        'instagram' => '<i class="fab fa-instagram"></i>',
+                                                        'tiktok'   => '<i class="fab fa-tiktok"></i>',
+                                                        default    => '<i class="far fa-circle-question"></i>',
+                                                    };
+                                                    ?>
+                                                    <h5 class="mt-4">
+                                                        <?= $platformIcon ?>
+                                                        <?= esc($platform['platform_name']) ?> (<?= esc($platform['channel']) ?>)
+                                                    </h5>
+                                                    <table class="table table-striped table-hover w-100 daily-schedule-items-table" id="data-table-<?= $loopIndex = isset($loopIndex) ? $loopIndex + 1 : 1; ?>">
+                                                        <thead>
                                                             <tr>
-                                                                <td class="text-center">
-                                                                    <?php
-                                                                    $published = "";
-                                                                    switch ($schedule['schedule'][$i]['published']) {
-                                                                        case '0':
-                                                                            $published = '<i class="fa fa-times-circle text-danger"></i>';
-                                                                            break;
-                                                                        case '1':
-                                                                            $published = '<i class="fa fa-circle-check text-success"></i>';
-                                                                            break;
-                                                                        default:
-                                                                            $published = '';
-                                                                    }
-                                                                    echo $published;
-                                                                    ?>
-                                                                </td>
-                                                                <td class="text-center"><input type="checkbox" class="select-row form-check-input" data-id="<?php echo $schedule['schedule'][$i]['scd_id']; ?>"></td>
-                                                                <td class="text-center"><?php echo $i + 1; ?></td>
-                                                                <td>
-                                                                    <a class="link-fx text-success" data-bs-toggle="tooltip" aria-label="View Schedule" data-bs-title="View Schedule" data-bs-placement="top" href="<?php echo base_url('schedule/') . $schedule['schedule'][$i]['sched_id']; ?>"><?php echo $schedule['schedule'][$i]['commercial']; ?></a>
-                                                                    <span class="mx-1 text-gray-dark">(<?php echo $schedule['schedule'][$i]['duration']; ?>s)</span>
-                                                                    <?php if (isset($schedule['schedule'][$i]['category'])) { ?>
-                                                                        <span class="badge bg-info"><?php echo $schedule['schedule'][$i]['category']; ?></span>
-                                                                    <?php } ?>
-                                                                    <?php if (isset($schedule['schedule'][$i]['sub_category'])) { ?>
-                                                                        <span class="badge bg-success"><?php echo $schedule['schedule'][$i]['sub_category']; ?></span>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $schedule['schedule'][$i]['format']; ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php
-                                                                    $platform = "";
-                                                                    switch (strtolower($schedule['schedule'][$i]['platform'])) {
-                                                                        case 'facebook':
-                                                                            $platform = '<i class="fab fa-facebook"></i> ';
-                                                                            break;
-                                                                        case 'youtube':
-                                                                            $platform = '<i class="fab fa-youtube"></i> ';
-                                                                            break;
-                                                                        case 'instagram':
-                                                                            $platform = '<i class="fab fa-instagram"></i> ';
-                                                                            break;
-                                                                        case 'tiktok':
-                                                                            $platform = '<i class="fab fa-tiktok"></i> ';
-                                                                            break;
-                                                                        default:
-                                                                            $platform = '<i class="far fa-circle-question"></i>';
-                                                                    }
-                                                                    echo $platform;
-                                                                    ?>
-                                                                    <?php echo $schedule['schedule'][$i]['platform'] . ' (' . $schedule['schedule'][$i]['channel'] . ')'; ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $schedule['schedule'][$i]['spot']; ?>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="btn-group">
-                                                                        <a role="button" class="btn btn-sm btn-success" id="schedule-update-button" data-id="<?php echo $schedule['schedule'][$i]['scd_id']; ?>" data-url="<?php echo base_url('/daily-schedule/update/' . $schedule['schedule'][$i]['scd_id']); ?>" href="#" data-bs-toggle="tooltip" aria-label="Update Status" data-bs-title="Update Status" data-bs-placement="left">
-                                                                            <i class="fa fa-fw fa-pencil-alt"></i>
-                                                                        </a>
-                                                                        <a role="button" class="btn btn-sm btn-primary" id="reference-link-button" data-id="<?php echo $schedule['schedule'][$i]['scd_id']; ?>" href="#" data-url="<?php echo $schedule['schedule'][$i]['link']; ?>" data-bs-toggle="tooltip" aria-label="View Program" data-bs-title="View Program" data-bs-placement="right">
-                                                                            <i class="fa fa-fw fa-link"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
+                                                                <th class="text-center"></th>
+                                                                <th class="text-center">
+                                                                    <input type="checkbox" class="form-check-input select-all" data-bs-toggle="tooltip" aria-label="Select All" data-bs-title="Select All" data-bs-placement="top">
+                                                                </th>
+                                                                <th class="text-center">#</th>
+                                                                <th>Commercial</th>
+                                                                <th>Format</th>
+                                                                <th>Spot</th>
+                                                                <th>Actions</th>
                                                             </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($platform['items'] as $i => $item): ?>
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <?php
+                                                                        echo match ($item['published']) {
+                                                                            '0' => '<i class="fa fa-times-circle text-danger"></i>',
+                                                                            '1' => '<i class="fa fa-circle-check text-success"></i>',
+                                                                            default => ''
+                                                                        };
+                                                                        ?>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <input type="checkbox" class="select-row form-check-input" data-id="<?= esc($item['scd_id']) ?>">
+                                                                    </td>
+                                                                    <td class="text-center"><?= $i + 1 ?></td>
+                                                                    <td>
+                                                                        <a class="link-fx text-success" href="<?= base_url('schedule/' . $item['sched_id']) ?>" data-bs-toggle="tooltip" aria-label="View Schedule" data-bs-title="View Schedule" data-bs-placement="top">
+                                                                            <?= esc($item['commercial']) ?>
+                                                                        </a>
+                                                                        <span class="mx-1 text-gray-dark">(<?= esc($item['duration']) ?>s)</span>
+                                                                        <?php if (!empty($item['category'])): ?>
+                                                                            <span class="badge bg-info"><?= esc($item['category']) ?></span>
+                                                                        <?php endif ?>
+                                                                        <?php if (!empty($item['sub_category'])): ?>
+                                                                            <span class="badge bg-success"><?= esc($item['sub_category']) ?></span>
+                                                                        <?php endif ?>
+                                                                    </td>
+                                                                    <td><?= esc($item['format']) ?></td>
+                                                                    <td><?= esc($item['spot']) ?></td>
+                                                                    <td>
+                                                                        <div class="btn-group">
+                                                                            <a role="button" class="btn btn-sm btn-success" id="schedule-update-button" data-id="<?= esc($item['scd_id']) ?>" data-url="<?= base_url('/daily-schedule/update/' . $item['scd_id']) ?>" href="#" data-bs-toggle="tooltip" aria-label="Update Status" data-bs-title="Update Status" data-bs-placement="left">
+                                                                                <i class="fa fa-fw fa-pencil-alt"></i>
+                                                                            </a>
+                                                                            <a role="button" class="btn btn-sm btn-primary" id="reference-link-button" data-id="<?= esc($item['scd_id']) ?>" href="#" data-url="<?= esc($item['link']) ?>" data-bs-toggle="tooltip" aria-label="View Program" data-bs-title="View Program" data-bs-placement="right">
+                                                                                <i class="fa fa-fw fa-link"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; ?>
+                                                        </tbody>
+                                                    </table>
+                                                <?php endforeach; ?>
                                             </div>
                                         </div>
                                     </div>

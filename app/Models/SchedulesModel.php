@@ -178,7 +178,7 @@ class SchedulesModel extends Model
 
         if (isset($programs) && !is_null($programs)) {
             for ($i = 0; $i < count($programs); $i++) {
-                $schdule = $this->getAllSchedules($programs[$i]['prog_id'], $date, $platform);
+                $schdule = $this->getAllSchedulesGroupedByPlatform($programs[$i]['prog_id'], $date, $platform);
 
                 if (count($schdule) > 0) {
                     // Assign Schedule to the array
@@ -218,6 +218,64 @@ class SchedulesModel extends Model
         $builder->orderBy('sp.priority', 'asc');
 
         return $builder->get()->getResultArray();
+    }
+
+    public function getAllSchedulesGroupedByPlatform($program, $date, $platform = null)
+    {
+        $builder = $this->db->table('schedule_items as si');
+        $builder->select('
+        s.sched_id,
+        si.scd_id,
+        pl.pfm_id,
+        pl.name as platform_name,
+        pl.channel,
+        c.duration,
+        c.name as commercial,
+        c.category,
+        c.sub_category,
+        sp.name as spot,
+        sp.priority,
+        si.published,
+        si.link,
+        f.name as format
+    ');
+        $builder->where('s.deleted_at IS NULL', null, false);
+        $builder->where('si.deleted_at IS NULL', null, false);
+        $builder->where('si.sched_date', $date);
+        $builder->where('s.program', $program);
+
+        if ($platform !== null) {
+            $builder->where('s.platform', $platform);
+        }
+
+        $builder->join('schedules as s', 's.sched_id = si.sched_id');
+        $builder->join('commercials as c', 'c.com_id = s.commercial');
+        $builder->join('programs as p', 'p.prog_id = s.program');
+        $builder->join('spots as sp', 'sp.spot_id = si.spot');
+        $builder->join('platforms as pl', 'pl.pfm_id = s.platform');
+        $builder->join('formats as f', 'f.format_id = c.format');
+
+        $builder->orderBy('pl.pfm_id', 'asc');
+        $builder->orderBy('sp.priority', 'asc');
+
+        $results = $builder->get()->getResultArray();
+
+        $grouped = [];
+
+        foreach ($results as $item) {
+            $pfm_id = $item['pfm_id'];
+            if (!isset($grouped[$pfm_id])) {
+                $grouped[$pfm_id] = [
+                    'platform_name' => $item['platform_name'],
+                    'channel' => $item['channel'],
+                    'icon_class' => $item['icon_class'] ?? '',  // default empty if not set
+                    'items' => [],
+                ];
+            }
+            $grouped[$pfm_id]['items'][] = $item;
+        }
+
+        return $grouped;
     }
 
     public function getSchedulesForAccounts($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue = "", $filters = null)
