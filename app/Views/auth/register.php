@@ -25,8 +25,12 @@
                     <div class="block-content">
                         <div class="p-sm-3 px-lg-4 px-xxl-5 py-lg-5">
                             <a class="navbar-brand" href="<?php echo base_url(); ?>">
-                                <img class="site-logo mb-2"
-                                    src="<?php echo base_url('assets/media/logos/dark_logo.png'); ?>" alt="ITN Digital">
+                                <img class="site-logo dark-logo mb-2"
+                                    src="<?php echo base_url('assets/media/logos/dark_logo.png'); ?>"
+                                    alt="ITN Digital">
+                                <img class="site-logo light-logo mb-2"
+                                    src="<?php echo base_url('assets/media/logos/light_logo.png'); ?>"
+                                    alt="ITN Digital">
                             </a>
                             <p class="fw-medium text-muted">
                                 Welcome, please register.
@@ -80,8 +84,8 @@
                                     </div>
                                 </div>
                                 <?php if (setting('Auth.allowMagicLinkLogins')) : ?>
-                                <p class="text-center"><?= lang('Auth.haveAccount') ?> <a
-                                        href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
+                                    <p class="text-center"><?= lang('Auth.haveAccount') ?> <a
+                                            href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
                                 <?php endif ?>
                             </form>
                             <!-- END Sign In Form -->
