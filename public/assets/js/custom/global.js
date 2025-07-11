@@ -39,6 +39,51 @@ jQuery('.js-rangeslider:not(.js-rangeslider-enabled)').each((index, element) => 
     });
 });
 
+/**
+ * Handles dynamic logo switching based on the current theme (dark or light).
+ * 
+ * This script:
+ * - Selects the HTML root element and logo elements (dark and light variants).
+ * - Defines a function to toggle the visibility of the logos depending on whether
+ *   the page is in dark mode (by checking for the "dark" class on <html>).
+ * - Executes the logo toggle function on page load.
+ * - Observes changes to the <html> element's class attribute to dynamically
+ *   switch logos when the theme is toggled via JavaScript.
+ * 
+ * Dependencies:
+ * - jQuery
+ * 
+ * Usage:
+ * Ensure the page has `.dark-logo` and `.light-logo` elements,
+ * and that theme switching applies/removes the `dark` class on the `<html>` tag.
+ */
+
+$(document).ready(function () {
+    const $html = $("html"); // Select the <html> element
+    const $darkLogo = $(".dark-logo"); // Select the dark logo
+    const $lightLogo = $(".light-logo"); // Select the light logo
+
+    // Function to toggle logo visibility
+    const updateLogoVisibility = function () {
+        if ($html.hasClass("dark")) {
+            $darkLogo.show(); // Show dark logo
+            $lightLogo.hide(); // Hide light logo
+        } else {
+            $darkLogo.hide(); // Hide dark logo
+            $lightLogo.show(); // Show light logo
+        }
+    };
+
+    // Run on page load
+    updateLogoVisibility();
+
+    // Optional: Monitor class changes dynamically if theme switching is done via JavaScript
+    const observer = new MutationObserver(function () {
+        updateLogoVisibility();
+    });
+
+    observer.observe($html[0], { attributes: true, attributeFilter: ["class"] });
+});
 
 /*
  * Bootstrap Tooltip, for more examples you can check out https://getbootstrap.com/docs/5.0/components/tooltips/
