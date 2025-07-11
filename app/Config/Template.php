@@ -128,126 +128,152 @@ class Template extends BaseConfig
     // public $main_nav_active            = basename($_SERVER['PHP_SELF']);
 
     // You can use the following array to create your main menu
-    public $main_nav                   = array(
+    public $main_nav = array(
         array(
-            'name'  => 'Dashboard',
-            'icon'  => 'si si-speedometer',
-            'url'   => ''
+            'name'       => 'Dashboard',
+            'icon'       => 'si si-speedometer',
+            'url'        => '',
+            'permission' => 'dashboard.access',
         ),
         array(
-            'name'  => 'Schedules',
-            'icon'  => 'si si-calendar',
-            'sub'    => array(
+            'name'       => 'Schedules',
+            'icon'       => 'si si-calendar',
+            'permission' => 'schedules.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Schedules',
-                    'url'   => 'schedules'
+                    'name'       => 'All Schedules',
+                    'url'        => 'schedules',
+                    'permission' => 'schedules.access',
                 ),
                 array(
-                    'name'  => 'Add Schedule',
-                    'url'   => 'schedules/add'
+                    'name'       => 'Add Schedule',
+                    'url'        => 'schedules/add',
+                    'permission' => 'schedules.create',
                 )
             )
         ),
         array(
-            'name'  => 'Clients',
-            'icon'  => 'si si-users',
-            'sub'    => array(
+            'name'       => 'Clients',
+            'icon'       => 'si si-users',
+            'permission' => 'clients.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Clients',
-                    'url'   => 'clients'
+                    'name'       => 'All Clients',
+                    'url'        => 'clients',
+                    'permission' => 'clients.access',
                 ),
                 array(
-                    'name'  => 'Add Client',
-                    'url'   => 'clients/add'
+                    'name'       => 'Add Client',
+                    'url'        => 'clients/add',
+                    'permission' => 'clients.create',
                 )
             )
         ),
         array(
-            'name'  => 'Programs',
-            'icon'  => 'fa fa-display',
-            'sub'    => array(
+            'name'       => 'Programs',
+            'icon'       => 'fa fa-display',
+            'permission' => 'programs.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Programs',
-                    'url'   => 'programs'
+                    'name'       => 'All Programs',
+                    'url'        => 'programs',
+                    'permission' => 'programs.access',
                 ),
                 array(
-                    'name'  => 'Add Program',
-                    'url'   => 'programs/add'
+                    'name'       => 'Add Program',
+                    'url'        => 'programs/add',
+                    'permission' => 'programs.create',
                 )
             )
         ),
         array(
-            'name'  => 'Ad Spots',
-            'icon'  => 'si si-target',
-            'sub'    => array(
+            'name'       => 'Ad Spots',
+            'icon'       => 'si si-target',
+            'permission' => 'spots.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Spots',
-                    'url'   => 'spots'
+                    'name'       => 'All Spots',
+                    'url'        => 'spots',
+                    'permission' => 'spots.access',
                 ),
                 array(
-                    'name'  => 'Add Spot',
-                    'url'   => 'spots/add'
+                    'name'       => 'Add Spot',
+                    'url'        => 'spots/add',
+                    'permission' => 'spots.create',
                 )
             )
         ),
         array(
-            'name'  => 'Ad Formats',
-            'icon'  => 'si si-list',
-            'sub'    => array(
+            'name'       => 'Ad Formats',
+            'icon'       => 'si si-list',
+            'permission' => 'formats.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Formats',
-                    'url'   => 'formats'
+                    'name'       => 'All Formats',
+                    'url'        => 'formats',
+                    'permission' => 'formats.access',
                 ),
                 array(
-                    'name'  => 'Add Format',
-                    'url'   => 'formats/add'
+                    'name'       => 'Add Format',
+                    'url'        => 'formats/add',
+                    'permission' => 'formats.create',
                 )
             )
         ),
         array(
-            'name'  => 'Platforms',
-            'icon'  => 'si si-social-youtube',
-            'sub'    => array(
+            'name'       => 'Platforms',
+            'icon'       => 'si si-social-youtube',
+            'permission' => 'platforms.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Platforms',
-                    'url'   => 'platforms'
+                    'name'       => 'All Platforms',
+                    'url'        => 'platforms',
+                    'permission' => 'platforms.access',
                 ),
                 array(
-                    'name'  => 'Add Platform',
-                    'url'   => 'platforms/add'
+                    'name'       => 'Add Platform',
+                    'url'        => 'platforms/add',
+                    'permission' => 'platforms.create',
                 )
             )
         ),
         array(
-            'name'  => 'Ads',
-            'icon'  => 'fas fa-ad',
-            'sub'    => array(
+            'name'       => 'Ads',
+            'icon'       => 'fas fa-ad',
+            'permission' => 'commercials.access',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Ads',
-                    'url'   => 'commercials'
+                    'name'       => 'All Ads',
+                    'url'        => 'commercials',
+                    'permission' => 'commercials.access',
                 ),
                 array(
-                    'name'  => 'Add Ad',
-                    'url'   => 'commercials/add'
+                    'name'       => 'Add Ad',
+                    'url'        => 'commercials/add',
+                    'permission' => 'commercials.create',
                 )
             )
         ),
         array(
-            'name'  => 'Accounts',
-            'icon'  => 'fa fa-file-invoice-dollar',
-            'url'   => 'accounts'
+            'name'       => 'Accounts',
+            'icon'       => 'fa fa-file-invoice-dollar',
+            'url'        => 'accounts',
+            'permission' => 'accounts.access',
         ),
         array(
-            'name'  => 'Users',
-            'icon'  => 'si si-user',
-            'sub'    => array(
+            'name'       => 'Users',
+            'icon'       => 'si si-user',
+            'permission' => 'users.manage-admins',
+            'sub'        => array(
                 array(
-                    'name'  => 'All Users',
-                    'url'   => 'users'
+                    'name'       => 'All Users',
+                    'url'        => 'users',
+                    'permission' => 'users.manage-admins',
                 ),
                 array(
-                    'name'  => 'Add User',
-                    'url'   => 'users/add'
+                    'name'       => 'Add User',
+                    'url'        => 'users/add',
+                    'permission' => 'users.create',
                 )
             )
         )

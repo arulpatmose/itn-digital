@@ -77,6 +77,7 @@ class AuthGroups extends ShieldAuthGroups
     public array $permissions = [
         'admin.access'          => 'Can access the sites admin area',
         'admin.settings'        => 'Can access the main site settings',
+        'dashboard.access'      => 'Can access the dashboard',
         'users.manage-admins'   => 'Can manage other admins',
         'users.create'          => 'Can create new non-admin users',
         'users.edit'            => 'Can edit existing non-admin users',
@@ -130,6 +131,7 @@ class AuthGroups extends ShieldAuthGroups
     public array $matrix = [
         'superadmin' => [
             'admin.*',
+            'dashboard.*',
             'users.*',
             'beta.*',
             'clients.*',
@@ -145,6 +147,7 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'admin' => [
             'admin.access',
+            'dashboard.*',
             'users.create',
             'users.edit',
             'users.delete',
@@ -162,6 +165,7 @@ class AuthGroups extends ShieldAuthGroups
             'beta.access',
         ],
         'webeditor' => [
+            'dashboard.*',
             'dailyschedule.*',
             'clients.access',
             'programs.access',
@@ -181,6 +185,7 @@ class AuthGroups extends ShieldAuthGroups
             'beta.access',
         ],
         'scheduler' => [
+            'dashboard.*',
             'dailyschedule.access',
             'clients.access',
             'clients.create',
@@ -200,9 +205,11 @@ class AuthGroups extends ShieldAuthGroups
             'schedules.edit'
         ],
         'accountant' => [
+            'dashboard.*',
             'accounts.*'
         ],
         'marketingex' => [
+            'dashboard.*',
             'commercials.access',
             'clients.access',
             'schedules.access',
