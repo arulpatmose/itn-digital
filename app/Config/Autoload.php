@@ -95,6 +95,8 @@ class Autoload extends AutoloadConfig
      */
     public $helpers = [
         'format_name',
-        'format_company_name'
+        'format_company_name',
+        'auth',
+        'setting'
     ];
 }
