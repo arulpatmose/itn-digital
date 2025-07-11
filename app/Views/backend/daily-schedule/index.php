@@ -59,12 +59,17 @@
                                 </div>
                                 <div class="block-content">
                                     <div class="row">
-                                        <div class="col-md-3 col-lg-3 col-sm-12">
-                                            <?php if (isset($schedule['program']['thumbnail']) && !is_null(isset($schedule['program']['thumbnail']))) { ?>
-                                                <img class="w-100 rounded animated bounceIn" alt="Program Thumbnail" src="<?php echo base_url('uploads/thumbnails/' . $schedule['program']['thumbnail']); ?>">
-                                            <?php } else { ?> <img class="w-100 rounded animated bounceIn" alt="Program Thumbnail" src="<?php echo base_url('uploads/thumbnails/No-Image-Placeholder.svg') ?>">
-                                            <?php  } ?>
+                                        <div class="col-md-3 col-lg-3 col-sm-12 position-relative">
+                                            <div class="position-sticky pb-3" style="top: 5rem;">
+                                                <img
+                                                    class="w-100 rounded animated bounceIn"
+                                                    alt="Program Thumbnail"
+                                                    src="<?= isset($schedule['program']['thumbnail']) && !empty($schedule['program']['thumbnail'])
+                                                                ? base_url('uploads/thumbnails/' . $schedule['program']['thumbnail'])
+                                                                : base_url('uploads/thumbnails/No-Image-Placeholder.svg') ?>">
+                                            </div>
                                         </div>
+
                                         <div class="col-md-9 col-lg-9 col-sm-12" data-table-id="<?php echo $index + 1; ?>">
                                             <?php foreach ($schedule['schedule'] as $platform): ?>
                                                 <?php
