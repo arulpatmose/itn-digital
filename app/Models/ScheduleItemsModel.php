@@ -78,4 +78,13 @@ class ScheduleItemsModel extends Model
 
         return $query;
     }
+
+    public function getCommentsByScheduleItem($itemId)
+    {
+        return $this->select('remarks, scd_id')
+            ->where('scd_id', $itemId)
+            ->where('remarks IS NOT NULL', null, false)
+            ->get()
+            ->getRowArray();
+    }
 }

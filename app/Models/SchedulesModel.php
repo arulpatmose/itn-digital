@@ -278,6 +278,15 @@ class SchedulesModel extends Model
         return $grouped;
     }
 
+    public function getScheduleRemarks($scheduleId)
+    {
+        return $this->select('remarks, sched_id')
+            ->where('sched_id', $scheduleId)
+            ->where('remarks IS NOT NULL', null, false)
+            ->get()
+            ->getRowArray();
+    }
+
     public function getSchedulesForAccounts($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue = "", $filters = null)
     {
         $data = array();

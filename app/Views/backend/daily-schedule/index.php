@@ -134,10 +134,40 @@
                                                                     <td><?= esc($item['spot']) ?></td>
                                                                     <td>
                                                                         <div class="btn-group">
-                                                                            <a role="button" class="btn btn-sm btn-success" id="schedule-update-button" data-id="<?= esc($item['scd_id']) ?>" data-url="<?= base_url('/daily-schedule/update/' . $item['scd_id']) ?>" href="#" data-bs-toggle="tooltip" aria-label="Update Status" data-bs-title="Update Status" data-bs-placement="left">
+                                                                            <a role="button"
+                                                                                class="btn btn-sm btn-success"
+                                                                                id="schedule-update-button"
+                                                                                data-id="<?= esc($item['scd_id']) ?>"
+                                                                                data-url="<?= base_url('/daily-schedule/update/' . $item['scd_id']) ?>"
+                                                                                href="#"
+                                                                                data-bs-toggle="tooltip"
+                                                                                aria-label="Update Status"
+                                                                                data-bs-title="Update Status"
+                                                                                data-bs-placement="left">
                                                                                 <i class="fa fa-fw fa-pencil-alt"></i>
                                                                             </a>
-                                                                            <a role="button" class="btn btn-sm btn-primary" id="reference-link-button" data-id="<?= esc($item['scd_id']) ?>" href="#" data-url="<?= esc($item['link']) ?>" data-bs-toggle="tooltip" aria-label="View Program" data-bs-title="View Program" data-bs-placement="right">
+
+                                                                            <a role="button"
+                                                                                class="btn btn-sm btn-warning"
+                                                                                id="view-comments-button"
+                                                                                data-schedule-id="<?= esc($item['sched_id']) ?>"
+                                                                                data-schedule-item-id="<?= esc($item['scd_id']) ?>"
+                                                                                href="#"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewCommentsModal">
+                                                                                <i class="fa fa-fw fa-comments"></i>
+                                                                            </a>
+
+                                                                            <a role="button"
+                                                                                class="btn btn-sm btn-primary"
+                                                                                id="reference-link-button"
+                                                                                data-id="<?= esc($item['scd_id']) ?>"
+                                                                                href="#"
+                                                                                data-url="<?= esc($item['link']) ?>"
+                                                                                data-bs-toggle="tooltip"
+                                                                                aria-label="View Program"
+                                                                                data-bs-title="View Program"
+                                                                                data-bs-placement="right">
                                                                                 <i class="fa fa-fw fa-link"></i>
                                                                             </a>
                                                                         </div>
@@ -169,7 +199,7 @@
 
 <!-- Schedule Update Form Block Modal -->
 <div class="modal fade" id="schedule-update-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-popin" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-popin" role="document">
         <div class="modal-content">
             <div class="block block-rounded block-transparent mb-0">
                 <div class="block-header block-header-default">
@@ -201,6 +231,92 @@
     </div>
 </div>
 <!-- END Schedule Update Form Block Modal -->
+
+<!-- View Comments Modal -->
+<div class="modal fade" id="viewCommentsModal" tabindex="-1" aria-labelledby="viewCommentsModalLabel" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-popin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewCommentsModalLabel">Remarks & Comments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Schedule Remarks -->
+                <h6 class="fw-bold mb-2">📝 Schedule Remarks</h6>
+                <ul class="list-group text-start" id="schedule-remarks-list"></ul>
+                <div class="text-muted text-center py-2 d-none" id="no-schedule-remarks-msg">
+                    No remarks added for this schedule.
+                </div>
+                <hr class="my-2">
+                <!-- Schedule Item Comments -->
+                <h6 class="fw-bold mb-2">💬 Item-Specific Comments</h6>
+                <ul class="list-group text-start" id="schedule-item-comments-list"></ul>
+                <div class="text-muted text-center py-2 d-none" id="no-item-comments-msg">
+                    No comments for this schedule item.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END View Comments Modal -->
+<?= $this->endSection() ?>
+
+<?= $this->section('other-scripts') ?>
+<script>
+    $(document).on('click', '#view-comments-button', function(e) {
+        e.preventDefault();
+
+        const button = $(this);
+        const scheduleId = button.data('schedule-id');
+        const scheduleItemId = button.data('schedule-item-id');
+
+        // Elements
+        const remarksList = $('#schedule-remarks-list').empty();
+        const itemCommentsList = $('#schedule-item-comments-list').empty();
+
+        $('#no-schedule-remarks-msg, #no-item-comments-msg').addClass('d-none');
+
+        $.ajax({
+            url: '<?= base_url('daily-schedule/fetch-comments') ?>',
+            method: 'POST',
+            data: {
+                schedule_id: scheduleId,
+                item_id: scheduleItemId
+            },
+            dataType: 'json',
+            success: function(res) {
+                // Render schedule remarks
+                if (res.schedule_remarks) {
+                    remarksList.append(
+                        `<div class="text-muted text-center py-2">${res.schedule_remarks}</div>`
+                    );
+                } else {
+                    $('#no-schedule-remarks-msg').removeClass('d-none');
+                }
+
+                // Render item comments
+                if (res.item_comments) {
+                    itemCommentsList.append(
+                        `<div class="text-muted text-center py-2">${res.item_comments}</div>`
+                    );
+                } else {
+                    $('#no-item-comments-msg').removeClass('d-none');
+                }
+
+                $('#viewCommentsModal').modal('show');
+            },
+            error: function(xhr) {
+                toast.fire({
+                    title: 'Failed',
+                    icon: 'error',
+                    html: xhr.responseJSON?.message || 'Something went wrong.',
+                    showCancelButton: false,
+                    showConfirmButton: true
+                }).then(() => window.location.reload());
+            }
+        });
+    });
+</script>
 <?= $this->endSection() ?>
 
 <?= $this->section('other-styles') ?>
