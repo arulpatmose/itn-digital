@@ -6,7 +6,6 @@ var _SearchQuery = uri.query();
 var _PathName = uri.pathname();
 
 // Function to check if the URL is Valid
-
 function IsURL(url) {
     const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
     return urlPattern.test(url);
@@ -85,6 +84,25 @@ $(document).ready(function () {
     observer.observe($html[0], { attributes: true, attributeFilter: ["class"] });
 });
 
+/**
+ * Clears the saved DataTable state from localStorage and reloads the table via AJAX,
+ * resetting pagination to the first page.
+ *
+ * @param {string} tableId - The ID of the DataTable to clear state and reload.
+ *
+ * @example
+ * // Clear and reload a table with ID 'example-table', resetting to first page
+ * clearStateAndReload('example-table');
+ */
+function clearStateAndReload(tableId) {
+    if (jQuery('#' + tableId).length) {
+        const stateKey = 'DataTables_' + window.location.pathname + '_' + tableId;
+        localStorage.removeItem(stateKey);
+        // Reload and reset pagination (true)
+        jQuery('#' + tableId).DataTable().ajax.reload(null, true);
+    }
+}
+
 /*
  * Bootstrap Tooltip, for more examples you can check out https://getbootstrap.com/docs/5.0/components/tooltips/
  *
@@ -96,7 +114,6 @@ $(document).ready(function () {
  * <button type="button" class="btn btn-primary js-bs-tooltip" title="Tooltip Text">Example</button>
  *
  */
-
 function bsTooltip() {
     let elements = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]:not(.js-bs-tooltip-enabled), .js-bs-tooltip:not(.js-bs-tooltip-enabled)'));
 
@@ -129,7 +146,6 @@ function bsTooltip() {
  */
 
 // Select2 for Commercials
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-commercial').length) {
         let el = jQuery('#schedule-commercial');
@@ -191,7 +207,6 @@ jQuery(document).ready(function () {
 });
 
 // Select2 for Spots on Schedules
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-spot').length) {
         let el = jQuery('#schedule-spot');
@@ -222,7 +237,6 @@ jQuery(document).ready(function () {
 });
 
 // Select2 for Spots on Platform
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-platform').length) {
         let el = jQuery('#schedule-platform');
@@ -235,7 +249,6 @@ jQuery(document).ready(function () {
 });
 
 // Select2 for Commercials on Schedules
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-filters-commercial').length) {
         let el = jQuery('#schedule-filters-commercial');
@@ -263,19 +276,12 @@ jQuery(document).ready(function () {
                 allowClear: true
             }
         }).on('change', function (e) {
-            if (jQuery('#table-schedules').length) {
-                jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-            }
-
-            if (jQuery('#table-schedule-budget').length) {
-                jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-            }
+            clearStateAndReload('table-schedules');
         });
     }
 });
 
 // Select2 for Programs on Schedules
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-filters-program').length) {
         let el = jQuery('#schedule-filters-program');
@@ -303,19 +309,12 @@ jQuery(document).ready(function () {
                 allowClear: true
             }
         }).on('change', function (e) {
-            if (jQuery('#table-schedules').length) {
-                jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-            }
-
-            if (jQuery('#table-schedule-budget').length) {
-                jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-            }
+            clearStateAndReload('table-schedules');
         });
     }
 });
 
 // Select2 for Clients on Schedules
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-filters-client').length) {
         let el = jQuery('#schedule-filters-client');
@@ -343,19 +342,12 @@ jQuery(document).ready(function () {
                 allowClear: true
             }
         }).on('change', function (e) {
-            if (jQuery('#table-schedules').length) {
-                jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-            }
-
-            if (jQuery('#table-schedule-budget').length) {
-                jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-            }
+            clearStateAndReload('table-schedules');
         });
     }
 });
 
 // Select2 for Platforms on Schedules
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-filters-platform').length) {
         let el = jQuery('#schedule-filters-platform');
@@ -365,13 +357,7 @@ jQuery(document).ready(function () {
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             minimumResultsForSearch: -1
         }).on('change', function (e) {
-            if (jQuery('#table-schedules').length) {
-                jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-            }
-
-            if (jQuery('#table-schedule-budget').length) {
-                jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-            }
+            clearStateAndReload('table-schedules');
 
             if (jQuery('#daily-schedule-items-wrapper').length) {
                 window.location.href = URI().setSearch('platform', el.find(":selected").val());
@@ -381,7 +367,6 @@ jQuery(document).ready(function () {
 });
 
 // Select2 for Formats on Schedules
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-filters-format').length) {
         let el = jQuery('#schedule-filters-format');
@@ -391,19 +376,12 @@ jQuery(document).ready(function () {
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             minimumResultsForSearch: -1
         }).on('change', function (e) {
-            if (jQuery('#table-schedules').length) {
-                jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-            }
-
-            if (jQuery('#table-schedule-budget').length) {
-                jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-            }
+            clearStateAndReload('table-schedules');
         });
     }
 });
 
 // Select2 for Spots on Platform
-
 jQuery(document).ready(function () {
     if (jQuery('#commercial-client').length) {
         let el = jQuery('#commercial-client');
@@ -425,7 +403,6 @@ jQuery(document).ready(function () {
  * <input type="text" class="js-flatpickr form-control">
  *
  */
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-dates').length) {
         let el = jQuery('#schedule-dates');
@@ -470,13 +447,7 @@ jQuery(document).ready(function () {
         const fp = document.querySelector("#schedule-date-range")._flatpickr;
 
         fp.config.onClose.push(function (data) {
-            if (jQuery('#table-schedules').length) {
-                jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-            }
-
-            if (jQuery('#table-schedule-budget').length) {
-                jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-            }
+            clearStateAndReload('table-schedules');
         });
     }
 });
@@ -505,7 +476,6 @@ jQuery(document).ready(function () {
 });
 
 // Flatpickr on Schedule Items Add Page
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-item-dates').length) {
         let el = jQuery('#schedule-item-dates');
@@ -527,7 +497,6 @@ jQuery(document).ready(function () {
 });
 
 // Trigger Search on Schedule Search Fitler Input Key Up
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-filters-schedule').length) {
         let keyupTimer;
@@ -541,30 +510,16 @@ jQuery(document).ready(function () {
 });
 
 // Clear Input on Click
-
 function clearInput(target) {
     document.getElementById(target).value = "";
-    if (jQuery('#table-schedules').length) {
-        jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-    }
-
-    if (jQuery('#table-schedule-budget').length) {
-        jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-    }
+    clearStateAndReload('table-schedules');
 }
 
 // Clear Selection on Click
-
 function clearSelection(target) {
     var el = document.getElementById(target);
     jQuery(el).val(null).trigger("change");
-    if (jQuery('#table-schedules').length) {
-        jQuery('#table-schedules').DataTable().ajax.reload(null, false);
-    }
-
-    if (jQuery('#table-schedule-budget').length) {
-        jQuery('#table-schedule-budget').DataTable().ajax.reload(null, false);
-    }
+    clearStateAndReload('table-schedules');
 }
 
 // Formatting Schedule Extra Data function for row details - modify as you need
@@ -598,7 +553,6 @@ function formatScheduleExtra(d) {
 }
 
 // Auto Calculate Schedule Budget 
-
 jQuery(document).ready(function () {
     if (jQuery('#schedule-dates').length) {
         const flp = document.querySelector("#schedule-dates")._flatpickr;
@@ -654,7 +608,6 @@ jQuery(document).ready(function ($) {
 
 
 // Handle Go Back funtion for Table Go Back Button
-
 function goBack() {
     window.history.back();
 }
