@@ -28,7 +28,8 @@
 
         <!-- Close Side Overlay -->
         <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-        <a class="ms-auto btn btn-sm btn-alt-danger" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_close">
+        <a class="ms-auto btn btn-sm btn-alt-danger" href="javascript:void(0)" data-toggle="layout"
+            data-action="side_overlay_close">
             <i class="fa fa-fw fa-times"></i>
         </a>
         <!-- END Close Side Overlay -->
@@ -41,28 +42,33 @@
         <div class="block block-transparent pull-x pull-t">
             <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
                 <li class="nav-item">
-                    <button type="button" class="nav-link active" id="so-overview-tab" data-bs-toggle="tab" data-bs-target="#so-overview" role="tab" aria-controls="so-overview" aria-selected="true">
+                    <button type="button" class="nav-link active" id="so-overview-tab" data-bs-toggle="tab"
+                        data-bs-target="#so-overview" role="tab" aria-controls="so-overview" aria-selected="true">
                         <i class="fa fa-fw fa-coffee text-gray opacity-75 me-1"></i> Overview
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link" id="so-sales-tab" data-bs-toggle="tab" data-bs-target="#so-sales" role="tab" aria-controls="so-sales" aria-selected="false">
+                    <button type="button" class="nav-link" id="so-sales-tab" data-bs-toggle="tab"
+                        data-bs-target="#so-sales" role="tab" aria-controls="so-sales" aria-selected="false">
                         <i class="fa fa-fw fa-chart-line text-gray opacity-75 me-1"></i> Sales
                     </button>
                 </li>
             </ul>
             <div class="block-content tab-content overflow-hidden">
                 <!-- Overview Tab -->
-                <div class="tab-pane pull-x fade fade-left show active" id="so-overview" role="tabpanel" aria-labelledby="so-overview-tab" tabindex="0">
+                <div class="tab-pane pull-x fade fade-left show active" id="so-overview" role="tabpanel"
+                    aria-labelledby="so-overview-tab" tabindex="0">
                     <!-- Activity -->
                     <div class="block block-transparent">
                         <div class="block-header block-header-default">
                             <h3 class="block-title">Recent Activity</h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                <button type="button" class="btn-block-option" data-toggle="block-option"
+                                    data-action="state_toggle" data-action-mode="demo">
                                     <i class="si si-refresh"></i>
                                 </button>
-                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                                <button type="button" class="btn-block-option" data-toggle="block-option"
+                                    data-action="content_toggle"></button>
                             </div>
                         </div>
                         <div class="block-content">
@@ -115,10 +121,12 @@
                         <div class="block-header block-header-default">
                             <h3 class="block-title">Online Friends</h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                <button type="button" class="btn-block-option" data-toggle="block-option"
+                                    data-action="state_toggle" data-action-mode="demo">
                                     <i class="si si-refresh"></i>
                                 </button>
-                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                                <button type="button" class="btn-block-option" data-toggle="block-option"
+                                    data-action="content_toggle"></button>
                             </div>
                         </div>
                         <div class="block-content">
@@ -129,7 +137,8 @@
                                         <div class="me-3 ms-2 overlay-container overlay-bottom">
                                             <?php //$one->get_avatar(0, 'female', 48); 
                                             ?>
-                                            <span class="overlay-item item item-tiny item-circle border border-2 border-white bg-success"></span>
+                                            <span
+                                                class="overlay-item item item-tiny item-circle border border-2 border-white bg-success"></span>
                                         </div>
                                         <div class="flex-grow-1 fs-sm">
                                             <div class="fw-semibold"><?php //$one->get_name('female'); 
@@ -143,7 +152,8 @@
                                         <div class="me-3 ms-2 overlay-container overlay-bottom">
                                             <?php // $one->get_avatar(0, 'male', 48); 
                                             ?>
-                                            <span class="overlay-item item item-tiny item-circle border border-2 border-white bg-success"></span>
+                                            <span
+                                                class="overlay-item item item-tiny item-circle border border-2 border-white bg-success"></span>
                                         </div>
                                         <div class="flex-grow-1 fs-sm">
                                             <div class="fw-semibold"><?php //$one->get_name('male'); 
@@ -157,7 +167,8 @@
                                         <div class="me-3 ms-2 overlay-container overlay-bottom">
                                             <?php //$one->get_avatar(0, 'female', 48); 
                                             ?>
-                                            <span class="overlay-item item item-tiny item-circle border border-2 border-white bg-success"></span>
+                                            <span
+                                                class="overlay-item item item-tiny item-circle border border-2 border-white bg-success"></span>
                                         </div>
                                         <div class="flex-grow-1 fs-sm">
                                             <div class="fw-semibold"><?php //$one->get_name('female'); 
@@ -171,7 +182,8 @@
                                         <div class="me-3 ms-2 overlay-container overlay-bottom">
                                             <?php //$one->get_avatar(0, 'female', 48); 
                                             ?>
-                                            <span class="overlay-item item item-tiny item-circle border border-2 border-white bg-warning"></span>
+                                            <span
+                                                class="overlay-item item item-tiny item-circle border border-2 border-white bg-warning"></span>
                                         </div>
                                         <div class="flex-grow-1 fs-sm">
                                             <div class="fw-semibold"><?php //$one->get_name('female'); 
@@ -185,7 +197,8 @@
                                         <div class="me-3 ms-2 overlay-container overlay-bottom">
                                             <?php //$one->get_avatar(0, 'male', 48); 
                                             ?>
-                                            <span class="overlay-item item item-tiny item-circle border border-2 border-white bg-warning"></span>
+                                            <span
+                                                class="overlay-item item item-tiny item-circle border border-2 border-white bg-warning"></span>
                                         </div>
                                         <div class="flex-grow-1 fs-sm">
                                             <div class="fw-semibold"><?php //$one->get_name('male'); 
@@ -205,7 +218,8 @@
                         <div class="block-header block-header-default">
                             <h3 class="block-title">Quick Settings</h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                                <button type="button" class="btn-block-option" data-toggle="block-option"
+                                    data-action="content_toggle"></button>
                             </div>
                         </div>
                         <div class="block-content">
@@ -216,7 +230,8 @@
                                         Online Status
                                     </p>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" value="" id="so-settings-check1" name="so-settings-check1" checked>
+                                        <input class="form-check-input" type="checkbox" value="" id="so-settings-check1"
+                                            name="so-settings-check1" checked>
                                         <label class="form-check-label fs-sm" for="so-settings-check1">Show your status
                                             to all</label>
                                     </div>
@@ -226,7 +241,8 @@
                                         Auto Updates
                                     </p>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" value="" id="so-settings-check2" name="so-settings-check2" checked>
+                                        <input class="form-check-input" type="checkbox" value="" id="so-settings-check2"
+                                            name="so-settings-check2" checked>
                                         <label class="form-check-label fs-sm" for="so-settings-check2">Keep up to
                                             date</label>
                                     </div>
@@ -237,12 +253,14 @@
                                     </p>
                                     <div class="space-y-2">
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" value="" id="so-settings-check3" name="so-settings-check3" checked>
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="so-settings-check3" name="so-settings-check3" checked>
                                             <label class="form-check-label fs-sm" for="so-settings-check3">Email
                                                 Notifications</label>
                                         </div>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" value="" id="so-settings-check4" name="so-settings-check4" checked>
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="so-settings-check4" name="so-settings-check4" checked>
                                             <label class="form-check-label fs-sm" for="so-settings-check4">SMS
                                                 Notifications</label>
                                         </div>
@@ -253,7 +271,8 @@
                                         API
                                     </p>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" value="" id="so-settings-check5" name="so-settings-check5" checked>
+                                        <input class="form-check-input" type="checkbox" value="" id="so-settings-check5"
+                                            name="so-settings-check5" checked>
                                         <label class="form-check-label fs-sm" for="so-settings-check5">Enable
                                             access</label>
                                     </div>
@@ -267,7 +286,8 @@
                 <!-- END Overview Tab -->
 
                 <!-- Sales Tab -->
-                <div class="tab-pane pull-x fade fade-right" id="so-sales" role="tabpanel" aria-labelledby="so-sales-tab" tabindex="0">
+                <div class="tab-pane pull-x fade fade-right" id="so-sales" role="tabpanel"
+                    aria-labelledby="so-sales-tab" tabindex="0">
                     <div class="block block-transparent mb-0">
                         <!-- Stats -->
                         <div class="block-content">
