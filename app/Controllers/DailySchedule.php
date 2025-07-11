@@ -15,73 +15,77 @@ class DailySchedule extends BaseController
             $status = 'error';
             $message = 'You do not have permissions to access that page!';
             return redirect()->back()->with($status, $message);
-        } else {
-            // Prepare Data for Filter
-            $filterData = array();
-
-            // Access the request service
-            $request = service('request');
-
-            // Retrieve a URL parameter named 'platform'
-            $platform = $request->getGet('platform');
-
-            // Check if the 'platform' parameter exists and is valid
-            if ($platform !== null && is_numeric($platform) && $platform > 0) {
-                $filterData['platform'] = $platform;
-                $data['selectedPlatform'] = $platform;
-            } else {
-                $filterData['platform'] = NULL;
-                $data['selectedPlatform'] = NULL;
-            }
-
-            $router = service('router');
-            $data['controller'] = class_basename($router->controllerName());
-            $data['method'] = $router->methodName();
-
-            if (isset($date) && !is_null($date) && $this->validateDate($date, 'Y-m-d')) {
-                $filterData['date'] = $date;
-            } else {
-                $filterData['date'] = date('Y-m-d');
-            }
-
-            $scheduleModel = new SchedulesModel();
-            $platformsModel = new PlatformsModel();
-
-            $data['date'] = $filterData['date'];
-            $data['schedule_date'] = date("l jS \of F Y", strtotime($filterData['date']));
-
-            $data['schedules'] = $scheduleModel->getDailySchedule($filterData);
-            $data['platforms'] = $platformsModel->select('pfm_id as id, name, channel')->findAll();
-
-            $data['page_title'] = "Daily Commercial Schedule";
-            $data['page_description'] = "Timed placements for diverse viewer engagement.";
-
-            return view('backend/daily-schedule/index', $data);
         }
+
+        // Prepare Data for Filter
+        $filterData = array();
+
+        // Access the request service
+        $request = service('request');
+
+        // Retrieve a URL parameter named 'platform'
+        $platform = $request->getGet('platform');
+
+        // Check if the 'platform' parameter exists and is valid
+        if ($platform !== null && is_numeric($platform) && $platform > 0) {
+            $filterData['platform'] = $platform;
+            $data['selectedPlatform'] = $platform;
+        } else {
+            $filterData['platform'] = NULL;
+            $data['selectedPlatform'] = NULL;
+        }
+
+        $router = service('router');
+        $data['controller'] = class_basename($router->controllerName());
+        $data['method'] = $router->methodName();
+
+        if (isset($date) && !is_null($date) && $this->validateDate($date, 'Y-m-d')) {
+            $filterData['date'] = $date;
+        } else {
+            $filterData['date'] = date('Y-m-d');
+        }
+
+        $scheduleModel = new SchedulesModel();
+        $platformsModel = new PlatformsModel();
+
+        $data['date'] = $filterData['date'];
+        $data['schedule_date'] = date("l jS \of F Y", strtotime($filterData['date']));
+
+        $data['schedules'] = $scheduleModel->getDailySchedule($filterData);
+        $data['platforms'] = $platformsModel->select('pfm_id as id, name, channel')->findAll();
+
+        $data['page_title'] = "Daily Commercial Schedule";
+        $data['page_description'] = "Timed placements for diverse viewer engagement.";
+
+        return view('backend/daily-schedule/index', $data);
     }
 
     public function edit($id)
     {
         if (!auth()->user()->can('dailyschedule.edit')) {
-            $code = 0;
-            $message = 'You do not have permissions to access that page!';
+            $status = 'error';
+            $message = 'You do not have permissions to access this page!';
 
-            echo json_encode([$code => 0, 'message' => $message]);
-        } else {
-            if ($this->request->isAjax()) {
-                if (isset($id) && !is_null($id)) {
-                    $scheduleItemsModel = new ScheduleItemsModel();
+            return $this->response->setStatusCode(400)
+                ->setJSON([
+                    'status' => $status,
+                    'message' => $message
+                ]);
+        }
 
-                    $schedule = $scheduleItemsModel->find($id);
+        if ($this->request->isAjax()) {
+            if (isset($id) && !is_null($id)) {
+                $scheduleItemsModel = new ScheduleItemsModel();
 
-                    $data = [
-                        "link" => $schedule['link'],
-                        "remarks" => $schedule['remarks']
-                    ];
+                $schedule = $scheduleItemsModel->find($id);
 
-                    if (isset($data)) {
-                        return $this->response->setJSON($data);
-                    }
+                $data = [
+                    "link" => $schedule['link'],
+                    "remarks" => $schedule['remarks']
+                ];
+
+                if (isset($data)) {
+                    return $this->response->setJSON($data);
                 }
             }
         }
@@ -90,132 +94,189 @@ class DailySchedule extends BaseController
     public function update($id)
     {
         if (!auth()->user()->can('dailyschedule.edit')) {
-            $code = 0;
-            $message = 'You do not have permissions to access that page!';
+            $status = 'error';
+            $message = 'You do not have permissions to access this page!';
 
-            echo json_encode([$code => 0, 'message' => $message]);
-        } else {
-            if ($this->request->isAjax()) {
-                $scheduleItemsModel = new ScheduleItemsModel();
-                $schedulesModel = new SchedulesModel();
+            return $this->response->setStatusCode(400)
+                ->setJSON([
+                    'status' => $status,
+                    'message' => $message
+                ]);
+        }
 
-                $currentItem = $scheduleItemsModel->find($id);
+        if ($this->request->isAjax()) {
+            $scheduleItemsModel = new ScheduleItemsModel();
+            $schedulesModel = new SchedulesModel();
 
-                $link = trim($this->request->getVar('schedule-link'));
-                $remarks = trim($this->request->getVar('schedule-remarks'));
-                $published = !empty($link) ? 1 : 0;
-                $updatedBy = !empty($link) ? auth()->id() : 0;
+            $currentItem = $scheduleItemsModel->find($id);
 
-                // Prepare data to update
-                $data = [
-                    "link" => $link,
-                    "remarks" => $remarks,
-                    "published" => $published,
-                    "updated_by" => $updatedBy
-                ];
+            $link = trim($this->request->getVar('schedule-link'));
+            $remarks = trim($this->request->getVar('schedule-remarks'));
+            $published = !empty($link) ? 1 : 0;
+            $updatedBy = !empty($link) ? auth()->id() : 0;
 
-                // Insert into database
-                if ($scheduleItemsModel->update($id, $data, false)) {
-                    $data = array(
-                        'status' => 'success'
-                    );
+            // Prepare data to update
+            $data = [
+                "link" => $link,
+                "remarks" => $remarks,
+                "published" => $published,
+                "updated_by" => $updatedBy
+            ];
 
-                    // Check if all items have been published and update the Schedule as Published or Unpublished
-                    $items = $scheduleItemsModel->getScheduleItems($currentItem['sched_id']);
+            // Insert into database
+            if ($scheduleItemsModel->update($id, $data, false)) {
+                $data = array(
+                    'status' => 'success'
+                );
 
-                    $uniqueIDColumn = 'sched_id';
-                    $valueColumn = 'published';
+                // Check if all items have been published and update the Schedule as Published or Unpublished
+                $items = $scheduleItemsModel->getScheduleItems($currentItem['sched_id']);
 
-                    if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
-                        $scheduleStatus = [
-                            "published" => 1
-                        ];
+                $uniqueIDColumn = 'sched_id';
+                $valueColumn = 'published';
 
-                        $schedulesModel->update($currentItem['sched_id'], $scheduleStatus, false);
-                    } else {
-                        $scheduleStatus = [
-                            "published" => 0
-                        ];
+                if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
+                    $scheduleStatus = [
+                        "published" => 1
+                    ];
 
-                        $schedulesModel->update($currentItem['sched_id'], $scheduleStatus, false);
-                    }
+                    $schedulesModel->update($currentItem['sched_id'], $scheduleStatus, false);
                 } else {
-                    $data = array(
-                        'status' => 'error'
-                    );
-                }
+                    $scheduleStatus = [
+                        "published" => 0
+                    ];
 
-                return $this->response->setJSON($data);
+                    $schedulesModel->update($currentItem['sched_id'], $scheduleStatus, false);
+                }
+            } else {
+                $data = array(
+                    'status' => 'error'
+                );
             }
+
+            return $this->response->setJSON($data);
         }
     }
 
     public function updateBulk()
     {
         if (!auth()->user()->can('dailyschedule.edit')) {
-            $code = 0;
-            $message = 'You do not have permissions to access that page!';
+            $status = 'error';
+            $message = 'You do not have permissions to access this page!';
 
-            echo json_encode([$code => 0, 'message' => $message]);
-        } else {
-            if ($this->request->isAjax()) {
-                $scheduleItemsModel = new ScheduleItemsModel();
-                $schedulesModel = new SchedulesModel();
+            return $this->response->setStatusCode(400)
+                ->setJSON([
+                    'status' => $status,
+                    'message' => $message
+                ]);
+        }
 
-                $ids = $this->request->getPost('ids'); // Get array of IDs from POST request
-                $link = trim($this->request->getVar('schedule-link'));
-                $remarks = trim($this->request->getVar('schedule-remarks'));
-                $published = !empty($link) ? 1 : 0;
-                $updatedBy = !empty($link) ? auth()->id() : 0;
+        if ($this->request->isAjax()) {
+            $scheduleItemsModel = new ScheduleItemsModel();
+            $schedulesModel = new SchedulesModel();
 
-                // Prepare data to update
-                $data = [
-                    "link" => $link,
-                    "remarks" => $remarks,
-                    "published" => $published,
-                    "updated_by" => $updatedBy
-                ];
+            $ids = $this->request->getPost('ids'); // Get array of IDs from POST request
+            $link = trim($this->request->getVar('schedule-link'));
+            $remarks = trim($this->request->getVar('schedule-remarks'));
+            $published = !empty($link) ? 1 : 0;
+            $updatedBy = !empty($link) ? auth()->id() : 0;
 
-                $updateSuccess = true;
-                $scheduleIds = [];
+            // Prepare data to update
+            $data = [
+                "link" => $link,
+                "remarks" => $remarks,
+                "published" => $published,
+                "updated_by" => $updatedBy
+            ];
 
-                foreach ($ids as $id) {
-                    if ($scheduleItemsModel->update($id, $data, false)) {
-                        $currentItem = $scheduleItemsModel->find($id);
-                        $schedId = $currentItem['sched_id'];
-                        $scheduleIds[$schedId] = true; // Keep track of successfully updated schedule IDs
-                    } else {
-                        $updateSuccess = false;
-                        break;
-                    }
-                }
+            $updateSuccess = true;
+            $scheduleIds = [];
 
-                if ($updateSuccess) {
-                    foreach (array_keys($scheduleIds) as $schedId) {
-                        // Check if all items have been published and update the Schedule as Published or Unpublished
-                        $items = $scheduleItemsModel->getScheduleItems($schedId);
-
-                        $uniqueIDColumn = 'sched_id';
-                        $valueColumn = 'published';
-
-                        if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
-                            $scheduleStatus = ["published" => 1];
-                        } else {
-                            $scheduleStatus = ["published" => 0];
-                        }
-
-                        $schedulesModel->update($schedId, $scheduleStatus, false);
-                    }
-                    $response = ['status' => 'success'];
+            foreach ($ids as $id) {
+                if ($scheduleItemsModel->update($id, $data, false)) {
+                    $currentItem = $scheduleItemsModel->find($id);
+                    $schedId = $currentItem['sched_id'];
+                    $scheduleIds[$schedId] = true; // Keep track of successfully updated schedule IDs
                 } else {
-                    $response = ['status' => 'error'];
+                    $updateSuccess = false;
+                    break;
                 }
-
-                return $this->response->setJSON($response);
             }
+
+            if ($updateSuccess) {
+                foreach (array_keys($scheduleIds) as $schedId) {
+                    // Check if all items have been published and update the Schedule as Published or Unpublished
+                    $items = $scheduleItemsModel->getScheduleItems($schedId);
+
+                    $uniqueIDColumn = 'sched_id';
+                    $valueColumn = 'published';
+
+                    if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
+                        $scheduleStatus = ["published" => 1];
+                    } else {
+                        $scheduleStatus = ["published" => 0];
+                    }
+
+                    $schedulesModel->update($schedId, $scheduleStatus, false);
+                }
+                $response = ['status' => 'success'];
+            } else {
+                $response = ['status' => 'error'];
+            }
+
+            return $this->response->setJSON($response);
         }
     }
 
+    public function fetchComments()
+    {
+        if (!auth()->user()->can('dailyschedule.edit')) {
+            $status = 'error';
+            $message = 'You do not have permissions to access this page!';
+
+            return $this->response->setStatusCode(400)
+                ->setJSON([
+                    'status' => $status,
+                    'message' => $message
+                ]);
+        }
+
+        // Check if the request is an AJAX request
+        if ($this->request->isAJAX()) {
+            $scheduleId = $this->request->getPost('schedule_id');
+            $itemId     = $this->request->getPost('item_id');
+
+            $scheduleItemsModel = new ScheduleItemsModel();
+            $schedulesModel = new SchedulesModel();
+
+            $response = [
+                'schedule_remarks' => '',
+                'item_comments'    => ''
+            ];
+
+            // Get schedule-level remarks
+            $scheduleRemarks = $schedulesModel->getScheduleRemarks($scheduleId);
+            if (!empty($scheduleRemarks['remarks'])) {
+                $response['schedule_remarks'] = esc($scheduleRemarks['remarks']);
+            }
+
+            // Get item-level comments
+            $itemComment = $scheduleItemsModel->getCommentsByScheduleItem($itemId);
+            if (!empty($itemComment['remarks'])) {
+                $response['item_comments'] = esc($itemComment['remarks']);
+            }
+
+            return $this->response->setJSON($response);
+        }
+    }
+
+    /**
+     * Validate a date string against a specific format.
+     *
+     * @param string $date The date string to validate.
+     * @param string $format The format to validate against (default is 'Y-m-d').
+     * @return bool True if the date is valid, false otherwise.
+     */
     function validateDate($date, $format = 'Y-m-d')
     {
         $d = \DateTime::createFromFormat($format, $date);
@@ -223,6 +284,14 @@ class DailySchedule extends BaseController
         return $d && $d->format($format) === $date;
     }
 
+    /**
+     * Check if all rows with the same unique ID have the same value in a specific column.
+     *
+     * @param array $data The data to check.
+     * @param string $uniqueIDColumn The column name for unique IDs.
+     * @param string $valueColumn The column name for the value to compare.
+     * @return bool True if all rows with the same unique ID have the same value, false otherwise.
+     */
     function areAllItemsPublished($data, $uniqueIDColumn, $valueColumn)
     {
         $uniqueIDs = array(); // To store unique IDs and their associated values
