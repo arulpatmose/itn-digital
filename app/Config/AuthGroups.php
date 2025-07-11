@@ -151,6 +151,7 @@ class AuthGroups extends ShieldAuthGroups
             'beta.access',
             'schedule.*',
             'schedules.*',
+            'programs.*',
             'dailyschedule.*'
         ],
         'developer' => [
