@@ -183,7 +183,7 @@
                     </div>
                 </div>
                 <div class="block-content fs-sm">
-                    <form id="schedule-update-form" action="">
+                    <form id="schedule-update-form" action="" autocomplete="off">
                         <div class="mb-4">
                             <label class="form-label" for="schedule-link">Reference Link</label>
                             <input type="url" class="form-control" id="schedule-link" name="schedule-link" placeholder="Reference Link">
