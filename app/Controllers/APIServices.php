@@ -772,9 +772,9 @@ class APIServices extends BaseController
             $reponse = array();
 
             // Read Values
-            $draw = $dtPostData['draw'];
-            $start = $dtPostData['start'];
-            $rowsPerPage = $dtPostData['length']; // Rows Display Per Page
+            $draw = (int) $dtPostData['draw'];
+            $start = (int) $dtPostData['start'];
+            $rowsPerPage = (int) $dtPostData['length']; // Rows Display Per Page
             $columnIndex = $dtPostData['order'][0]['column'];
             $columnName = $dtPostData['columns'][$columnIndex]['data'];
             $columnSortOrder = $dtPostData['order'][0]['dir']; // asc or desc
