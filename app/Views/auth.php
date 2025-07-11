@@ -2,7 +2,7 @@
 
 $config = config('Template');
 
-$data['config']['title'] = $page_title ?? "";
+$data['config']['title'] = ($page_title ?? $config->site_title) . " | ITN Digital";
 $data['config']['og_url_site'] = base_url();
 $data['config']['author'] = $config->author;
 $data['config']['robots'] = $config->robots;
@@ -16,15 +16,38 @@ $data['config']['inc_hero'] = '';
 $data['config']['inc_side_overlay'] = '';
 $data['config']['inc_sidebar'] = '';
 
-$data['config']['page_classes'] = page_classes(false, $config);
+$data['config']['html_classes'] = html_classes($config, false);
+$data['config']['page_classes'] = page_classes($config, false);
 
-echo view('layout/head_start', $data);
-echo view('layout/head_end', $data);
-echo view('layout/page_start', $data);
-echo view('layout/page_content', $data);
-echo view('layout/page_end', $data);
-echo view('layout/footer_start', $data);
-echo view('layout/footer_scripts', $data);
+echo view('blank/master', $data);
+
+/**
+ * Builds <html> classes
+ *
+ * @param   boolean $print True to print the classes and False to return them
+ *
+ * @return  string  Returns the classes if $print is set to false
+ */
+function html_classes($config, $print = true)
+{
+    // Build <html> classes
+    $html_classes  = '';
+
+    if ($config->remember_theme) {
+        $html_classes .= ' remember-theme';
+    }
+
+    // Print or return <html> classes
+    if ($html_classes) {
+        if ($print) {
+            echo ' class="' . trim($html_classes) . '"';
+        } else {
+            return trim($html_classes);
+        }
+    } else {
+        return false;
+    }
+}
 
 /**
  * Builds #page-container classes
@@ -33,7 +56,7 @@ echo view('layout/footer_scripts', $data);
  *
  * @return  string  Returns the classes if $print is set to false
  */
-function page_classes($print = true, $config)
+function page_classes($config, $print = true)
 {
     // Build page classes
 
