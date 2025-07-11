@@ -82,7 +82,10 @@
                 ],
                 autoWidth: false,
                 responsive: true,
-                stateSave: true,
+                stateSave: false,
+                order: [
+                    [0, 'desc']
+                ],
                 columns: [{
                         data: 'com_id'
                     },
