@@ -318,4 +318,35 @@ class Users extends BaseController
             return redirect()->to('/')->with($status, $message);
         }
     }
+
+    public function restoreUser()
+    {
+        if (!auth()->user()->can('users.delete-admins')) {
+            return $this->response->setStatusCode(400)
+                ->setJSON([
+                    'status' => 'error',
+                    'message' => 'You are not allowed to do this!'
+                ]);
+        }
+
+        if ($this->request->isAjax()) {
+            $user_id = $this->request->getVar('user_id');
+
+            $userModel = new IDUserModel();
+
+            // Check if user exists and is soft deleted
+            $user = $userModel->onlyDeleted()->find($user_id);
+
+            if (!$user) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'User not found or not deleted'])->setStatusCode(404);
+            }
+
+            // Restore the user
+            if ($userModel->restoreUser($user_id)) {
+                return $this->response->setJSON(['status' => 'success', 'message' => 'User restored successfully']);
+            } else {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to restore user'])->setStatusCode(500);
+            }
+        }
+    }
 }

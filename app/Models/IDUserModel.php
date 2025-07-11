@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use CodeIgniter\Shield\Models\UserModel;
+use CodeIgniter\Shield\Models\UserModel as ShieldUserModel;
 
-class IDUserModel extends UserModel
+class IDUserModel extends ShieldUserModel
 {
-    protected $allowedFields  = [
-        'username',
-        'status',
-        'status_message',
-        'active',
-        'last_active',
-        'deleted_at',
-        'first_name',
-        'last_name'
-    ];
+    protected function initialize(): void
+    {
+        parent::initialize();
+
+        $this->allowedFields = [
+            ...$this->allowedFields,
+            'first_name',
+            'last_name',
+            'deleted_at'
+        ];
+    }
 
     public function getUsers($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue = "")
     {
@@ -63,5 +66,13 @@ class IDUserModel extends UserModel
         $data['records'] = $query->get()->getResultArray();
 
         return ($data);
+    }
+
+    // Function to restore a deleted user
+    public function restoreUser($id)
+    {
+        return $this->set('deleted_at', null)
+            ->where('id', $id)
+            ->update();
     }
 }
