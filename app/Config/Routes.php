@@ -2,8 +2,6 @@
 
 namespace Config;
 
-use App\Controllers\Programs;
-
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
@@ -33,102 +31,168 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Dashboard::index', ['as' => 'dashboard']);
 
-// Users
-$routes->get('users', 'Users::index', ['as' => 'users']);
-$routes->get('users/add', 'Users::create');
-$routes->post('users/submit', 'Users::store');
-$routes->post('users/update-profile', 'Users::updateProfile');
-$routes->post('users/update-user', 'Users::updateUser');
-$routes->post('users/update-password', 'Users::changePassword');
-$routes->post('users/update-user-password', 'Users::changeUserPassword');
-$routes->post('users/update-user-groups', 'Users::updateUserGroups');
-$routes->get('users/profile', 'Users::profile');
-$routes->get('users/edit/(:num)', 'Users::edit/$1');
-$routes->post('users/delete', 'Users::deleteUser');
+/*
+| --------------------------------------------------------------------
+| User Management Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('users', function ($routes) {
+    $routes->get('/', 'Users::index', ['as' => 'users']);
+    $routes->get('add', 'Users::create');
+    $routes->post('submit', 'Users::store');
+    $routes->post('update-profile', 'Users::updateProfile');
+    $routes->post('update-user', 'Users::updateUser');
+    $routes->post('update-password', 'Users::changePassword');
+    $routes->post('update-user-password', 'Users::changeUserPassword');
+    $routes->post('update-user-groups', 'Users::updateUserGroups');
+    $routes->get('profile', 'Users::profile');
+    $routes->get('edit/(:num)', 'Users::edit/$1');
+    $routes->post('delete', 'Users::deleteUser');
+});
 
-// Schedule
-$routes->get('schedules', 'Schedules::index', ['as' => 'schedules']);
-$routes->get('schedules/add', 'Schedules::create');
-$routes->post('schedules/submit', 'Schedules::store');
-$routes->get('schedules/edit/(:num)', 'Schedules::edit/$1');
-$routes->post('schedules/update/(:num)', 'Schedules::update/$1');
-$routes->post('schedules/delete', 'Schedules::destroy');
+/*
+| --------------------------------------------------------------------
+| Client Management Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('clients', function ($routes) {
+    $routes->get('/', 'Clients::index', ['as' => 'clients']);
+    $routes->get('add', 'Clients::create');
+    $routes->post('submit', 'Clients::store');
+    $routes->get('edit/(:num)', 'Clients::edit/$1');
+    $routes->post('update/(:num)', 'Clients::update/$1');
+    $routes->post('delete', 'Clients::destroy');
+});
 
-// Single Schedule
-$routes->get('schedule/(:num)', 'Schedule::index/$1');
-$routes->get('schedule/add/(:num)', 'Schedule::create/$1');
-$routes->post('schedule/submit/(:num)', 'Schedule::store/$1');
-$routes->post('schedule/delete', 'Schedule::destroy');
+/*
+| --------------------------------------------------------------------
+| Schedule Routes (Bulk & Individual)
+| --------------------------------------------------------------------
+*/
+$routes->group('schedules', function ($routes) {
+    $routes->get('/', 'Schedules::index', ['as' => 'schedules']);
+    $routes->get('add', 'Schedules::create');
+    $routes->post('submit', 'Schedules::store');
+    $routes->get('edit/(:num)', 'Schedules::edit/$1');
+    $routes->post('update/(:num)', 'Schedules::update/$1');
+    $routes->post('delete', 'Schedules::destroy');
+});
 
-// Programs
-$routes->get('programs', 'Programs::index', ['as' => 'programs']);
-$routes->get('programs/add', 'Programs::create');
-$routes->post('programs/submit', 'Programs::store');
-$routes->get('programs/edit/(:num)', 'Programs::edit/$1');
-$routes->post('programs/update/(:num)', 'Programs::update/$1');
-$routes->post('programs/delete', 'Programs::destroy');
+$routes->group('schedule', function ($routes) {
+    $routes->get('(:num)', 'Schedule::index/$1');
+    $routes->get('add/(:num)', 'Schedule::create/$1');
+    $routes->post('submit/(:num)', 'Schedule::store/$1');
+    $routes->post('delete', 'Schedule::destroy');
+});
 
-// Spots
-$routes->get('spots', 'Spots::index', ['as' => 'spots']);
-$routes->get('spots/add', 'Spots::create');
-$routes->post('spots/submit', 'Spots::store');
-$routes->get('spots/edit/(:num)', 'Spots::edit/$1');
-$routes->post('spots/update/(:num)', 'Spots::update/$1');
-$routes->post('spots/delete', 'Spots::destroy');
+/*
+| --------------------------------------------------------------------
+| Program Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('programs', function ($routes) {
+    $routes->get('/', 'Programs::index', ['as' => 'programs']);
+    $routes->get('add', 'Programs::create');
+    $routes->post('submit', 'Programs::store');
+    $routes->get('edit/(:num)', 'Programs::edit/$1');
+    $routes->post('update/(:num)', 'Programs::update/$1');
+    $routes->post('delete', 'Programs::destroy');
+});
 
-// Formats
-$routes->get('formats', 'Formats::index', ['as' => 'formats']);
-$routes->get('formats/add', 'Formats::create');
-$routes->post('formats/submit', 'Formats::store');
-$routes->get('formats/edit/(:num)', 'Formats::edit/$1');
-$routes->post('formats/update/(:num)', 'Formats::update/$1');
-$routes->post('formats/delete', 'Formats::destroy');
+/*
+| --------------------------------------------------------------------
+| Spot Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('spots', function ($routes) {
+    $routes->get('/', 'Spots::index', ['as' => 'spots']);
+    $routes->get('add', 'Spots::create');
+    $routes->post('submit', 'Spots::store');
+    $routes->get('edit/(:num)', 'Spots::edit/$1');
+    $routes->post('update/(:num)', 'Spots::update/$1');
+    $routes->post('delete', 'Spots::destroy');
+});
 
-// Clients
-$routes->get('clients', 'Clients::index', ['as' => 'clients']);
-$routes->get('clients/add', 'Clients::create');
-$routes->post('clients/submit', 'Clients::store');
-$routes->get('clients/edit/(:num)', 'Clients::edit/$1');
-$routes->post('clients/update/(:num)', 'Clients::update/$1');
-$routes->post('clients/delete', 'Clients::destroy');
+/*
+| --------------------------------------------------------------------
+| Format Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('formats', function ($routes) {
+    $routes->get('/', 'Formats::index', ['as' => 'formats']);
+    $routes->get('add', 'Formats::create');
+    $routes->post('submit', 'Formats::store');
+    $routes->get('edit/(:num)', 'Formats::edit/$1');
+    $routes->post('update/(:num)', 'Formats::update/$1');
+    $routes->post('delete', 'Formats::destroy');
+});
 
-// Platforms
-$routes->get('platforms', 'Platforms::index', ['as' => 'platforms']);
-$routes->get('platforms/add', 'Platforms::create');
-$routes->post('platforms/submit', 'Platforms::store');
-$routes->get('platforms/edit/(:num)', 'Platforms::edit/$1');
-$routes->post('platforms/update/(:num)', 'Platforms::update/$1');
-$routes->post('platforms/delete', 'Platforms::destroy');
+/*
+| --------------------------------------------------------------------
+| Platform Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('platforms', function ($routes) {
+    $routes->get('/', 'Platforms::index', ['as' => 'platforms']);
+    $routes->get('add', 'Platforms::create');
+    $routes->post('submit', 'Platforms::store');
+    $routes->get('edit/(:num)', 'Platforms::edit/$1');
+    $routes->post('update/(:num)', 'Platforms::update/$1');
+    $routes->post('delete', 'Platforms::destroy');
+});
 
-// Commercials
-$routes->get('commercials', 'Commercials::index', ['as' => 'commercials']);
-$routes->get('commercials/add', 'Commercials::create');
-$routes->post('commercials/submit', 'Commercials::store');
-$routes->get('commercials/edit/(:num)', 'Commercials::edit/$1');
-$routes->post('commercials/update/(:num)', 'Commercials::update/$1');
-$routes->post('commercials/delete', 'Commercials::destroy');
+/*
+| --------------------------------------------------------------------
+| Commercial (Ads) Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('commercials', function ($routes) {
+    $routes->get('/', 'Commercials::index', ['as' => 'commercials']);
+    $routes->get('add', 'Commercials::create');
+    $routes->post('submit', 'Commercials::store');
+    $routes->get('edit/(:num)', 'Commercials::edit/$1');
+    $routes->post('update/(:num)', 'Commercials::update/$1');
+    $routes->post('delete', 'Commercials::destroy');
+});
 
-// Daily Schedule
+/*
+| --------------------------------------------------------------------
+| Daily Schedule Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('daily-schedule', function ($routes) {
+    $routes->post('edit/(:num)', 'DailySchedule::edit/$1');
+    $routes->post('update/(:num)', 'DailySchedule::update/$1');
+    $routes->post('update-bulk', 'DailySchedule::updateBulk');
+    $routes->post('fetch-comments', 'DailySchedule::fetchComments');
+    $routes->get('/', 'DailySchedule::index/');
+    $routes->get('(:any)?', 'DailySchedule::index/$1');
+});
 
-$routes->post('daily-schedule/edit/(:num)', 'DailySchedule::edit/$1');
-$routes->post('daily-schedule/update/(:num)', 'DailySchedule::update/$1');
-$routes->post('daily-schedule/update-bulk', 'DailySchedule::updateBulk');
-$routes->get('daily-schedule(/:any)?', 'DailySchedule::index$1');
-
-// Accounts
+/*
+| --------------------------------------------------------------------
+| Accounts
+| --------------------------------------------------------------------
+*/
 $routes->get('accounts', 'Accounts::index', ['as' => 'accounts']);
 
-// API Services
-$routes->post('api/get-all-programs', 'APIServices::getAllPrograms');
-$routes->post('api/get-all-spots', 'APIServices::getAllSpots');
-$routes->post('api/get-all-formats', 'APIServices::getAllFormats');
-$routes->post('api/get-all-clients', 'APIServices::getAllClients');
-$routes->post('api/get-all-platforms', 'APIServices::getAllPlatforms');
-$routes->post('api/get-all-commercials', 'APIServices::getAllCommercials');
-$routes->post('api/get-select-options', 'APIServices::getSelectOptions');
-$routes->post('api/get-all-users', 'APIServices::getAllUsers');
-$routes->post('api/get-all-schedules', 'APIServices::getAllSchedules');
-$routes->post('api/get-schedules-budget', 'APIServices::getAllScheduleForAccounts');
+/*
+| --------------------------------------------------------------------
+| API Service Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('api', function ($routes) {
+    $routes->post('get-all-programs', 'APIServices::getAllPrograms');
+    $routes->post('get-all-spots', 'APIServices::getAllSpots');
+    $routes->post('get-all-formats', 'APIServices::getAllFormats');
+    $routes->post('get-all-clients', 'APIServices::getAllClients');
+    $routes->post('get-all-platforms', 'APIServices::getAllPlatforms');
+    $routes->post('get-all-commercials', 'APIServices::getAllCommercials');
+    $routes->post('get-select-options', 'APIServices::getSelectOptions');
+    $routes->post('get-all-users', 'APIServices::getAllUsers');
+    $routes->post('get-all-schedules', 'APIServices::getAllSchedules');
+    $routes->post('get-schedules-budget', 'APIServices::getAllScheduleForAccounts');
+});
 
 service('auth')->routes($routes);
 
