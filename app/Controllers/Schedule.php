@@ -271,6 +271,14 @@ class Schedule extends BaseController
         }
     }
 
+    /**
+     * Check if all rows with the same unique ID have the same value in a specific column.
+     *
+     * @param array $data The data to check.
+     * @param string $uniqueIDColumn The column name for unique IDs.
+     * @param string $valueColumn The column name for the value to compare.
+     * @return bool True if all rows with the same unique ID have the same value, false otherwise.
+     */
     function areAllItemsPublished($data, $uniqueIDColumn, $valueColumn)
     {
         $uniqueIDs = array(); // To store unique IDs and their associated values
