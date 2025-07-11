@@ -4,7 +4,7 @@ $config = config('Template');
 
 $main_nav_active = uri_string();
 
-$data['config']['title'] = $page_title . " - ITN Digital" ?? $config->site_title;
+$data['config']['title'] = ($page_title ?? $config->site_title) . " | ITN Digital";
 $data['config']['page_description'] = $page_description ?? $config->description;
 $data['config']['og_url_site'] = base_url();
 $data['config']['author'] = $config->author;
@@ -37,16 +37,39 @@ if (isset($config->inc_footer) && $config->inc_footer) {
     $data['config']['inc_footer'] = $config->inc_footer;
 }
 
-$data['config']['page_classes'] = page_classes(false, $config);
-$data['config']['main_nav'] = build_nav($config->main_nav, false, false, $main_nav_active);
+$data['config']['html_classes'] = html_classes($config, false);
+$data['config']['page_classes'] = page_classes($config, false);
+$data['config']['main_nav'] = build_nav($main_nav_active, $config->main_nav, false, false);
 
-echo view('layout/head_start', $data);
-echo view('layout/head_end', $data);
-echo view('layout/page_start', $data);
-echo view('layout/page_content', $data);
-echo view('layout/page_end', $data);
-echo view('layout/footer_start', $data);
-echo view('layout/footer_scripts', $data);
+echo view('default/master', $data);
+
+/**
+ * Builds <html> classes
+ *
+ * @param   boolean $print True to print the classes and False to return them
+ *
+ * @return  string  Returns the classes if $print is set to false
+ */
+function html_classes($config, $print = true)
+{
+    // Build <html> classes
+    $html_classes  = '';
+
+    if ($config->remember_theme) {
+        $html_classes .= ' remember-theme';
+    }
+
+    // Print or return <html> classes
+    if ($html_classes) {
+        if ($print) {
+            echo ' class="' . trim($html_classes) . '"';
+        } else {
+            return trim($html_classes);
+        }
+    } else {
+        return false;
+    }
+}
 
 /**
  * Builds #page-container classes
@@ -55,7 +78,7 @@ echo view('layout/footer_scripts', $data);
  *
  * @return  string  Returns the classes if $print is set to false
  */
-function page_classes($print = true, $config)
+function page_classes($config, $print = true)
 {
     // Build page classes
 
@@ -126,19 +149,6 @@ function page_classes($print = true, $config)
         $page_classes .= ' main-content-narrow';
     }
 
-    // Dark mode
-    if ($config->l_dark_mode) {
-        if (!$config->l_sidebar_dark) {
-            $page_classes .= ' sidebar-dark';
-        }
-
-        if (!$config->l_header_dark) {
-            $page_classes .= ' page-header-dark';
-        }
-
-        $page_classes .= ' dark-mode';
-    }
-
     // Print or return page classes
     if ($page_classes) {
         if ($print) {
@@ -160,7 +170,7 @@ function page_classes($print = true, $config)
  *
  * @return  string      Returns the navigation if $print is set to false
  */
-function build_nav($nav_array = false, $nav_horizontal = false, $print = true, $main_nav_active)
+function build_nav($main_nav_active, $nav_array = false, $nav_horizontal = false, $print = true)
 {
     // Clean navigation HTML
     $nav_html = '';
