@@ -66,22 +66,23 @@
                                             <?php  } ?>
                                         </div>
                                         <div class="col-md-9 col-lg-9 col-sm-12" data-table-id="<?php echo $index + 1; ?>">
-                                            <div class="table-responsive">
-                                                <?php foreach ($schedule['schedule'] as $platform): ?>
-                                                    <?php
-                                                    $platformNameLower = strtolower($platform['platform_name']);
-                                                    $platformIcon = match ($platformNameLower) {
-                                                        'facebook' => '<i class="fab fa-facebook"></i>',
-                                                        'youtube'  => '<i class="fab fa-youtube"></i>',
-                                                        'instagram' => '<i class="fab fa-instagram"></i>',
-                                                        'tiktok'   => '<i class="fab fa-tiktok"></i>',
-                                                        default    => '<i class="far fa-circle-question"></i>',
-                                                    };
-                                                    ?>
-                                                    <h5 class="mt-4">
-                                                        <?= $platformIcon ?>
-                                                        <?= esc($platform['platform_name']) ?> (<?= esc($platform['channel']) ?>)
-                                                    </h5>
+                                            <?php foreach ($schedule['schedule'] as $platform): ?>
+                                                <?php
+                                                $platformNameLower = strtolower($platform['platform_name']);
+                                                $platformIcon = match ($platformNameLower) {
+                                                    'facebook' => '<i class="fab fa-facebook"></i>',
+                                                    'youtube'  => '<i class="fab fa-youtube"></i>',
+                                                    'instagram' => '<i class="fab fa-instagram"></i>',
+                                                    'tiktok'   => '<i class="fab fa-tiktok"></i>',
+                                                    default    => '<i class="far fa-circle-question"></i>',
+                                                };
+                                                ?>
+                                                <h5 class="mt-4">
+                                                    <?= $platformIcon ?>
+                                                    <?= esc($platform['platform_name']) ?> (<?= esc($platform['channel']) ?>)
+                                                </h5>
+
+                                                <div class="table-responsive">
                                                     <table class="table table-striped table-hover w-100 daily-schedule-items-table" id="data-table-<?= $loopIndex = isset($loopIndex) ? $loopIndex + 1 : 1; ?>">
                                                         <thead>
                                                             <tr>
@@ -140,8 +141,8 @@
                                                             <?php endforeach; ?>
                                                         </tbody>
                                                     </table>
-                                                <?php endforeach; ?>
-                                            </div>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -195,4 +196,65 @@
     </div>
 </div>
 <!-- END Schedule Update Form Block Modal -->
+<?= $this->endSection() ?>
+
+<?= $this->section('other-styles') ?>
+<style>
+    .daily-schedule-items-table th:nth-child(1),
+    /* status icon */
+    .daily-schedule-items-table td:nth-child(1) {
+        width: 40px;
+        /* fixed small width */
+    }
+
+    .daily-schedule-items-table th:nth-child(2),
+    .daily-schedule-items-table td:nth-child(2) {
+        width: 40px;
+        /* checkbox column */
+    }
+
+    .daily-schedule-items-table th:nth-child(3),
+    .daily-schedule-items-table td:nth-child(3) {
+        width: 40px;
+        /* serial number */
+    }
+
+    .daily-schedule-items-table th:nth-child(4),
+    .daily-schedule-items-table td:nth-child(4) {
+        min-width: 220px;
+        /* commercial */
+    }
+
+    .daily-schedule-items-table th:nth-child(5),
+    .daily-schedule-items-table td:nth-child(5) {
+        width: 120px;
+        /* format */
+    }
+
+    .daily-schedule-items-table th:nth-child(6),
+    .daily-schedule-items-table td:nth-child(6) {
+        width: 250px;
+        /* spot */
+    }
+
+    .daily-schedule-items-table th:nth-child(7),
+    .daily-schedule-items-table td:nth-child(7) {
+        width: 120px;
+        /* actions */
+    }
+
+    @media (max-width: 767.98px) {
+
+        /* Bootstrap’s sm breakpoint */
+        .daily-schedule-items-table td,
+        .daily-schedule-items-table th {
+            white-space: nowrap !important;
+            /* Prevent wrapping */
+            overflow: hidden !important;
+            /* Hide overflow */
+            text-overflow: ellipsis !important;
+            /* Show ... for overflow */
+        }
+    }
+</style>
 <?= $this->endSection() ?>
