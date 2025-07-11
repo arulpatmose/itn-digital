@@ -19,24 +19,24 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black:    #000 !default;
 
-$primary:       #4c78dd !default;
-$secondary:     #475569 !default;
-$success:       #65A30D !default;
-$info:          #0891B2 !default;
-$warning:       #EA580C !default;
-$danger:        #DC2626 !default;
-$light:         #ebeef2 !default;
-$dark:          #334155 !default;
+$primary: #2356d7 !default;
+$secondary: #475569 !default;
+$success: #139a52 !default;
+$info: #1391aa !default;
+$warning: #ea580c !default;
+$danger: #d61f47 !default;
+$light: #ebeef2 !default;
+$dark: #334155 !default;
 
 $theme-colors: (
-  "primary":    $primary,
-  "secondary":  $secondary,
-  "success":    $success,
-  "info":       $info,
-  "warning":    $warning,
-  "danger":     $danger,
-  "light":      $light,
-  "dark":       $dark
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
 ) !default;
 
 
@@ -51,6 +51,7 @@ $min-contrast-ratio: 3 !default;
 
 $enable-validation-icons: false !default;
 $enable-negative-margins: true !default;
+$enable-dark-mode: false !default;
 
 
 // Spacing
@@ -79,8 +80,11 @@ $spacers: (
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   #ebeef2 !default;
-$body-color:                #334155 !default;
+$body-bg:                   $white !default;
+$body-color:                $gray-900 !default;
+
+$body-bg-dark:              darken($light, 4.5%) !default;
+$body-color-dark:           shade-color($body-color, 8%) !default;
 
 
 // Links
@@ -111,7 +115,7 @@ $grid-gutter-width:           1.75rem !default;
 //
 // Define common padding and border radius sizes and more.
 
-$border-color:                darken($body-bg, 4%) !default;
+$border-color:                darken($light, 4%) !default;
 
 $transition-fade:             opacity .25s ease-out !default;
 
@@ -161,15 +165,15 @@ $table-color:                 $body-color !default;
 
 $table-th-font-weight:        $font-weight-semibold !default;
 
-$table-striped-bg:            lighten($body-bg, 3.5%) !default;
+$table-striped-bg:            lighten($light, 3.5%) !default;
 
-$table-active-bg:             $body-bg !default;
+$table-active-bg:             $light !default;
 
-$table-hover-bg:              rgba($body-bg, .75) !default;
+$table-hover-bg:              rgba($light, .75) !default;
 
-$table-border-color:          $body-bg !default;
+$table-border-color:          $light !default;
 
-$table-group-separator-color: $body-bg !default;
+$table-group-separator-color: $light !default;
 
 
 // Buttons + Forms
@@ -204,14 +208,14 @@ $input-color:                       $body-color !default;
 $input-border-color:                $border-color !default;
 
 $input-group-addon-color:           $input-color !default;
-$input-group-addon-bg:              $body-bg !default;
+$input-group-addon-bg:              $light !default;
 $input-group-addon-border-color:    $input-border-color !default;
 
 $form-feedback-font-size:           $font-size-sm !default;
 
-$form-check-input-border:           1px solid darken($body-bg, 10%) !default;
+$form-check-input-border:           1px solid darken($light, 10%) !default;
 
-$form-switch-color:                 darken($body-bg, 10%) !default;
+$form-switch-color:                 darken($light, 10%) !default;
 $form-switch-width:                 2.5em !default;
 
 
@@ -229,16 +233,16 @@ $nav-tabs-link-active-border-color: $border-color $border-color $border-color !d
 // Dropdowns
 
 $dropdown-min-width:                11.25rem !default;
-$dropdown-border-color:             darken($body-bg, 8%) !default;
+$dropdown-border-color:             darken($light, 8%) !default;
 $dropdown-divider-bg:               $border-color !default;
 $dropdown-box-shadow:               0 .25rem 2rem rgba($black, .08) !default;
 
 $dropdown-link-color:               $body-color !default;
 $dropdown-link-hover-color:         $body-color !default;
-$dropdown-link-hover-bg:            $body-bg !default;
+$dropdown-link-hover-bg:            $light !default;
 
 $dropdown-link-active-color:        $body-color !default;
-$dropdown-link-active-bg:           darken($body-bg, 4.5%) !default;
+$dropdown-link-active-bg:           darken($light, 4.5%) !default;
 
 $dropdown-item-padding-y:           .5rem !default;
 $dropdown-item-padding-x:           .75rem !default;
@@ -252,7 +256,7 @@ $pagination-border-width:           2px !default;
 $pagination-margin-start:           .25rem !default;
 $pagination-border-color:           transparent !default;
 
-$pagination-focus-bg:               $body-bg !default;
+$pagination-focus-bg:               $light !default;
 $pagination-focus-box-shadow:       none !default;
 
 $pagination-hover-color:            $primary !default;
@@ -260,7 +264,7 @@ $pagination-hover-bg:               transparent !default;
 $pagination-hover-border-color:     $primary !default;
 
 $pagination-active-color:           $primary !default;
-$pagination-active-bg:              lighten($body-bg, 1.5%) !default;
+$pagination-active-bg:              lighten($light, 1.5%) !default;
 $pagination-active-border-color:    $primary !default;
 
 $pagination-disabled-color:         $gray-500 !default;
@@ -273,11 +277,11 @@ $pagination-disabled-border-color:  $white !default;
 $card-spacer-y:                     1.25rem !default;
 $card-spacer-x:                     1.25rem !default;
 $card-title-spacer-y:               $card-spacer-y * .5 !default;
-$card-border-color:                 darken($body-bg, 4.5%) !default;
+$card-border-color:                 darken($light, 4.5%) !default;
 $card-border-radius:                0.3rem !default;
 $card-cap-padding-y:                $card-spacer-y * .5 !default;
 $card-cap-padding-x:                $card-spacer-x !default;
-$card-cap-bg:                       lighten($body-bg, 3.5%) !default;
+$card-cap-bg:                       lighten($light, 3.5%) !default;
 $card-img-overlay-padding:          $card-spacer-y !default;
 $card-group-margin:                 $card-spacer-y !default;
 
@@ -329,7 +333,7 @@ $list-group-border-color:           $border-color !default;
 $list-group-item-padding-y:         .75rem !default;
 $list-group-item-padding-x:         1.25rem !default;
 
-$list-group-hover-bg:               lighten($body-bg, 1.5%) !default;
+$list-group-hover-bg:               lighten($light, 1.5%) !default;
 
 $list-group-action-color:           $body-color !default;
 $list-group-action-hover-color:     $body-color !default;

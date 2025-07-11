@@ -206,7 +206,7 @@
       width: 230px;
       padding-left: 0;
       z-index: $zindex-dropdown - 5;
-      background-color: $body-bg;
+      background-color: $light;
       box-shadow: 0 0.25rem 2rem rgba(0, 0, 0, 0.08);
 
       &.nav-main-submenu-right {
@@ -307,10 +307,14 @@
   }
 }
 
-// Dark Sidebar Variation
+// Dark Variation
 .nav-main-dark,
 .sidebar-dark #sidebar,
-.page-header-dark #page-header {
+.page-header-dark #page-header,
+html.dark #sidebar,
+html.dark #page-header,
+html.dark #side-overlay,
+html.dark #main-container {
   // Headings
   .nav-main-heading {
     color: darken($body-bg-dark, 35%);
@@ -379,7 +383,10 @@
 @include media-breakpoint-up(lg) {
   .nav-main-dark.nav-main-horizontal,
   .sidebar-dark #sidebar .nav-main-horizontal,
-  .page-header-dark #page-header .nav-main-horizontal {
+  .page-header-dark #page-header .nav-main-horizontal,
+  html.dark #sidebar .nav-main-horizontal,
+  html.dark #page-header .nav-main-horizontal,
+  html.dark #main-container .nav-main-horizontal {
     .nav-main-submenu {
       background-color: darken($primary-darker, 3%) !important;
       box-shadow: none;

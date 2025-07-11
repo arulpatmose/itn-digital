@@ -18,37 +18,36 @@ export default class Helpers {
   static run(helpers, options = {}) {
     let helperList = {
       // Bootstrap
-      'bs-tooltip': () => this.bsTooltip(),
-      'bs-popover': () => this.bsPopover(),
+      "bs-tooltip": () => this.bsTooltip(),
+      "bs-popover": () => this.bsPopover(),
 
       // OneUI
-      'one-toggle-class': () => this.oneToggleClass(),
-      'one-year-copy': () => this.oneYearCopy(),
-      'one-ripple': () => this.oneRipple(),
-      'one-print': () => this.onePrint(),
-      'one-table-tools-sections': () => this.oneTableToolsSections(),
-      'one-table-tools-checkable': () => this.oneTableToolsCheckable(),
+      "one-toggle-class": () => this.oneToggleClass(),
+      "one-year-copy": () => this.oneYearCopy(),
+      "one-ripple": () => this.oneRipple(),
+      "one-print": () => this.onePrint(),
+      "one-table-tools-sections": () => this.oneTableToolsSections(),
+      "one-table-tools-checkable": () => this.oneTableToolsCheckable(),
 
       // JavaScript
-      'js-ckeditor': () => this.jsCkeditor(),
-      'js-ckeditor5': () => this.jsCkeditor5(),
-      'js-simplemde': () => this.jsSimpleMDE(),
-      'js-highlightjs': () => this.jsHighlightjs(),
-      'js-flatpickr': () => this.jsFlatpickr(),
+      "js-ckeditor5": () => this.jsCkeditor5(),
+      "js-simplemde": () => this.jsSimpleMDE(),
+      "js-highlightjs": () => this.jsHighlightjs(),
+      "js-flatpickr": () => this.jsFlatpickr(),
 
       // jQuery
-      'jq-appear': () => this.jqAppear(),
-      'jq-magnific-popup': () => this.jqMagnific(),
-      'jq-slick': () => this.jqSlick(),
-      'jq-datepicker': () => this.jqDatepicker(),
-      'jq-masked-inputs': () => this.jqMaskedInputs(),
-      'jq-select2': () => this.jqSelect2(),
-      'jq-notify': (options) => this.jqNotify(options),
-      'jq-easy-pie-chart': () => this.jqEasyPieChart(),
-      'jq-maxlength': () => this.jqMaxlength(),
-      'jq-rangeslider': () => this.jqRangeslider(),
-      'jq-sparkline': () => this.jqSparkline(),
-      'jq-validation': () => this.jqValidation(),
+      "jq-appear": () => this.jqAppear(),
+      "jq-magnific-popup": () => this.jqMagnific(),
+      "jq-slick": () => this.jqSlick(),
+      "jq-datepicker": () => this.jqDatepicker(),
+      "jq-masked-inputs": () => this.jqMaskedInputs(),
+      "jq-select2": () => this.jqSelect2(),
+      "jq-notify": (options) => this.jqNotify(options),
+      "jq-easy-pie-chart": () => this.jqEasyPieChart(),
+      "jq-maxlength": () => this.jqMaxlength(),
+      "jq-rangeslider": () => this.jqRangeslider(),
+      "jq-sparkline": () => this.jqSparkline(),
+      "jq-validation": () => this.jqValidation(),
     };
 
     if (helpers instanceof Array) {
@@ -73,7 +72,7 @@ export default class Helpers {
    */
 
   /*
-   * Bootstrap Tooltip, for more examples you can check out https://getbootstrap.com/docs/5.0/components/tooltips/
+   * Bootstrap Tooltip, for more examples you can check out https://getbootstrap.com/docs/5.3/components/tooltips/
    *
    * Helpers.run('bs-tooltip');
    *
@@ -84,22 +83,30 @@ export default class Helpers {
    *
    */
   static bsTooltip() {
-    let elements = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]:not(.js-bs-tooltip-enabled), .js-bs-tooltip:not(.js-bs-tooltip-enabled)'));
+    let elements = [].slice.call(
+      document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]:not(.js-bs-tooltip-enabled), .js-bs-tooltip:not(.js-bs-tooltip-enabled)'
+      )
+    );
 
-    window.helperBsTooltips = elements.map(el => {
+    window.helperBsTooltips = elements.map((el) => {
       // Add .js-bs-tooltip-enabled class to tag it as activated
-      el.classList.add('js-bs-tooltip-enabled');
+      el.classList.add("js-bs-tooltip-enabled");
 
       // Init Bootstrap Tooltip
       return new bootstrap.Tooltip(el, {
-        container: el.dataset.bsContainer || '#page-container',
-        animation: el.dataset.bsAnimation && el.dataset.bsAnimation.toLowerCase() == 'true' ? true : false,
-      })
+        container: el.dataset.bsContainer || "#page-container",
+        animation:
+          el.dataset.bsAnimation &&
+          el.dataset.bsAnimation.toLowerCase() == "true"
+            ? true
+            : false,
+      });
     });
   }
 
   /*
-   * Bootstrap Popover, for more examples you can check out https://getbootstrap.com/docs/5.0/components/popovers/
+   * Bootstrap Popover, for more examples you can check out https://getbootstrap.com/docs/5.3/components/popovers/
    *
    * Helpers.run('bs-popover');
    *
@@ -110,18 +117,26 @@ export default class Helpers {
    *
    */
   static bsPopover() {
-    let elements = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]:not(.js-bs-popover-enabled), .js-bs-popover:not(.js-bs-popover-enabled)'));
+    let elements = [].slice.call(
+      document.querySelectorAll(
+        '[data-bs-toggle="popover"]:not(.js-bs-popover-enabled), .js-bs-popover:not(.js-bs-popover-enabled)'
+      )
+    );
 
-    window.helperBsPopovers = elements.map(el => {
+    window.helperBsPopovers = elements.map((el) => {
       // Add .js-bs-popover-enabled class to tag it as activated
-      el.classList.add('js-bs-popover-enabled');
+      el.classList.add("js-bs-popover-enabled");
 
       // Init Bootstrap Popover
       return new bootstrap.Popover(el, {
-        container: el.dataset.bsContainer || '#page-container',
-        animation: el.dataset.bsAnimation && el.dataset.bsAnimation.toLowerCase() == 'true' ? true : false,
-        trigger: el.dataset.bsTrigger || 'hover focus',
-      })
+        container: el.dataset.bsContainer || "#page-container",
+        animation:
+          el.dataset.bsAnimation &&
+          el.dataset.bsAnimation.toLowerCase() == "true"
+            ? true
+            : false,
+        trigger: el.dataset.bsTrigger || "hover focus",
+      });
     });
   }
 
@@ -148,20 +163,22 @@ export default class Helpers {
    *
    */
   static oneToggleClass() {
-    let elements = document.querySelectorAll('[data-toggle="class-toggle"]:not(.js-class-toggle-enabled), .js-class-toggle:not(.js-class-toggle-enabled)');
+    let elements = document.querySelectorAll(
+      '[data-toggle="class-toggle"]:not(.js-class-toggle-enabled), .js-class-toggle:not(.js-class-toggle-enabled)'
+    );
 
-    elements.forEach(el => {
-      el.addEventListener('click', () => {
+    elements.forEach((el) => {
+      el.addEventListener("click", () => {
         // Add .js-class-toggle-enabled class to tag it as activated
-        el.classList.add('js-class-toggle-enabled');
+        el.classList.add("js-class-toggle-enabled");
 
         // Get all classes
-        let cssClasses = el.dataset.class ? el.dataset.class.split(' ') : false;
+        let cssClasses = el.dataset.class ? el.dataset.class.split(" ") : false;
 
         // Toggle class on target elements
-        document.querySelectorAll(el.dataset.target).forEach(targetEl => {
+        document.querySelectorAll(el.dataset.target).forEach((targetEl) => {
           if (cssClasses) {
-            cssClasses.forEach(cls => {
+            cssClasses.forEach((cls) => {
               targetEl.classList.toggle(cls);
             });
           }
@@ -182,18 +199,23 @@ export default class Helpers {
    *
    */
   static oneYearCopy() {
-    let elements = document.querySelectorAll('[data-toggle="year-copy"]:not(.js-year-copy-enabled)');
+    let elements = document.querySelectorAll(
+      '[data-toggle="year-copy"]:not(.js-year-copy-enabled)'
+    );
 
-    elements.forEach(el => {
+    elements.forEach((el) => {
       let date = new Date();
       let currentYear = date.getFullYear();
       let baseYear = el.textContent || currentYear;
 
       // Add .js-year-copy-enabled class to tag it as activated
-      el.classList.add('js-year-copy-enabled');
+      el.classList.add("js-year-copy-enabled");
 
       // Set the correct year
-      el.textContent = (parseInt(baseYear) >= currentYear) ? currentYear : baseYear + '-' + currentYear.toString().substr(2, 2);
+      el.textContent =
+        parseInt(baseYear) >= currentYear
+          ? currentYear
+          : baseYear + "-" + currentYear.toString().substr(2, 2);
     });
   }
 
@@ -208,53 +230,64 @@ export default class Helpers {
    *
    */
   static oneRipple() {
-    let elements = document.querySelectorAll('[data-toggle="click-ripple"]:not(.js-click-ripple-enabled)');
+    let elements = document.querySelectorAll(
+      '[data-toggle="click-ripple"]:not(.js-click-ripple-enabled)'
+    );
 
-    elements.forEach(el => {
+    elements.forEach((el) => {
       // Add .js-click-ripple-enabled class to tag it as activated and init it
-      el.classList.add('js-click-ripple-enabled');
+      el.classList.add("js-click-ripple-enabled");
 
       // Add custom CSS styles
-      el.style.overflow = 'hidden';
-      el.style.position = 'relative';
+      el.style.overflow = "hidden";
+      el.style.position = "relative";
       el.style.zIndex = 1;
 
       // On click create and render the ripple
-      el.addEventListener('click', e => {
-        let cssClass = 'click-ripple';
-        let ripple = el.querySelector('.' + cssClass);
+      el.addEventListener("click", (e) => {
+        let cssClass = "click-ripple";
+        let ripple = el.querySelector("." + cssClass);
         let d, x, y;
 
         // If the ripple element exists in this element, remove .animate class from ripple element..
         if (ripple) {
-          ripple.classList.remove('animate');
-        }
-        else { // ..else add it
-          let elChild = document.createElement('span')
-          
-          elChild.classList.add(cssClass)
+          ripple.classList.remove("animate");
+        } else {
+          // ..else add it
+          let elChild = document.createElement("span");
+
+          elChild.classList.add(cssClass);
           el.insertBefore(elChild, el.firstChild);
         }
 
         // Get the ripple element
-        ripple = el.querySelector('.' + cssClass);
+        ripple = el.querySelector("." + cssClass);
 
         // If the ripple element doesn't have dimensions, set them accordingly
-        if ((getComputedStyle(ripple).height === '0px') || (getComputedStyle(ripple).width === '0px')) {
-          d = Math.max(el.offsetWidth, el.offsetHeight)
+        if (
+          getComputedStyle(ripple).height === "0px" ||
+          getComputedStyle(ripple).width === "0px"
+        ) {
+          d = Math.max(el.offsetWidth, el.offsetHeight);
 
-          ripple.style.height = d + 'px'
-          ripple.style.width = d + 'px'
+          ripple.style.height = d + "px";
+          ripple.style.width = d + "px";
         }
 
         // Get coordinates for our ripple element
-        x = e.pageX - (el.getBoundingClientRect().left + window.scrollX) - parseFloat(getComputedStyle(ripple).width.replace('px', '')) / 2
-        y = e.pageY - (el.getBoundingClientRect().top + window.scrollY) - parseFloat(getComputedStyle(ripple).height.replace('px', '')) / 2
+        x =
+          e.pageX -
+          (el.getBoundingClientRect().left + window.scrollX) -
+          parseFloat(getComputedStyle(ripple).width.replace("px", "")) / 2;
+        y =
+          e.pageY -
+          (el.getBoundingClientRect().top + window.scrollY) -
+          parseFloat(getComputedStyle(ripple).height.replace("px", "")) / 2;
 
         // Position the ripple element and add the class .animate to it
-        ripple.style.top = y + 'px'
-        ripple.style.left = x + 'px'
-        ripple.classList.add('animate')
+        ripple.style.top = y + "px";
+        ripple.style.left = x + "px";
+        ripple.classList.add("animate");
       });
     });
   }
@@ -267,13 +300,13 @@ export default class Helpers {
    */
   static onePrint() {
     // Store all #page-container classes
-    let lPage = document.getElementById('page-container');
+    let lPage = document.getElementById("page-container");
     let pageCls = lPage.className;
 
     console.log(pageCls);
 
     // Remove all classes from #page-container
-    lPage.classList = '';
+    lPage.classList = "";
 
     // Print the page
     window.print();
@@ -293,36 +326,40 @@ export default class Helpers {
    *
    */
   static oneTableToolsSections() {
-    let tables = document.querySelectorAll('.js-table-sections:not(.js-table-sections-enabled)');
+    let tables = document.querySelectorAll(
+      ".js-table-sections:not(.js-table-sections-enabled)"
+    );
 
-    tables.forEach(table => {
+    tables.forEach((table) => {
       // Add .js-table-sections-enabled class to tag it as activated
-      table.classList.add('js-table-sections-enabled');
+      table.classList.add("js-table-sections-enabled");
 
       // When a row is clicked in tbody.js-table-sections-header
-      table.querySelectorAll('.js-table-sections-header > tr').forEach(tr => {
-        tr.addEventListener('click', e => {
-          if (e.target.type !== 'checkbox'
-            && e.target.type !== 'button'
-            && e.target.tagName.toLowerCase() !== 'a'
-            && e.target.parentNode.nodeName.toLowerCase() !== 'a'
-            && e.target.parentNode.nodeName.toLowerCase() !== 'button'
-            && e.target.parentNode.nodeName.toLowerCase() !== 'label'
-            && !e.target.parentNode.classList.contains('custom-control')) {
+      table.querySelectorAll(".js-table-sections-header > tr").forEach((tr) => {
+        tr.addEventListener("click", (e) => {
+          if (
+            e.target.type !== "checkbox" &&
+            e.target.type !== "button" &&
+            e.target.tagName.toLowerCase() !== "a" &&
+            e.target.parentNode.nodeName.toLowerCase() !== "a" &&
+            e.target.parentNode.nodeName.toLowerCase() !== "button" &&
+            e.target.parentNode.nodeName.toLowerCase() !== "label" &&
+            !e.target.parentNode.classList.contains("custom-control")
+          ) {
             let tbody = tr.parentNode;
-            let tbodyAll = table.querySelectorAll('tbody');
+            let tbodyAll = table.querySelectorAll("tbody");
 
-            if (!tbody.classList.contains('show')) {
+            if (!tbody.classList.contains("show")) {
               if (tbodyAll) {
-                tbodyAll.forEach(tbodyEl => {
-                  tbodyEl.classList.remove('show');
-                  tbodyEl.classList.remove('table-active');
+                tbodyAll.forEach((tbodyEl) => {
+                  tbodyEl.classList.remove("show");
+                  tbodyEl.classList.remove("table-active");
                 });
               }
             }
 
-            tbody.classList.toggle('show');
-            tbody.classList.toggle('table-active');
+            tbody.classList.toggle("show");
+            tbody.classList.toggle("table-active");
           }
         });
       });
@@ -340,66 +377,90 @@ export default class Helpers {
    *
    */
   static oneTableToolsCheckable() {
-    let tables = document.querySelectorAll('.js-table-checkable:not(.js-table-checkable-enabled)');
+    let tables = document.querySelectorAll(
+      ".js-table-checkable:not(.js-table-checkable-enabled)"
+    );
 
-    tables.forEach(table => {
+    tables.forEach((table) => {
       // Add .js-table-checkable-enabled class to tag it as activated
-      table.classList.add('js-table-checkable-enabled');
+      table.classList.add("js-table-checkable-enabled");
 
       // When a checkbox is clicked in thead
-      table.querySelector('thead input[type=checkbox]').addEventListener('click', e => {
-        // Check or uncheck all checkboxes in tbody
-        table.querySelectorAll('tbody input[type=checkbox]').forEach(checkbox => {
-          checkbox.checked = e.currentTarget.checked;
+      table
+        .querySelector("thead input[type=checkbox]")
+        .addEventListener("click", (e) => {
+          // Check or uncheck all checkboxes in tbody
+          table
+            .querySelectorAll("tbody input[type=checkbox]")
+            .forEach((checkbox) => {
+              checkbox.checked = e.currentTarget.checked;
 
-          // Update Row classes
-          this.tableToolscheckRow(checkbox, e.currentTarget.checked);
+              // Update Row classes
+              this.tableToolscheckRow(checkbox, e.currentTarget.checked);
+            });
         });
-      });
 
       // When a checkbox is clicked in tbody
-      table.querySelectorAll('tbody input[type=checkbox], tbody input + label').forEach(checkbox => {
-        checkbox.addEventListener('click', e => {
-          let checkboxHead = table.querySelector('thead input[type=checkbox]');
+      table
+        .querySelectorAll("tbody input[type=checkbox], tbody input + label")
+        .forEach((checkbox) => {
+          checkbox.addEventListener("click", (e) => {
+            let checkboxHead = table.querySelector(
+              "thead input[type=checkbox]"
+            );
 
-          // Adjust checkbox in thead
-          if (!checkbox.checked) {
-            checkboxHead.checked = false
-          } else {
-            if (table.querySelectorAll('tbody input[type=checkbox]:checked').length === table.querySelectorAll('tbody input[type=checkbox]').length) {
-              checkboxHead.checked = true;
+            // Adjust checkbox in thead
+            if (!checkbox.checked) {
+              checkboxHead.checked = false;
+            } else {
+              if (
+                table.querySelectorAll("tbody input[type=checkbox]:checked")
+                  .length ===
+                table.querySelectorAll("tbody input[type=checkbox]").length
+              ) {
+                checkboxHead.checked = true;
+              }
             }
-          }
 
-          // Update Row classes
-          this.tableToolscheckRow(checkbox, checkbox.checked);
+            // Update Row classes
+            this.tableToolscheckRow(checkbox, checkbox.checked);
+          });
         });
-      });
 
       // When a row is clicked in tbody
-      table.querySelectorAll('tbody > tr').forEach(tr => {
-        tr.addEventListener('click', e => {
-          if (e.target.type !== 'checkbox'
-            && e.target.type !== 'button'
-            && e.target.tagName.toLowerCase() !== 'a'
-            && e.target.parentNode.nodeName.toLowerCase() !== 'a'
-            && e.target.parentNode.nodeName.toLowerCase() !== 'button'
-            && e.target.parentNode.nodeName.toLowerCase() !== 'label'
-            && !e.target.parentNode.classList.contains('custom-control')) {
-            let checkboxHead = table.querySelector('thead input[type=checkbox]');
-            let checkbox = e.currentTarget.querySelector('input[type=checkbox]');
-            
+      table.querySelectorAll("tbody > tr").forEach((tr) => {
+        tr.addEventListener("click", (e) => {
+          if (
+            e.target.type !== "checkbox" &&
+            e.target.type !== "button" &&
+            e.target.tagName.toLowerCase() !== "a" &&
+            e.target.parentNode.nodeName.toLowerCase() !== "a" &&
+            e.target.parentNode.nodeName.toLowerCase() !== "button" &&
+            e.target.parentNode.nodeName.toLowerCase() !== "label" &&
+            !e.target.parentNode.classList.contains("custom-control")
+          ) {
+            let checkboxHead = table.querySelector(
+              "thead input[type=checkbox]"
+            );
+            let checkbox = e.currentTarget.querySelector(
+              "input[type=checkbox]"
+            );
+
             // Update row's checkbox status
             checkbox.checked = !checkbox.checked;
 
             // Update Row classes
             this.tableToolscheckRow(checkbox, checkbox.checked);
-  
+
             // Adjust checkbox in thead
             if (!checkbox.checked) {
-              checkboxHead.checked = false
+              checkboxHead.checked = false;
             } else {
-              if (table.querySelectorAll('tbody input[type=checkbox]:checked').length === table.querySelectorAll('tbody input[type=checkbox]').length) {
+              if (
+                table.querySelectorAll("tbody input[type=checkbox]:checked")
+                  .length ===
+                table.querySelectorAll("tbody input[type=checkbox]").length
+              ) {
                 checkboxHead.checked = true;
               }
             }
@@ -412,9 +473,9 @@ export default class Helpers {
   // Checkable table functionality helper - Checks or unchecks table row
   static tableToolscheckRow(checkbox, checkedStatus) {
     if (checkedStatus) {
-      checkbox.closest('tr').classList.add('table-active');
+      checkbox.closest("tr").classList.add("table-active");
     } else {
-      checkbox.closest('tr').classList.remove('table-active');
+      checkbox.closest("tr").classList.remove("table-active");
     }
   }
 
@@ -425,39 +486,6 @@ export default class Helpers {
    *
    ********************************************************************************************
    */
-
-  /*
-   * CKEditor init, for more examples you can check out http://ckeditor.com/
-   *
-   * Helpers.run('jsCkeditor');
-   *
-   * Example usage:
-   *
-   * <textarea id="js-ckeditor" name="ckeditor">Hello CKEditor!</textarea> or
-   * <div id="js-ckeditor-inline">Hello inline CKEditor!</div>
-   *
-   */
-  static jsCkeditor() {
-    let ckeditorInline = document.querySelector('#js-ckeditor-inline:not(.js-ckeditor-inline-enabled)');
-    let ckeditorFull = document.querySelector('#js-ckeditor:not(.js-ckeditor-enabled)');
-
-    // Init inline text editor
-    if (ckeditorInline) {
-      ckeditorInline.setAttribute('contenteditable', 'true');
-      CKEDITOR.inline('js-ckeditor-inline');
-
-      // Add .js-ckeditor-inline-enabled class to tag it as activated
-      ckeditorInline.classList.add('js-ckeditor-inline-enabled');
-    }
-
-    // Init full text editor
-    if (ckeditorFull) {
-      CKEDITOR.replace('js-ckeditor');
-
-      // Add .js-ckeditor-enabled class to tag it as activated
-      ckeditorFull.classList.add('js-ckeditor-enabled');
-    }
-  }
 
   /*
    * CKEditor 5 init, for more examples you can check out http://ckeditor.com/
@@ -472,30 +500,34 @@ export default class Helpers {
    *
    */
   static jsCkeditor5() {
-    let ckeditor5Inline = document.querySelector('#js-ckeditor5-inline');
-    let ckeditor5Full = document.querySelector('#js-ckeditor5-classic');
+    let ckeditor5Inline = document.querySelector("#js-ckeditor5-inline");
+    let ckeditor5Full = document.querySelector("#js-ckeditor5-classic");
 
     // Init inline text editor
     if (ckeditor5Inline) {
-      InlineEditor
-        .create(document.querySelector('#js-ckeditor5-inline'))
-        .then(editor => {
+      InlineEditor.create(document.querySelector("#js-ckeditor5-inline"))
+        .then((editor) => {
           window.editor = editor;
         })
-        .catch(error => {
-          console.error('There was a problem initializing the inline editor.', error);
+        .catch((error) => {
+          console.error(
+            "There was a problem initializing the inline editor.",
+            error
+          );
         });
     }
 
     // Init full text editor
     if (ckeditor5Full) {
-      ClassicEditor
-        .create(document.querySelector('#js-ckeditor5-classic'))
-        .then(editor => {
+      ClassicEditor.create(document.querySelector("#js-ckeditor5-classic"))
+        .then((editor) => {
           window.editor = editor;
         })
-        .catch(error => {
-          console.error('There was a problem initializing the classic editor.', error);
+        .catch((error) => {
+          console.error(
+            "There was a problem initializing the classic editor.",
+            error
+          );
         });
     }
   }
@@ -511,17 +543,21 @@ export default class Helpers {
    *
    */
   static jsSimpleMDE() {
-    let elements = document.querySelectorAll('.js-simplemde');
+    let elements = document.querySelectorAll(".js-simplemde");
 
-    elements.forEach(el => {
+    elements.forEach((el) => {
       // Init editor
       new SimpleMDE({ element: el, autoDownloadFontAwesome: false });
     });
 
     // Fix: Change SimpleMDE's Font Awesome 4 Icons with Font Awesome 6
     if (elements) {
-      document.querySelector('.editor-toolbar > a.fa-header').classList.replace('fa-header', 'fa-heading');
-      document.querySelector('.editor-toolbar > a.fa-picture-o').classList.replace('fa-picture-o', 'fa-image');
+      document
+        .querySelector(".editor-toolbar > a.fa-header")
+        .classList.replace("fa-header", "fa-heading");
+      document
+        .querySelector(".editor-toolbar > a.fa-picture-o")
+        .classList.replace("fa-picture-o", "fa-image");
     }
   }
 
@@ -553,11 +589,13 @@ export default class Helpers {
    *
    */
   static jsFlatpickr() {
-    let elements = document.querySelectorAll('.js-flatpickr:not(.js-flatpickr-enabled)');
+    let elements = document.querySelectorAll(
+      ".js-flatpickr:not(.js-flatpickr-enabled)"
+    );
 
-    elements.forEach(el => {
+    elements.forEach((el) => {
       // Add .js-flatpickr-enabled class to tag it as activated
-      el.classList.add('js-flatpickr-enabled');
+      el.classList.add("js-flatpickr-enabled");
 
       // Init it
       flatpickr(el);
@@ -584,20 +622,29 @@ export default class Helpers {
    */
   static jqAppear() {
     // Add a specific class on elements (when they become visible on scrolling)
-    jQuery('[data-toggle="appear"]:not(.js-appear-enabled)').each((index, element) => {
-      let windowW = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-      let el = jQuery(element);
-      let elCssClass = el.data('class') || 'animated fadeIn';
-      let elOffset = el.data('offset') || 0;
-      let elTimeout = (windowW < 992) ? 0 : (el.data('timeout') ? el.data('timeout') : 0);
+    jQuery('[data-toggle="appear"]:not(.js-appear-enabled)').each(
+      (index, element) => {
+        let windowW =
+          window.innerWidth ||
+          document.documentElement.clientWidth ||
+          document.body.clientWidth;
+        let el = jQuery(element);
+        let elCssClass = el.data("class") || "animated fadeIn";
+        let elOffset = el.data("offset") || 0;
+        let elTimeout =
+          windowW < 992 ? 0 : el.data("timeout") ? el.data("timeout") : 0;
 
-      // Add .js-appear-enabled class to tag it as activated and init it
-      el.addClass('js-appear-enabled').appear(() => {
-        setTimeout(() => {
-          el.removeClass('invisible').addClass(elCssClass);
-        }, elTimeout);
-      }, { accY: elOffset });
-    });
+        // Add .js-appear-enabled class to tag it as activated and init it
+        el.addClass("js-appear-enabled").appear(
+          () => {
+            setTimeout(() => {
+              el.removeClass("invisible").addClass(elCssClass);
+            }, elTimeout);
+          },
+          { accY: elOffset }
+        );
+      }
+    );
   }
 
   /*
@@ -612,15 +659,17 @@ export default class Helpers {
    */
   static jqMagnific() {
     // Gallery init
-    jQuery('.js-gallery:not(.js-gallery-enabled)').each((index, element) => {
+    jQuery(".js-gallery:not(.js-gallery-enabled)").each((index, element) => {
       // Add .js-gallery-enabled class to tag it as activated and init it
-      jQuery(element).addClass('js-gallery-enabled').magnificPopup({
-        delegate: 'a.img-lightbox',
-        type: 'image',
-        gallery: {
-          enabled: true
-        }
-      });
+      jQuery(element)
+        .addClass("js-gallery-enabled")
+        .magnificPopup({
+          delegate: "a.img-lightbox",
+          type: "image",
+          gallery: {
+            enabled: true,
+          },
+        });
     });
   }
 
@@ -640,18 +689,21 @@ export default class Helpers {
    */
   static jqSlick() {
     // Get each slider element (with .js-slider class)
-    jQuery('.js-slider:not(.js-slider-enabled)').each((index, element) => {
+    jQuery(".js-slider:not(.js-slider-enabled)").each((index, element) => {
       let el = jQuery(element);
 
       // Add .js-slider-enabled class to tag it as activated and init it
-      el.addClass('js-slider-enabled').slick({
-        arrows: el.data('arrows') || false,
-        dots: el.data('dots') || false,
-        slidesToShow: el.data('slides-to-show') || 1,
-        centerMode: el.data('center-mode') || false,
-        autoplay: el.data('autoplay') || false,
-        autoplaySpeed: el.data('autoplay-speed') || 3000,
-        infinite: typeof el.data('infinite') === 'undefined' ? true : el.data('infinite')
+      el.addClass("js-slider-enabled").slick({
+        arrows: el.data("arrows") || false,
+        dots: el.data("dots") || false,
+        slidesToShow: el.data("slides-to-show") || 1,
+        centerMode: el.data("center-mode") || false,
+        autoplay: el.data("autoplay") || false,
+        autoplaySpeed: el.data("autoplay-speed") || 3000,
+        infinite:
+          typeof el.data("infinite") === "undefined"
+            ? true
+            : el.data("infinite"),
       });
     });
   }
@@ -668,19 +720,21 @@ export default class Helpers {
    */
   static jqDatepicker() {
     // Init datepicker (with .js-datepicker and .input-daterange class)
-    jQuery('.js-datepicker:not(.js-datepicker-enabled)').add('.input-daterange:not(.js-datepicker-enabled)').each((index, element) => {
-      let el = jQuery(element);
+    jQuery(".js-datepicker:not(.js-datepicker-enabled)")
+      .add(".input-daterange:not(.js-datepicker-enabled)")
+      .each((index, element) => {
+        let el = jQuery(element);
 
-      // Add .js-datepicker-enabled class to tag it as activated and init it
-      el.addClass('js-datepicker-enabled').datepicker({
-        weekStart: el.data('week-start') || 0,
-        autoclose: el.data('autoclose') || false,
-        todayHighlight: el.data('today-highlight') || false,
-        startDate: el.data('start-date') || false,
-        container: el.data('container') || '#page-container',
-        orientation: 'bottom' // Position issue when using BS5, set it to bottom until officially supported
+        // Add .js-datepicker-enabled class to tag it as activated and init it
+        el.addClass("js-datepicker-enabled").datepicker({
+          weekStart: el.data("week-start") || 0,
+          autoclose: el.data("autoclose") || false,
+          todayHighlight: el.data("today-highlight") || false,
+          startDate: el.data("start-date") || false,
+          container: el.data("container") || "#page-container",
+          orientation: "bottom", // Position issue when using BS5, set it to bottom until officially supported
+        });
       });
-    });
   }
 
   /*
@@ -698,24 +752,26 @@ export default class Helpers {
     // a - Represents an alpha character (A-Z,a-z)
     // 9 - Represents a numeric character (0-9)
     // * - Represents an alphanumeric character (A-Z,a-z,0-9)
-    jQuery('.js-masked-date:not(.js-masked-enabled)').mask('99/99/9999');
-    jQuery('.js-masked-date-dash:not(.js-masked-enabled)').mask('99-99-9999');
-    jQuery('.js-masked-phone:not(.js-masked-enabled)').mask('(999) 999-9999');
-    jQuery('.js-masked-phone-ext:not(.js-masked-enabled)').mask('(999) 999-9999? x99999');
-    jQuery('.js-masked-taxid:not(.js-masked-enabled)').mask('99-9999999');
-    jQuery('.js-masked-ssn:not(.js-masked-enabled)').mask('999-99-9999');
-    jQuery('.js-masked-pkey:not(.js-masked-enabled)').mask('a*-999-a999');
-    jQuery('.js-masked-time:not(.js-masked-enabled)').mask('99:99');
+    jQuery(".js-masked-date:not(.js-masked-enabled)").mask("99/99/9999");
+    jQuery(".js-masked-date-dash:not(.js-masked-enabled)").mask("99-99-9999");
+    jQuery(".js-masked-phone:not(.js-masked-enabled)").mask("(999) 999-9999");
+    jQuery(".js-masked-phone-ext:not(.js-masked-enabled)").mask(
+      "(999) 999-9999? x99999"
+    );
+    jQuery(".js-masked-taxid:not(.js-masked-enabled)").mask("99-9999999");
+    jQuery(".js-masked-ssn:not(.js-masked-enabled)").mask("999-99-9999");
+    jQuery(".js-masked-pkey:not(.js-masked-enabled)").mask("a*-999-a999");
+    jQuery(".js-masked-time:not(.js-masked-enabled)").mask("99:99");
 
-    jQuery('.js-masked-date')
-      .add('.js-masked-date-dash')
-      .add('.js-masked-phone')
-      .add('.js-masked-phone-ext')
-      .add('.js-masked-taxid')
-      .add('.js-masked-ssn')
-      .add('.js-masked-pkey')
-      .add('.js-masked-time')
-      .addClass('js-masked-enabled');
+    jQuery(".js-masked-date")
+      .add(".js-masked-date-dash")
+      .add(".js-masked-phone")
+      .add(".js-masked-phone-ext")
+      .add(".js-masked-taxid")
+      .add(".js-masked-ssn")
+      .add(".js-masked-pkey")
+      .add(".js-masked-time")
+      .addClass("js-masked-enabled");
   }
 
   /*
@@ -735,13 +791,15 @@ export default class Helpers {
    */
   static jqSelect2() {
     // Init Select2 (with .js-select2 class)
-    jQuery('.js-select2:not(.js-select2-enabled)').each((index, element) => {
+    jQuery(".js-select2:not(.js-select2-enabled)").each((index, element) => {
       let el = jQuery(element);
 
       // Add .js-select2-enabled class to tag it as activated and init it
-      el.addClass('js-select2-enabled').select2({
-        placeholder: el.data('placeholder') || false,
-        dropdownParent: document.querySelector(el.data('container') || '#page-container'),
+      el.addClass("js-select2-enabled").select2({
+        placeholder: el.data("placeholder") || false,
+        dropdownParent: document.querySelector(
+          el.data("container") || "#page-container"
+        ),
       });
     });
   }
@@ -759,69 +817,74 @@ export default class Helpers {
   static jqNotify(options = {}) {
     if (jQuery.isEmptyObject(options)) {
       // Init notifications (with .js-notify class)
-      jQuery('.js-notify:not(.js-notify-enabled)').each((index, element) => {
+      jQuery(".js-notify:not(.js-notify-enabled)").each((index, element) => {
         // Add .js-notify-enabled class to tag it as activated and init it
-        jQuery(element).addClass('js-notify-enabled').on('click.pixelcave.helpers', e => {
-          let el = jQuery(e.currentTarget);
+        jQuery(element)
+          .addClass("js-notify-enabled")
+          .on("click.pixelcave.helpers", (e) => {
+            let el = jQuery(e.currentTarget);
 
-          // Create notification
-          jQuery.notify({
-            icon: el.data('icon') || '',
-            message: el.data('message'),
-            url: el.data('url') || ''
-          },
-            {
-              element: 'body',
-              type: el.data('type') || 'info',
-              placement: {
-                from: el.data('from') || 'top',
-                align: el.data('align') || 'right'
+            // Create notification
+            jQuery.notify(
+              {
+                icon: el.data("icon") || "",
+                message: el.data("message"),
+                url: el.data("url") || "",
               },
-              allow_dismiss: true,
-              newest_on_top: true,
-              showProgressbar: false,
-              offset: 20,
-              spacing: 10,
-              z_index: 1033,
-              delay: 5000,
-              timer: 1000,
-              animate: {
-                enter: 'animated fadeIn',
-                exit: 'animated fadeOutDown'
-              },
-              template: `<div data-notify="container" class="col-11 col-sm-4 alert alert-{0} alert-dismissible" role="alert">
+              {
+                element: "body",
+                type: el.data("type") || "info",
+                placement: {
+                  from: el.data("from") || "top",
+                  align: el.data("align") || "right",
+                },
+                allow_dismiss: true,
+                newest_on_top: true,
+                showProgressbar: false,
+                offset: 20,
+                spacing: 10,
+                z_index: 1033,
+                delay: 5000,
+                timer: 1000,
+                animate: {
+                  enter: "animated fadeIn",
+                  exit: "animated fadeOutDown",
+                },
+                template: `<div data-notify="container" class="col-11 col-sm-4 alert alert-{0} alert-dismissible" role="alert">
   <p class="mb-0">
     <span data-notify="icon"></span>
     <span data-notify="title">{1}</span>
     <span data-notify="message">{2}</span>
   </p>
-  <div class="progress" data-notify="progressbar">
-    <div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+  <div class="progress" data-notify="progressbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar progress-bar-{0}" style="width: 0%;"></div>
   </div>
   <a href="{3}" target="{4}" data-notify="url"></a>
   <a class="p-2 m-1 text-dark" href="javascript:void(0)" aria-label="Close" data-notify="dismiss">
     <i class="fa fa-times"></i>
   </a>
-</div>`
-            });
-        });
+</div>`,
+              }
+            );
+          });
       });
     } else {
       // Create notification
-      jQuery.notify({
-        icon: options.icon || '',
-        message: options.message,
-        url: options.url || ''
-      },
+      jQuery.notify(
         {
-          element: options.element || 'body',
-          type: options.type || 'info',
+          icon: options.icon || "",
+          message: options.message,
+          url: options.url || "",
+        },
+        {
+          element: options.element || "body",
+          type: options.type || "info",
           placement: {
-            from: options.from || 'top',
-            align: options.align || 'right'
+            from: options.from || "top",
+            align: options.align || "right",
           },
-          allow_dismiss: (options.allow_dismiss === false) ? false : true,
-          newest_on_top: (options.newest_on_top === false) ? false : true,
+          allow_dismiss: options.allow_dismiss === false ? false : true,
+          newest_on_top: options.newest_on_top === false ? false : true,
           showProgressbar: options.show_progress_bar ? true : false,
           offset: options.offset || 20,
           spacing: options.spacing || 10,
@@ -829,8 +892,8 @@ export default class Helpers {
           delay: options.delay || 5000,
           timer: options.timer || 1000,
           animate: {
-            enter: options.animate_enter || 'animated fadeIn',
-            exit: options.animate_exit || 'animated fadeOutDown'
+            enter: options.animate_enter || "animated fadeIn",
+            exit: options.animate_exit || "animated fadeOutDown",
           },
           template: `<div data-notify="container" class="col-11 col-sm-4 alert alert-{0} alert-dismissible" role="alert">
   <p class="mb-0">
@@ -838,15 +901,16 @@ export default class Helpers {
     <span data-notify="title">{1}</span>
     <span data-notify="message">{2}</span>
   </p>
-  <div class="progress" data-notify="progressbar">
-    <div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+  <div class="progress" data-notify="progressbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar progress-bar-{0}" style="width: 0%;"></div>
   </div>
   <a href="{3}" target="{4}" data-notify="url"></a>
   <a class="p-2 m-1 text-dark" href="javascript:void(0)" aria-label="Close" data-notify="dismiss">
     <i class="fa fa-times"></i>
   </a>
-</div>`
-        });
+</div>`,
+        }
+      );
     }
   }
 
@@ -864,19 +928,21 @@ export default class Helpers {
    */
   static jqEasyPieChart() {
     // Init Easy Pie Charts (with .js-pie-chart class)
-    jQuery('.js-pie-chart:not(.js-pie-chart-enabled)').each((index, element) => {
-      let el = jQuery(element);
+    jQuery(".js-pie-chart:not(.js-pie-chart-enabled)").each(
+      (index, element) => {
+        let el = jQuery(element);
 
-      // Add .js-pie-chart-enabled class to tag it as activated and init it
-      el.addClass('js-pie-chart-enabled').easyPieChart({
-        barColor: el.data('bar-color') || '#777777',
-        trackColor: el.data('track-color') || '#eeeeee',
-        lineWidth: el.data('line-width') || 3,
-        size: el.data('size') || '80',
-        animate: el.data('animate') || 750,
-        scaleColor: el.data('scale-color') || false
-      });
-    });
+        // Add .js-pie-chart-enabled class to tag it as activated and init it
+        el.addClass("js-pie-chart-enabled").easyPieChart({
+          barColor: el.data("bar-color") || "#777777",
+          trackColor: el.data("track-color") || "#eeeeee",
+          lineWidth: el.data("line-width") || 3,
+          size: el.data("size") || "80",
+          animate: el.data("animate") || 750,
+          scaleColor: el.data("scale-color") || false,
+        });
+      }
+    );
   }
 
   /*
@@ -891,21 +957,24 @@ export default class Helpers {
    */
   static jqMaxlength() {
     // Init Bootstrap Maxlength (with .js-maxlength class)
-    jQuery('.js-maxlength:not(.js-maxlength-enabled)').each((index, element) => {
-      let el = jQuery(element);
+    jQuery(".js-maxlength:not(.js-maxlength-enabled)").each(
+      (index, element) => {
+        let el = jQuery(element);
 
-      // Add .js-maxlength-enabled class to tag it as activated and init it
-      el.addClass('js-maxlength-enabled').maxlength({
-        alwaysShow: el.data('always-show') ? true : false,
-        threshold: el.data('threshold') || 10,
-        warningClass: el.data('warning-class') || 'badge bg-warning',
-        limitReachedClass: el.data('limit-reached-class') || 'badge bg-danger',
-        placement: el.data('placement') || 'bottom',
-        preText: el.data('pre-text') || '',
-        separator: el.data('separator') || '/',
-        postText: el.data('post-text') || ''
-      });
-    });
+        // Add .js-maxlength-enabled class to tag it as activated and init it
+        el.addClass("js-maxlength-enabled").maxlength({
+          alwaysShow: el.data("always-show") ? true : false,
+          threshold: el.data("threshold") || 10,
+          warningClass: el.data("warning-class") || "badge bg-warning",
+          limitReachedClass:
+            el.data("limit-reached-class") || "badge bg-danger",
+          placement: el.data("placement") || "bottom",
+          preText: el.data("pre-text") || "",
+          separator: el.data("separator") || "/",
+          postText: el.data("post-text") || "",
+        });
+      }
+    );
   }
 
   /*
@@ -920,15 +989,19 @@ export default class Helpers {
    */
   static jqRangeslider() {
     // Init Ion Range Slider (with .js-rangeslider class)
-    jQuery('.js-rangeslider:not(.js-rangeslider-enabled)').each((index, element) => {
-      let el = jQuery(element);
+    jQuery(".js-rangeslider:not(.js-rangeslider-enabled)").each(
+      (index, element) => {
+        let el = jQuery(element);
 
-      // Add .js-rangeslider-enabled class to tag it as activated and init it
-      jQuery(element).addClass('js-rangeslider-enabled').ionRangeSlider({
-        input_values_separator: ';',
-        skin: el.data('skin') || 'round'
-      });
-    });
+        // Add .js-rangeslider-enabled class to tag it as activated and init it
+        jQuery(element)
+          .addClass("js-rangeslider-enabled")
+          .ionRangeSlider({
+            input_values_separator: ";",
+            skin: el.data("skin") || "round",
+          });
+      }
+    );
   }
 
   /*
@@ -945,95 +1018,113 @@ export default class Helpers {
     let self = this;
 
     // Init jQuery Sparkline Charts (with .js-sparkline class)
-    jQuery('.js-sparkline:not(.js-sparkline-enabled)').each((index, element) => {
-      let el = jQuery(element);
-      let type = el.data('type');
-      let options = {};
+    jQuery(".js-sparkline:not(.js-sparkline-enabled)").each(
+      (index, element) => {
+        let el = jQuery(element);
+        let type = el.data("type");
+        let options = {};
 
-      // Sparkline types
-      let types = {
-        line: () => {
-          options['type'] = type;
-          options['lineWidth'] = el.data('line-width') || 2;
-          options['lineColor'] = el.data('line-color') || '#0665d0';
-          options['fillColor'] = el.data('fill-color') || '#0665d0';
-          options['spotColor'] = el.data('spot-color') || '#495057';
-          options['minSpotColor'] = el.data('min-spot-color') || '#495057';
-          options['maxSpotColor'] = el.data('max-spot-color') || '#495057';
-          options['highlightSpotColor'] = el.data('highlight-spot-color') || '#495057';
-          options['highlightLineColor'] = el.data('highlight-line-color') || '#495057';
-          options['spotRadius'] = el.data('spot-radius') || 2;
-          options['tooltipFormat'] = '{{prefix}}{{y}}{{suffix}}';
-        },
-        bar: () => {
-          options['type'] = type;
-          options['barWidth'] = el.data('bar-width') || 8;
-          options['barSpacing'] = el.data('bar-spacing') || 6;
-          options['barColor'] = el.data('bar-color') || '#0665d0';
-          options['tooltipFormat'] = '{{prefix}}{{value}}{{suffix}}';
-        },
-        pie: () => {
-          options['type'] = type;
-          options['sliceColors'] = ['#fadb7d', '#faad7d', '#75b0eb', '#abe37d'];
-          options['highlightLighten'] = el.data('highlight-lighten') || 1.1;
-          options['tooltipFormat'] = '{{prefix}}{{value}}{{suffix}}';
-        },
-        tristate: () => {
-          options['type'] = type;
-          options['barWidth'] = el.data('bar-width') || 8;
-          options['barSpacing'] = el.data('bar-spacing') || 6;
-          options['posBarColor'] = el.data('pos-bar-color') || '#82b54b';
-          options['negBarColor'] = el.data('neg-bar-color') || '#e04f1a';
-        }
-      };
+        // Sparkline types
+        let types = {
+          line: () => {
+            options["type"] = type;
+            options["lineWidth"] = el.data("line-width") || 2;
+            options["lineColor"] = el.data("line-color") || "#0665d0";
+            options["fillColor"] = el.data("fill-color") || "#0665d0";
+            options["spotColor"] = el.data("spot-color") || "#495057";
+            options["minSpotColor"] = el.data("min-spot-color") || "#495057";
+            options["maxSpotColor"] = el.data("max-spot-color") || "#495057";
+            options["highlightSpotColor"] =
+              el.data("highlight-spot-color") || "#495057";
+            options["highlightLineColor"] =
+              el.data("highlight-line-color") || "#495057";
+            options["spotRadius"] = el.data("spot-radius") || 2;
+            options["tooltipFormat"] = "{{prefix}}{{y}}{{suffix}}";
+          },
+          bar: () => {
+            options["type"] = type;
+            options["barWidth"] = el.data("bar-width") || 8;
+            options["barSpacing"] = el.data("bar-spacing") || 6;
+            options["barColor"] = el.data("bar-color") || "#0665d0";
+            options["tooltipFormat"] = "{{prefix}}{{value}}{{suffix}}";
+          },
+          pie: () => {
+            options["type"] = type;
+            options["sliceColors"] = [
+              "#fadb7d",
+              "#faad7d",
+              "#75b0eb",
+              "#abe37d",
+            ];
+            options["highlightLighten"] = el.data("highlight-lighten") || 1.1;
+            options["tooltipFormat"] = "{{prefix}}{{value}}{{suffix}}";
+          },
+          tristate: () => {
+            options["type"] = type;
+            options["barWidth"] = el.data("bar-width") || 8;
+            options["barSpacing"] = el.data("bar-spacing") || 6;
+            options["posBarColor"] = el.data("pos-bar-color") || "#82b54b";
+            options["negBarColor"] = el.data("neg-bar-color") || "#e04f1a";
+          },
+        };
 
-      // If the correct type is set init the chart
-      if (types[type]) {
-        types[type]();
+        // If the correct type is set init the chart
+        if (types[type]) {
+          types[type]();
 
-        // Extra options added only if specified
-        if (type === 'line') {
-          if (el.data('chart-range-min') >= 0 || el.data('chart-range-min')) {
-            options['chartRangeMin'] = el.data('chart-range-min');
+          // Extra options added only if specified
+          if (type === "line") {
+            if (el.data("chart-range-min") >= 0 || el.data("chart-range-min")) {
+              options["chartRangeMin"] = el.data("chart-range-min");
+            }
+
+            if (el.data("chart-range-max") >= 0 || el.data("chart-range-max")) {
+              options["chartRangeMax"] = el.data("chart-range-max");
+            }
           }
 
-          if (el.data('chart-range-max') >= 0 || el.data('chart-range-max')) {
-            options['chartRangeMax'] = el.data('chart-range-max');
+          // Add common options used in all types
+          options["width"] = el.data("width") || "120px";
+          options["height"] = el.data("height") || "80px";
+          options["tooltipPrefix"] = el.data("tooltip-prefix")
+            ? el.data("tooltip-prefix") + " "
+            : "";
+          options["tooltipSuffix"] = el.data("tooltip-suffix")
+            ? " " + el.data("tooltip-suffix")
+            : "";
+
+          // If we need a responsive width for the chart, then don't add .js-sparkline-enabled class and re-run the helper on window resize
+          if (options["width"] === "100%") {
+            if (!jqSparklineResize) {
+              // Make sure that we bind the event only once
+              jqSparklineResize = true;
+
+              // On window resize, re-run the Sparkline helper
+              jQuery(window).on(
+                "resize.pixelcave.helpers.sparkline",
+                function (e) {
+                  clearTimeout(jqSparklineTimeout);
+
+                  jqSparklineTimeout = setTimeout(() => {
+                    self.sparkline();
+                  }, 500);
+                }
+              );
+            }
+          } else {
+            // It has a specific width (it doesn't need to re-init again on resize), so add .js-sparkline-enabled class to tag it as activated
+            jQuery(element).addClass("js-sparkline-enabled");
           }
-        }
 
-        // Add common options used in all types
-        options['width'] = el.data('width') || '120px';
-        options['height'] = el.data('height') || '80px';
-        options['tooltipPrefix'] = el.data('tooltip-prefix') ? el.data('tooltip-prefix') + ' ' : '';
-        options['tooltipSuffix'] = el.data('tooltip-suffix') ? ' ' + el.data('tooltip-suffix') : '';
-
-        // If we need a responsive width for the chart, then don't add .js-sparkline-enabled class and re-run the helper on window resize
-        if (options['width'] === '100%') {
-          if (!jqSparklineResize) {
-            // Make sure that we bind the event only once
-            jqSparklineResize = true;
-
-            // On window resize, re-run the Sparkline helper
-            jQuery(window).on('resize.pixelcave.helpers.sparkline', function (e) {
-              clearTimeout(jqSparklineTimeout);
-
-              jqSparklineTimeout = setTimeout(() => {
-                self.sparkline();
-              }, 500);
-            });
-          }
+          // Finally init it
+          jQuery(element).sparkline(el.data("points") || [0], options);
         } else {
-          // It has a specific width (it doesn't need to re-init again on resize), so add .js-sparkline-enabled class to tag it as activated
-          jQuery(element).addClass('js-sparkline-enabled');
+          console.log(
+            "[jQuery Sparkline JS Helper] Please add a correct type (line, bar, pie or tristate) in all your elements with 'js-sparkline' class."
+          );
         }
-
-        // Finally init it
-        jQuery(element).sparkline(el.data('points') || [0], options);
-      } else {
-        console.log('[jQuery Sparkline JS Helper] Please add a correct type (line, bar, pie or tristate) in all your elements with \'js-sparkline\' class.')
       }
-    });
+    );
   }
 
   /*
@@ -1049,25 +1140,39 @@ export default class Helpers {
   static jqValidation() {
     // Set default options for jQuery Validation plugin
     jQuery.validator.setDefaults({
-      errorClass: 'invalid-feedback animated fadeIn',
-      errorElement: 'div',
+      errorClass: "invalid-feedback animated fadeIn",
+      errorElement: "div",
       errorPlacement: (error, el) => {
-        jQuery(el).addClass('is-invalid');
-        jQuery(el).parents('div:not(.input-group)').first().append(error);
+        jQuery(el).addClass("is-invalid");
+        jQuery(el).parents("div:not(.input-group)").first().append(error);
       },
-      highlight: el => {
-        jQuery(el).parents('div:not(.input-group)').first().find('.is-invalid').removeClass('is-invalid').addClass('is-invalid');
+      highlight: (el) => {
+        jQuery(el)
+          .parents("div:not(.input-group)")
+          .first()
+          .find(".is-invalid")
+          .removeClass("is-invalid")
+          .addClass("is-invalid");
       },
-      success: el => {
-        jQuery(el).parents('div:not(.input-group)').first().find('.is-invalid').removeClass('is-invalid');
+      success: (el) => {
+        jQuery(el)
+          .parents("div:not(.input-group)")
+          .first()
+          .find(".is-invalid")
+          .removeClass("is-invalid");
         jQuery(el).remove();
-      }
+      },
     });
 
     // Add custom email validation rule which requires a dot after @
-    jQuery.validator.addMethod('emailWithDot', function(value, element) {
-      let reg = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-      return this.optional(element) || reg.test(value);
-    }, 'Please enter a valid email address');
+    jQuery.validator.addMethod(
+      "emailWithDot",
+      function (value, element) {
+        let reg =
+          /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+        return this.optional(element) || reg.test(value);
+      },
+      "Please enter a valid email address"
+    );
   }
 }

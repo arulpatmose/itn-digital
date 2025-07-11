@@ -28,6 +28,7 @@ class pageEcomDashboard {
 
     // Overview Chart Options
     chartOverviewOptions = {
+      responsive: true,
       maintainAspectRatio: false,
       tension: .4,
       scales: {

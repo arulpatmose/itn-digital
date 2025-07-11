@@ -6,7 +6,7 @@
 // Colors
 
 $primary-light:              tint-color($primary, 35%) !default;
-$primary-lighter:            tint-color($primary, 65%) !default;
+$primary-lighter:            tint-color($primary, 80%) !default;
 $primary-dark:             #4B5563 !default;
 $primary-darker:           #1F2937 !default;
 $success-light:              tint-color($success, 80%) !default;
@@ -14,8 +14,8 @@ $info-light:                 tint-color($info, 80%) !default;
 $warning-light:              tint-color($warning, 80%) !default;
 $danger-light:               tint-color($danger, 80%) !default;
 
-$body-bg-dark:              darken($body-bg, 4.5%) !default;
-$body-bg-light:             lighten($body-bg, 3.5%) !default;
+$body-bg-dark:              darken($light, 4.5%) !default;
+$body-bg-light:             lighten($light, 3.5%) !default;
 
 $body-color-dark:           shade-color($body-color, 8%) !default;
 $body-color-light:          #e9ecef !default;
@@ -38,7 +38,7 @@ $zindex-block-fullscreen:   $zindex-fixed + 5 !default;
 // Header
 
 $header-height:             4rem !default;           // Best values > 3rem and < 5rem
-$header-bg:                 rgba($white, .75) !default;
+$header-bg:                 rgba($white, .95) !default;
 $header-dark-bg:            rgba($primary-darker, 1) !default;
 
 

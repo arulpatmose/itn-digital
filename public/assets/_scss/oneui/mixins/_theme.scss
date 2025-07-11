@@ -73,7 +73,9 @@
   @include text-emphasis-variant(".text-dual", $primary-dark);
 
   .page-header-dark #page-header,
-  .sidebar-dark #sidebar {
+  .sidebar-dark #sidebar,
+  html.dark #page-header,
+  html.dark #sidebar {
     @include text-emphasis-variant(".text-dual", $body-color-light);
   }
 
@@ -127,7 +129,9 @@
 
   // Used for buttons that adapt to light/dark header and sidebar variations
   .page-header-dark #page-header .btn-alt-secondary,
-  .sidebar-dark #sidebar .btn-alt-secondary {
+  .sidebar-dark #sidebar .btn-alt-secondary,
+  html.dark #page-header .btn-alt-secondary,
+  html.dark #sidebar .btn-alt-secondary {
     @include button-variant(lighten($primary-darker, 5%), lighten($primary-darker, 5%), $white, darken($primary-darker, 5%), darken($primary-darker, 5%), $white);
   }
 
@@ -455,6 +459,10 @@
     }
   }
 
+  .form-control::placeholder {
+    color: tint-color($body-color, 50%);
+  }
+
   .form-select {
     &:focus::-ms-value {
       color: $input-color;
@@ -542,6 +550,17 @@
     }
   }
 
+  .form-floating > .form-control::placeholder {
+    color: transparent;
+  }
+
+  .form-floating > .form-control:focus ~ label::after,
+  .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+  .form-floating > .form-control-plaintext ~ label::after,
+  .form-floating > .form-select ~ label::after {
+    background-color: $input-bg;
+  }
+
   // Borders
   .border {
     border-color: $body-bg-dark !important;
@@ -591,8 +610,11 @@
 
   // Layout/Style variations based on #page-container classes
   #page-container {
+    background-color: $body-bg;
+    
     // Page header
-    &.page-header-dark #page-header {
+    &.page-header-dark #page-header,
+    html.dark & #page-header {
       color: darken($body-color-light, 8%);
       background-color: $header-dark-bg;
     }
@@ -607,7 +629,8 @@
           background-color: $header-bg;
         }
 
-        &.page-header-scroll.page-header-dark #page-header {
+        &.page-header-scroll.page-header-dark #page-header,
+        html.dark &.page-header-scroll #page-header {
           background-color: $header-dark-bg;
         }
       }
@@ -618,7 +641,8 @@
       background-color: $body-bg-light;
     }
   
-    &.sidebar-dark #sidebar {
+    &.sidebar-dark #sidebar,
+    html.dark & #sidebar {
       color: $body-color-light;
       background-color: $sidebar-dark-bg;
   
@@ -768,10 +792,14 @@
     background-color: transparent;
   }
 
-  // Dark Sidebar Variation
+  // Dark Variation
   .nav-main-dark,
   .sidebar-dark #sidebar,
-  .page-header-dark #page-header {
+  .page-header-dark #page-header,
+  html.dark #sidebar,
+  html.dark #page-header,
+  html.dark #side-overlay,
+  html.dark #main-container {
     // Headings
     .nav-main-heading {
       color: darken($body-bg-dark, 35%);
@@ -836,7 +864,10 @@
     // Dark Variation
     .nav-main-dark.nav-main-horizontal,
     .sidebar-dark #sidebar .nav-main-horizontal,
-    .page-header-dark #page-header .nav-main-horizontal {
+    .page-header-dark #page-header .nav-main-horizontal,
+    html.dark #sidebar .nav-main-horizontal,
+    html.dark #page-header .nav-main-horizontal,
+    html.dark #main-container .nav-main-horizontal {
       .nav-main-submenu {
         background-color: darken($primary-darker, 3%) !important;
       }
@@ -981,7 +1012,7 @@
   }
 
   // FullCalendar
-  .fc-theme-standard {
+  .fc.fc-theme-standard {
     a {
       color: $body-color;
     }
@@ -1165,5 +1196,10 @@
   .jvectormap-zoomout,
   .jvectormap-goback {
     background: $primary-dark;
+  }
+
+  // DataTables
+  table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1) > * {
+    box-shadow: inset 0 0 0 9999px lighten($body-bg, 1.5%);
   }
 }

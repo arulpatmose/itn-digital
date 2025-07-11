@@ -92,27 +92,27 @@ class pageCompCharts {
 
     // Init Charts
     if (chartLinesCon !== null) {
-      chartLines = new Chart(chartLinesCon, { type: 'line', data: chartLinesBarsRadarData, options: { tension: .4 } },);
+      chartLines = new Chart(chartLinesCon, { type: 'line', data: chartLinesBarsRadarData, options: { responsive: true, maintainAspectRatio: false, tension: .4 } },);
     }
 
     if (chartBarsCon !== null) {
-      chartBars = new Chart(chartBarsCon, { type: 'bar', data: chartLinesBarsRadarData });
+      chartBars = new Chart(chartBarsCon, { type: 'bar', data: chartLinesBarsRadarData, options: { responsive: true, maintainAspectRatio: false } });
     }
 
     if (chartRadarCon !== null) {
-      chartRadar = new Chart(chartRadarCon, { type: 'radar', data: chartLinesBarsRadarData });
+      chartRadar = new Chart(chartRadarCon, { type: 'radar', data: chartLinesBarsRadarData, options: { responsive: true, maintainAspectRatio: false } });
     }
 
     if (chartPolarCon !== null) {
-      chartPolar = new Chart(chartPolarCon, { type: 'polarArea', data: chartPolarPieDonutData });
+      chartPolar = new Chart(chartPolarCon, { type: 'polarArea', data: chartPolarPieDonutData, options: { responsive: true, maintainAspectRatio: false } });
     }
 
     if (chartPieCon !== null) {
-      chartPie = new Chart(chartPieCon, { type: 'pie', data: chartPolarPieDonutData });
+      chartPie = new Chart(chartPieCon, { type: 'pie', data: chartPolarPieDonutData, options: { responsive: true, maintainAspectRatio: false } });
     }
 
     if (chartDonutCon !== null) {
-      chartDonut = new Chart(chartDonutCon, { type: 'doughnut', data: chartPolarPieDonutData });
+      chartDonut = new Chart(chartDonutCon, { type: 'doughnut', data: chartPolarPieDonutData, options: { responsive: true, maintainAspectRatio: false } });
     }
   }
 
