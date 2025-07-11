@@ -34,7 +34,7 @@ class Template extends BaseConfig
     //                                 - Layout helper buttons [data-toggle="layout" data-action="dark_mode_[on/off/toggle]"]
     //                                 - ..and/or One.layout('dark_mode_[on/off/toggle]')
     // false                         : Does not remember the active color theme and Dark Mode
-    public $remember_theme             = false;
+    public $remember_theme             = true;
 
     // true                          : Enables Page Loader screen
     // false                         : Disables Page Loader screen
@@ -63,7 +63,7 @@ class Template extends BaseConfig
 
     // true                          : Dark themed Sidebar
     // false                         : Light themed Sidebar (works with Dark Mode off)
-    public $l_sidebar_dark             = true;
+    public $l_sidebar_dark             = false;
 
     // true                          : Hoverable Side Overlay (screen width > 991px)
     // false                         : Normal mode
@@ -231,7 +231,8 @@ class Template extends BaseConfig
                     'url'   => 'commercials/add'
                 )
             )
-        ), array(
+        ),
+        array(
             'name'  => 'Accounts',
             'icon'  => 'fa fa-file-invoice-dollar',
             'url'   => 'accounts'
