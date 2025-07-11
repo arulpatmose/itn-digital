@@ -211,9 +211,13 @@ class SchedulesModel extends Model
         $builder->join('spots as sp', 'sp.spot_id = si.spot');
         $builder->join('platforms as pl', 'pl.pfm_id = s.platform');
         $builder->join('formats as f', 'f.format_id = c.format');
-        $query = $builder->orderBy('sp.priority', 'asc');
 
-        return $query->get()->getResultArray();
+        // Order first by platform order (ascending by platform id or name)
+        // Then order by spot priority ascending
+        $builder->orderBy('pl.pfm_id', 'asc');
+        $builder->orderBy('sp.priority', 'asc');
+
+        return $builder->get()->getResultArray();
     }
 
     public function getSchedulesForAccounts($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue = "", $filters = null)
