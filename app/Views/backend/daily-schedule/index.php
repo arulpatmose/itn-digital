@@ -148,14 +148,22 @@
                                                                             </a>
 
                                                                             <a role="button"
-                                                                                class="btn btn-sm btn-warning"
+                                                                                class="btn btn-sm btn-warning position-relative"
                                                                                 id="view-comments-button"
                                                                                 data-schedule-id="<?= esc($item['sched_id']) ?>"
                                                                                 data-schedule-item-id="<?= esc($item['scd_id']) ?>"
                                                                                 href="#"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#viewCommentsModal">
+
                                                                                 <i class="fa fa-fw fa-comments"></i>
+
+                                                                                <?php if (!empty($item['remarks'])): ?>
+                                                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-2"
+                                                                                        style="z-index: 10;">
+                                                                                        <span class="visually-hidden">New Comments</span>
+                                                                                    </span>
+                                                                                <?php endif ?>
                                                                             </a>
 
                                                                             <a role="button"
@@ -242,17 +250,17 @@
             </div>
             <div class="modal-body">
                 <!-- Schedule Remarks -->
-                <h6 class="fw-bold mb-2">📝 Schedule Remarks</h6>
+                <h6 class="fw-bold mb-2">📝 General Schedule Remarks</h6>
                 <ul class="list-group text-start" id="schedule-remarks-list"></ul>
                 <div class="text-muted text-center py-2 d-none" id="no-schedule-remarks-msg">
-                    No remarks added for this schedule.
+                    This schedule does not contain any general comments.
                 </div>
-                <hr class="my-2">
+                <hr class="my-4 border border-secondary border-1 opacity-75">
                 <!-- Schedule Item Comments -->
-                <h6 class="fw-bold mb-2">💬 Item-Specific Comments</h6>
+                <h6 class="fw-bold mb-2">💬 Remarks added to this Schedule Item</h6>
                 <ul class="list-group text-start" id="schedule-item-comments-list"></ul>
                 <div class="text-muted text-center py-2 d-none" id="no-item-comments-msg">
-                    No comments for this schedule item.
+                    You haven’t added any item-specific remarks yet.
                 </div>
             </div>
         </div>
@@ -263,6 +271,150 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
+    // Update modal on Daily Schedule Page
+    jQuery(document).on('click', '#schedule-update-button', function(event) {
+        event.preventDefault();
+        var id = $(this).data('id');
+        var update_url = $(this).data('url');
+        var edit_url = '/daily-schedule/edit/' + id;
+
+        $.ajax({
+            type: "POST",
+            url: edit_url,
+            cache: false,
+            success: function(res) {
+                if (res !== undefined || res === '') {
+                    $('#schedule-link').val(res.link);
+                    $('#schedule-remarks').val(res.remarks);
+                }
+            }
+        });
+
+        jQuery('#schedule-update-modal').modal('show');
+
+        // Attach a click event handler to the "Submit" button within the modal
+        jQuery('#schedule-update-form-button').on('click', function() {
+            // Get the form data using jQuery
+            var formData = new FormData($('#schedule-update-form')[0]);
+
+            formData.append('sched_id', id);
+
+            postData = new URLSearchParams(formData).toString();
+
+            $.ajax({
+                type: "POST",
+                url: update_url,
+                cache: false,
+                data: postData,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Close the modal
+                        $('#schedule-update-form').modal('hide');
+                        toast.fire({
+                            title: 'The schedule was updated successfully',
+                            showCancelButton: false,
+                            showConfirmButton: true
+                        }).then(function() {
+                            window.location.reload();
+                        })
+                    } else {
+                        toast.fire({
+                            title: 'Failed to update schedule',
+                            text: 'Please try again.'
+                        }).then(function() {
+                            window.location.reload();
+                        })
+                    }
+                },
+                error: function(error) {
+                    toast.fire({
+                        title: 'Failed to update schedule!',
+                        text: 'Something went wrong'
+                    }).then(function() {
+                        window.location.reload();
+                    })
+                }
+            });
+        });
+    });
+
+    // Bulk Update Links on Daily Schedule
+    $(document).ready(function() {
+        $('.bulk-update-button').click(function(event) {
+            event.preventDefault();
+            var update_url = '/daily-schedule/update-bulk';
+
+            let tableId = $(this).data('table-id');
+            let selectedIds = [];
+
+            $(this)
+                .closest('.block') // Get closest block wrapper for this button
+                .find(`#data-table-${tableId} .select-row:checked`) // Find checked rows in that block
+                .each(function() {
+                    selectedIds.push($(this).data('id'));
+                });
+
+            if (selectedIds.length > 0) {
+                // Show the modal
+                $('#schedule-update-modal').modal('show');
+
+                // Attach a click event handler to the "Submit" button within the modal
+                $('#schedule-update-form-button').off('click').on('click', function() {
+                    // Get the form data using jQuery
+                    var formData = new FormData($('#schedule-update-form')[0]);
+
+                    // Append selected IDs
+                    selectedIds.forEach(function(id) {
+                        formData.append('ids[]', id);
+                    });
+
+                    // Convert FormData to URL-encoded string
+                    var postData = new URLSearchParams(formData).toString();
+
+                    $.ajax({
+                        type: "POST",
+                        url: update_url, // Change this URL to your bulk update endpoint
+                        cache: false,
+                        data: postData,
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // Close the modal
+                                $('#schedule-update-modal').modal('hide');
+                                toast.fire({
+                                    title: 'The schedule was updated successfully',
+                                    showCancelButton: false,
+                                    showConfirmButton: true
+                                }).then(function() {
+                                    window.location.reload();
+                                });
+                            } else {
+                                toast.fire({
+                                    title: 'Failed to update schedule',
+                                    text: 'Please try again.'
+                                }).then(function() {
+                                    window.location.reload();
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            toast.fire({
+                                title: 'Failed to update schedule!',
+                                text: 'Something went wrong'
+                            }).then(function() {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                });
+            } else {
+                toast.fire({
+                    title: 'Oops!',
+                    text: 'Please select at least one schedule item.'
+                });
+            }
+        });
+    });
+
     $(document).on('click', '#view-comments-button', function(e) {
         e.preventDefault();
 

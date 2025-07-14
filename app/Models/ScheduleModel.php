@@ -199,7 +199,7 @@ class ScheduleModel extends Model
     public function getAllSchedules($program, $date, $platform = NULL)
     {
         $builder = $this->db->table('schedule_items as si');
-        $builder->select('s.sched_id, si.scd_id, pl.name as platform, pl.channel as channel, c.duration as duration, c.name as commercial, c.category as category, c.sub_category as sub_category, sp.name as spot, sp.priority, si.published, si.link, f.name as format');
+        $builder->select('s.sched_id, si.scd_id, pl.name as platform, pl.channel as channel, c.duration as duration, c.name as commercial, c.category as category, c.sub_category as sub_category, sp.name as spot, sp.priority, si.published, si.link, si.remarks, f.name as format');
         $builder->where('s.deleted_at IS NULL', null, false);
         $builder->where('si.deleted_at IS NULL', null, false);
         $builder->where('si.sched_date', $date);
@@ -241,6 +241,7 @@ class ScheduleModel extends Model
         sp.priority,
         si.published,
         si.link,
+        si.remarks,
         f.name as format
     ');
         $builder->where('s.deleted_at IS NULL', null, false);
