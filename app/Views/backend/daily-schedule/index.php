@@ -219,7 +219,12 @@
                     <form id="schedule-update-form" action="" autocomplete="off">
                         <div class="mb-4">
                             <label class="form-label" for="schedule-link">Reference Link</label>
-                            <input type="url" class="form-control" id="schedule-link" name="schedule-link" placeholder="Reference Link">
+                            <div class="input-group">
+                                <input type="url" class="form-control" id="schedule-link" name="schedule-link" placeholder="Reference Link">
+                                <button type="button" class="btn btn-outline-secondary" id="clear-link" aria-label="Clear link input">
+                                    Clear
+                                </button>
+                            </div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="schedule-remarks">Comments</label>
@@ -487,6 +492,10 @@
                 }).then(() => window.location.reload());
             }
         });
+    });
+
+    $('#clear-link').click(function() {
+        $('#schedule-link').val('');
     });
 </script>
 <?= $this->endSection() ?>
