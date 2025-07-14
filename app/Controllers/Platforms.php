@@ -120,6 +120,14 @@ class Platforms extends BaseController
 
     public function destroy()
     {
+        // Ensure it's an AJAX request
+        if (!$this->request->isAjax()) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid request method. AJAX request required.'
+            ])->setStatusCode(400); // Bad Request
+        }
+
         if (!auth()->user()->can('platforms.delete')) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -127,26 +135,19 @@ class Platforms extends BaseController
             ])->setStatusCode(403);
         }
 
-        if ($this->request->isAjax()) {
-            $id = $this->request->getPost('id');
-            $query = $this->platformModel->delete($id);
+        $id = $this->request->getPost('id');
+        $query = $this->platformModel->delete($id);
 
-            if ($query) {
-                return $this->response->setJSON([
-                    'status' => 'success',
-                    'message' => 'The platform was deleted successfully'
-                ])->setStatusCode(200);
-            } else {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'An error occurred while deleting the platform'
-                ])->setStatusCode(500);
-            }
+        if ($query) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'The platform was deleted successfully'
+            ])->setStatusCode(200);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'An error occurred while deleting the platform'
+            ])->setStatusCode(500);
         }
-
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Invalid request method. AJAX request required.'
-        ])->setStatusCode(400);
     }
 }

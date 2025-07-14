@@ -336,20 +336,20 @@ class Users extends BaseController
 
     public function restoreUser()
     {
-        if (!auth()->user()->can('users.delete')) {
-            return $this->response->setStatusCode(400)
-                ->setJSON([
-                    'status' => 'error',
-                    'message' => 'You are not allowed to do this!'
-                ]);
-        }
-
         // Ensure AJAX request
         if (!$this->request->isAjax()) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Invalid request method. AJAX request required.'
             ])->setStatusCode(400);
+        }
+
+        if (!auth()->user()->can('users.delete')) {
+            return $this->response->setStatusCode(400)
+                ->setJSON([
+                    'status' => 'error',
+                    'message' => 'You are not allowed to do this!'
+                ]);
         }
 
         $user_id = $this->request->getVar('user_id');

@@ -121,6 +121,14 @@ class Spots extends BaseController
 
     public function destroy()
     {
+        // Ensure it's an AJAX request
+        if (!$this->request->isAjax()) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid request method. AJAX request required.'
+            ])->setStatusCode(400); // Bad Request
+        }
+
         if (!auth()->user()->can('spots.delete')) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -128,26 +136,19 @@ class Spots extends BaseController
             ])->setStatusCode(403);
         }
 
-        if ($this->request->isAjax()) {
-            $id = $this->request->getPost('id');
-            $query = $this->spotModel->delete($id);
+        $id = $this->request->getPost('id');
+        $query = $this->spotModel->delete($id);
 
-            if ($query) {
-                return $this->response->setJSON([
-                    'status' => 'success',
-                    'message' => 'The spot was deleted successfully'
-                ])->setStatusCode(200);
-            } else {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'An error occurred while deleting the spot'
-                ])->setStatusCode(500);
-            }
+        if ($query) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'The spot was deleted successfully'
+            ])->setStatusCode(200);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'An error occurred while deleting the spot'
+            ])->setStatusCode(500);
         }
-
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Invalid request method. AJAX request required.'
-        ])->setStatusCode(400);
     }
 }
