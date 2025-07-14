@@ -142,5 +142,43 @@
             });
         }
     });
+
+    // Delete User Function
+    jQuery(document).on('click', '#delete-user-button', function(event) {
+        event.preventDefault();
+        var id = $(this).data('id');
+        var url = $(this).data('url');
+        toast.fire({
+            title: "Are you sure?",
+            html: "You won't be able to revert this!",
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonText: "Yes, delete it",
+            allowOutsideClick: false
+        }).then(function(result) {
+            if (result.value) {
+                $.post(url, {
+                    user_id: id
+                }, function(data) {
+                    response = jQuery.parseJSON(data);
+                    if (response.code == 1) {
+                        toast.fire({
+                            title: "Success",
+                            icon: 'success',
+                            html: response.message
+                        }).then(function() {
+                            jQuery('#table-users').DataTable().ajax.reload(null, false);
+                        });
+                    } else {
+                        toast.fire({
+                            title: "Error",
+                            icon: 'error',
+                            html: response.message
+                        });
+                    }
+                });
+            }
+        });
+    });
 </script>
 <?= $this->endSection() ?>

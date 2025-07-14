@@ -172,5 +172,71 @@
             });
         }
     });
+
+    // Delete Commercial Function
+    jQuery(document).on('click', '#delete-commercial-button', function(event) {
+        event.preventDefault();
+        var id = $(this).data('id');
+        var url = $(this).data('url');
+        toast.fire({
+            title: "Are you sure?",
+            html: "You won't be able to revert this!",
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonText: "Yes, delete it",
+            allowOutsideClick: false
+        }).then(function(result) {
+            if (result.value) {
+                $.post(url, {
+                    id: id
+                }, function(data) {
+                    response = jQuery.parseJSON(data);
+                    if (response.code == 1) {
+                        toast.fire({
+                            title: "Success",
+                            icon: 'success',
+                            html: response.message
+                        }).then(function() {
+                            jQuery('#table-commercials').DataTable().ajax.reload(null, false);
+                        });
+                    } else {
+                        toast.fire({
+                            title: "Error",
+                            icon: 'error',
+                            html: response.message
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Download Commercial Link Function
+    jQuery(document).on('click', '#commercial-link-button', function(event) {
+        event.preventDefault();
+        var id = $(this).data('id');
+        var url = $(this).data('url');
+
+        if (IsURL(url) !== true || url === null || url === undefined || url === '') {
+            toast.fire({
+                title: "Oops.. Sorry!",
+                html: "No valid download links found for this commercial!",
+                showCloseButton: true,
+                allowOutsideClick: false
+            })
+        } else {
+            toast.fire({
+                title: "Download Commercial",
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: "Download",
+                allowOutsideClick: false
+            }).then(function(result) {
+                if (result.value) {
+                    window.open(url, '_blank');
+                }
+            });
+        }
+    });
 </script>
 <?= $this->endSection() ?>

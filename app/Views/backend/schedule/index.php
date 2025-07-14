@@ -241,6 +241,45 @@
             });
         }
     });
+
+    // Delete Schedules Function
+    jQuery(document).on('click', '#delete-schedule-item-button', function(event) {
+        event.preventDefault();
+        var id = $(this).data('id');
+        var url = $(this).data('url');
+        var schedule = $(this).data('schedule');
+        toast.fire({
+            title: "Are you sure?",
+            html: "You won't be able to revert this!",
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonText: "Yes, Delete",
+            allowOutsideClick: false
+        }).then(function(result) {
+            if (result.value) {
+                $.post(url, {
+                    id: id
+                }, function(data) {
+                    response = jQuery.parseJSON(data);
+                    if (response.code == 1) {
+                        toast.fire({
+                            title: "Success",
+                            icon: 'success',
+                            html: response.message
+                        }).then(function() {
+                            location.reload();
+                        });
+                    } else {
+                        toast.fire({
+                            title: "Error",
+                            icon: 'error',
+                            html: response.message
+                        });
+                    }
+                });
+            }
+        });
+    });
 </script>
 <?= $this->endSection() ?>
 
