@@ -229,6 +229,7 @@ class ScheduleModel extends Model
         $builder = $this->db->table('schedule_items as si');
         $builder->select('
         s.sched_id,
+        s.remarks as schedule_remarks,
         si.scd_id,
         pl.pfm_id,
         pl.name as platform_name,
@@ -241,7 +242,7 @@ class ScheduleModel extends Model
         sp.priority,
         si.published,
         si.link,
-        si.remarks,
+        si.remarks as item_remarks,
         f.name as format
     ');
         $builder->where('s.deleted_at IS NULL', null, false);
@@ -273,7 +274,6 @@ class ScheduleModel extends Model
                 $grouped[$pfm_id] = [
                     'platform_name' => $item['platform_name'],
                     'channel' => $item['channel'],
-                    'icon_class' => $item['icon_class'] ?? '',  // default empty if not set
                     'items' => [],
                 ];
             }
