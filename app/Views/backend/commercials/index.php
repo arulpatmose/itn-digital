@@ -187,24 +187,37 @@
             allowOutsideClick: false
         }).then(function(result) {
             if (result.value) {
-                $.post(url, {
-                    id: id
-                }, function(data) {
-                    response = jQuery.parseJSON(data);
-                    if (response.code == 1) {
-                        toast.fire({
-                            title: "Success",
-                            icon: 'success',
-                            html: response.message
-                        }).then(function() {
-                            jQuery('#table-commercials').DataTable().ajax.reload(null, false);
-                        });
-                    } else {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json', // Automatically parses response as JSON
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            toast.fire({
+                                title: "Success",
+                                icon: 'success',
+                                html: response.message
+                            }).then(function() {
+                                jQuery('#table-commercials').DataTable().ajax.reload(null, false);
+                            });
+                        } else {
+                            toast.fire({
+                                title: "Error",
+                                icon: 'error',
+                                html: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
                         toast.fire({
                             title: "Error",
                             icon: 'error',
-                            html: response.message
+                            html: "Something went wrong. Please try again later."
                         });
+                        console.error("AJAX Error:", status, error);
                     }
                 });
             }

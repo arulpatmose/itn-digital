@@ -257,24 +257,37 @@
             allowOutsideClick: false
         }).then(function(result) {
             if (result.value) {
-                $.post(url, {
-                    id: id
-                }, function(data) {
-                    response = jQuery.parseJSON(data);
-                    if (response.code == 1) {
-                        toast.fire({
-                            title: "Success",
-                            icon: 'success',
-                            html: response.message
-                        }).then(function() {
-                            location.reload();
-                        });
-                    } else {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json', // Ensures the response is parsed automatically
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            toast.fire({
+                                title: "Success",
+                                icon: 'success',
+                                html: response.message
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            toast.fire({
+                                title: "Error",
+                                icon: 'error',
+                                html: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
                         toast.fire({
                             title: "Error",
                             icon: 'error',
-                            html: response.message
+                            html: "Something went wrong. Please try again."
                         });
+                        console.error("AJAX error:", status, error);
                     }
                 });
             }
