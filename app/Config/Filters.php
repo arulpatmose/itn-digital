@@ -69,9 +69,7 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'session' => ['except' => ['login*', 'register', 'logout', 'auth/a/*']],
         ],
         'after' => [
             // 'honeypot',
@@ -103,5 +101,13 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'auth-rates' => [
+            'before' => [
+                'login*',
+                'register',
+                'auth/*'
+            ]
+        ],
+    ];
 }
