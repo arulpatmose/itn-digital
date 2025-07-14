@@ -582,31 +582,6 @@ jQuery(document).ready(function () {
     }
 });
 
-// Handle Select Rows on Daily Schedule Table
-jQuery(document).ready(function ($) {
-    // Handle row click to toggle checkbox, excluding links and buttons
-    $('table tbody tr').click(function (event) {
-        // Check if the clicked element is an <a> tag
-        if (!$(event.target).is('input:checkbox, a, button')) {
-            let checkbox = $(this).find('.select-row');
-            checkbox.prop('checked', !checkbox.prop('checked'));
-        }
-    });
-
-    // Handle "Select All" checkbox
-    $('.daily-schedule-items-table .select-all').click(function () {
-        let isChecked = $(this).prop('checked');
-        $(this).closest('table').find('tbody .select-row').prop('checked', isChecked);
-    });
-
-    // Handle individual row checkboxes to update "Select All" checkbox state
-    $('.daily-schedule-items-table .select-row').change(function () {
-        let allChecked = $(this).closest('table').find('tbody .select-row:checked').length === $(this).closest('table').find('tbody .select-row').length;
-        $(this).closest('table').find('.select-all').prop('checked', allChecked);
-    });
-});
-
-
 // Handle Go Back funtion for Table Go Back Button
 function goBack() {
     window.history.back();

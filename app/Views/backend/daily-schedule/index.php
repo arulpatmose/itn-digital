@@ -54,7 +54,7 @@
                                     <div class="block-options">
                                         <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="block-option" data-action="fullscreen_toggle"><i class="si si-size-fullscreen"></i></button>
                                         <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="block-option" data-action="content_toggle"><i class="si si-arrow-up"></i></button>
-                                        <a href="#" role="button" id="bulk-update-button" class="btn btn-sm btn-primary bulk-update-button" data-table-id="<?php echo $index + 1; ?>">Update</a>
+                                        <a href="#" role="button" id="bulk-update-button" class="btn btn-sm btn-primary bulk-update-button">Update</a>
                                     </div>
                                 </div>
                                 <div class="block-content">
@@ -158,11 +158,8 @@
 
                                                                                 <i class="fa fa-fw fa-comments"></i>
 
-                                                                                <?php if (!empty($item['remarks'])): ?>
-                                                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-2"
-                                                                                        style="z-index: 10;">
-                                                                                        <span class="visually-hidden">New Comments</span>
-                                                                                    </span>
+                                                                                <?php if (!empty($item['item_remarks']) || !empty($item['schedule_remarks'])): ?>
+                                                                                    <span class="ripple-dot"></span>
                                                                                 <?php endif ?>
                                                                             </a>
 
@@ -271,6 +268,22 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
+    // ✅ Handle "Select All" checkbox
+    jQuery(document).ready(function($) {
+        $('.daily-schedule-items-table .select-all').click(function() {
+            let isChecked = $(this).prop('checked');
+            $(this).closest('table').find('tbody .select-row').prop('checked', isChecked);
+        });
+
+        // ✅ Handle individual checkbox change to update "Select All" state
+        $('.daily-schedule-items-table').on('change', '.select-row', function() {
+            let table = $(this).closest('table');
+            let total = table.find('tbody .select-row').length;
+            let checked = table.find('tbody .select-row:checked').length;
+            table.find('.select-all').prop('checked', total === checked);
+        });
+    });
+
     // Update modal on Daily Schedule Page
     jQuery(document).on('click', '#schedule-update-button', function(event) {
         event.preventDefault();
@@ -348,8 +361,9 @@
             let selectedIds = [];
 
             $(this)
-                .closest('.block') // Get closest block wrapper for this button
-                .find(`#data-table-${tableId} .select-row:checked`) // Find checked rows in that block
+                .closest('.block') // Ensure we're inside the same block
+                .find(`table[id^="data-table-"]`) // Find all tables in this block
+                .find('.select-row:checked') // Now get only selected rows inside
                 .each(function() {
                     selectedIds.push($(this).data('id'));
                 });
@@ -527,6 +541,48 @@
             /* Hide overflow */
             text-overflow: ellipsis !important;
             /* Show ... for overflow */
+        }
+    }
+
+    .ripple-dot {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
+        background-color: #d61f47;
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 0 0 rgba(214, 31, 71, 0.7);
+    }
+
+    .ripple-dot::before {
+        content: "";
+        top: 0;
+        right: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #d61f47;
+        border-radius: 50%;
+        z-index: -1;
+        animation: rippleEffect 1.5s ease-out infinite;
+    }
+
+    @keyframes rippleEffect {
+        0% {
+            transform: scale(0.5);
+            opacity: 0.8;
+        }
+
+        70% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(3);
+            opacity: 0;
         }
     }
 </style>
