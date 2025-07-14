@@ -291,6 +291,9 @@
         var update_url = $(this).data('url');
         var edit_url = '/daily-schedule/edit/' + id;
 
+        // Clear the form fields before loading new data
+        $('#schedule-update-form')[0].reset();
+
         $.ajax({
             type: "POST",
             url: edit_url,
@@ -369,6 +372,9 @@
                 });
 
             if (selectedIds.length > 0) {
+                // Clear the form on modal show
+                $('#schedule-update-form')[0].reset();
+
                 // Show the modal
                 $('#schedule-update-modal').modal('show');
 
