@@ -13,6 +13,7 @@ class Programs extends BaseController
     public function __construct()
     {
         $this->programModel = new ProgramModel();
+        helper('file_upload');
     }
 
     public function index()
@@ -52,32 +53,22 @@ class Programs extends BaseController
         }
 
         // Get Thumbnail File
-        $file = $this->request->getFile('program-thumbnail');
-
-        // If thumbanil file is valid, do upload
-        if ($file->isValid() && !$file->hasMoved()) {
-            $thumbName = $file->getRandomName();
-
-            $file->move('uploads/thumbnails', $thumbName);
-        }
+        $thumbFile = $this->request->getFile('program-thumbnail');
+        $thumbName = handleThumbnailUpload($thumbFile);
 
         // Prepare data to insert
         $data = [
             "name" => trim(ucwords($this->request->getVar('program-name'))),
             "type" => $this->request->getVar('program-type'),
-            "thumbnail" => isset($thumbName) ? $thumbName : NULL
+            "thumbnail" => $thumbName
         ];
 
         // Insert into database
         if ($this->programModel->insert($data, false)) {
-            $status = 'success';
-            $message = 'The program was addded successfully!';
-        } else {
-            $status = 'error';
-            $message = 'There was an error while adding the program!';
+            return redirect()->to('/programs')->with('success', 'The program was added successfully!');
         }
 
-        return redirect()->to('/programs')->with($status, $message);
+        return redirect()->back()->with('error', 'There was an error while adding the program!');
     }
 
     public function edit($id)
@@ -109,63 +100,43 @@ class Programs extends BaseController
     public function update($id)
     {
         if (!auth()->user()->can('programs.edit')) {
-            $status = 'error';
-            $message = 'You do not have permissions to access that page!';
-            return redirect()->back()->with($status, $message);
+            return redirect()->back()->with('error', 'You do not have permissions to access that page!');
         }
+
+        helper('file');
 
         $program = $this->programModel->find($id);
-
-        $oldThumbName = $program['thumbnail'];
-
-        // Get Thumbnail File
-        $file = $this->request->getFile('program-thumbnail');
-
-        // If thumbanil file is valid, do upload
-        if ($file->isValid() && !$file->hasMoved()) {
-            // Delete old thumbnail file if exists
-            if (isset($oldThumbName) && file_exists("uploads/thumbnails/" . $oldThumbName)) {
-                unlink("uploads/thumbnails/" . $oldThumbName);
-            }
-            // Upload new thumbnail
-            $ThumbName = $file->getRandomName();
-            $file->move('uploads/thumbnails', $ThumbName);
-        } else {
-            $ThumbName = $oldThumbName;
+        if (!$program) {
+            return redirect()->back()->with('error', 'Program not found!');
         }
 
-        // Remove thumbnail if selected
+        $thumbFile = $this->request->getFile('program-thumbnail');
         $removeThumb = $this->request->getVar('remove-thumbnail');
+        $thumbName = handleThumbnailUpload($thumbFile, $program['thumbnail'], $removeThumb);
 
-        if (isset($removeThumb) && $removeThumb == 1) {
-            if (isset($oldThumbName) && file_exists("uploads/thumbnails/" . $oldThumbName)) {
-                unlink("uploads/thumbnails/" . $oldThumbName);
-            }
-
-            $ThumbName = NULL;
-        }
-
-        // Prepare data to update
         $data = [
             "name" => trim(ucwords($this->request->getVar('program-name'))),
             "type" => $this->request->getVar('program-type'),
-            "thumbnail" => isset($ThumbName) ? $ThumbName : NULL
+            "thumbnail" => $thumbName
         ];
 
-        // Insert into database
         if ($this->programModel->update($id, $data, false)) {
-            $status = 'success';
-            $message = 'The program was updated successfully!';
-        } else {
-            $status = 'error';
-            $message = 'There was an error while updating the program!';
+            return redirect()->to('/programs')->with('success', 'The program was updated successfully!');
         }
 
-        return redirect()->to('/programs')->with($status, $message);
+        return redirect()->back()->with('error', 'There was an error while updating the program!');
     }
 
     public function destroy()
     {
+        // Ensure it's an AJAX request
+        if (!$this->request->isAjax()) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid request method. AJAX request required.'
+            ])->setStatusCode(400); // Bad Request
+        }
+
         if (!auth()->user()->can('programs.delete')) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -173,26 +144,24 @@ class Programs extends BaseController
             ])->setStatusCode(403);
         }
 
-        if ($this->request->isAjax()) {
-            $id = $this->request->getPost('id');
-            $query = $this->programModel->delete($id);
+        $id = $this->request->getPost('id');
+        $program = $this->programModel->find($id);
 
-            if ($query) {
-                return $this->response->setJSON([
-                    'status' => 'success',
-                    'message' => 'The program was deleted successfully'
-                ])->setStatusCode(200);
-            } else {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'An error occurred while deleting the program'
-                ])->setStatusCode(500);
-            }
+        // Remove thumbnail if it exists
+        if ($program) {
+            removeThumbnailFile($program['thumbnail']);
+        }
+
+        if ($this->programModel->delete($id)) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'The program was deleted successfully'
+            ])->setStatusCode(200);
         }
 
         return $this->response->setJSON([
             'status' => 'error',
-            'message' => 'Invalid request method. AJAX request required.'
-        ])->setStatusCode(400);
+            'message' => 'An error occurred while deleting the program'
+        ])->setStatusCode(500);
     }
 }
