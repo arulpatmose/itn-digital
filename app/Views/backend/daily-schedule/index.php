@@ -220,15 +220,15 @@
                         <div class="mb-4">
                             <label class="form-label" for="schedule-link">Reference Link</label>
                             <div class="input-group">
-                                <input type="url" class="form-control" id="schedule-link" name="schedule-link" placeholder="Reference Link">
-                                <button type="button" class="btn btn-outline-secondary" id="clear-link" aria-label="Clear link input">
+                                <input type="url" class="form-control" id="schedule-link" name="schedule-link" placeholder="Enter a valid URL">
+                                <button type="button" class="btn btn-secondary" id="clear-link" aria-label="Clear link input">
                                     Clear
                                 </button>
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="schedule-remarks">Comments</label>
-                            <textarea class="form-control" id="schedule-remarks" name="schedule-remarks" rows="4" placeholder="Comments"></textarea>
+                            <textarea class="form-control" id="schedule-remarks" name="schedule-remarks" rows="4" placeholder="Add your remarks or notes here"></textarea>
                         </div>
                     </form>
                 </div>
