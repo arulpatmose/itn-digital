@@ -121,9 +121,10 @@ class Clients extends BaseController
     public function destroy()
     {
         if (!auth()->user()->can('clients.delete')) {
-            $status = 'error';
-            $message = 'You do not have permissions to delete this client!';
-            return $this->response->setJSON(['status' => $status, 'message' => $message])->setStatusCode(403);
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'You do not have permissions to delete this spot!'
+            ])->setStatusCode(403);
         }
 
         if ($this->request->isAjax()) {
@@ -131,14 +132,21 @@ class Clients extends BaseController
             $query = $this->clientModel->delete($id);
 
             if ($query) {
-                $status = 'success';
-                $message = 'The client was deleted successfully';
-                return $this->response->setJSON(['status' => $status, 'message' => $message])->setStatusCode(200);
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'The client was deleted successfully'
+                ])->setStatusCode(200);
             } else {
-                $status = 'error';
-                $message = 'An error occurred while deleting the client';
-                return $this->response->setJSON(['status' => $status, 'message' => $message])->setStatusCode(500);
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'An error occurred while deleting the client'
+                ])->setStatusCode(500);
             }
         }
+
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Invalid request method. AJAX request required.'
+        ])->setStatusCode(400);
     }
 }

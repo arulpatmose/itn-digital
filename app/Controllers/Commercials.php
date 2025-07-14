@@ -150,26 +150,33 @@ class Commercials extends BaseController
     public function destroy()
     {
         if (!auth()->user()->can('commercials.delete')) {
-            $status = 'error';
-            $message = 'You do not have permissions to delete this commercial!';
-            return $this->response->setJSON(['status' => $status, 'message' => $message])->setStatusCode(403);
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'You do not have permissions to delete this commercial!'
+            ])->setStatusCode(403);
         }
 
         if ($this->request->isAjax()) {
             $id = $this->request->getPost('id');
-
             $query = $this->commercialModel->delete($id);
 
             if ($query) {
-                $status = 'success';
-                $message = 'The commercial was deleted successfully';
-                return $this->response->setJSON(['status' => $status, 'message' => $message])->setStatusCode(200);
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'The commercial was deleted successfully'
+                ])->setStatusCode(200);
             } else {
-                $status = 'error';
-                $message = 'An error occurred while deleting the commercial';
-                return $this->response->setJSON(['status' => $status, 'message' => $message])->setStatusCode(500);
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'An error occurred while deleting the commercial'
+                ])->setStatusCode(500);
             }
         }
+
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Invalid request method. AJAX request required.'
+        ])->setStatusCode(400);
     }
 
     // Generator function is used to Generate Key
