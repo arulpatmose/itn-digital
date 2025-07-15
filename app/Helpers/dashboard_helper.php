@@ -84,7 +84,9 @@ if (!function_exists('get_greeting')) {
 
             return [
                 'schedules' => $scheduleModel->countAllResults(false),
+                'publishedSchedules' => $scheduleModel->where('published', 1)->countAllResults(false),
                 'scheduleItems' => $scheduleItemModel->countAllResults(false),
+                'publishedScheduleItems' => $scheduleItemModel->where('published', 1)->countAllResults(false),
                 'commercials' => $commercialModel->countAllResults(false),
                 'clients' => $clientModel->countAllResults(false),
                 'programs' => $programModel->countAllResults(false),

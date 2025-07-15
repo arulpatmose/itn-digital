@@ -15,7 +15,7 @@
 <?= $this->section('content') ?>
 <div class="content">
     <div class="row">
-        <div class="col-3 col-md-3 col-xxl-3">
+        <div class="col-6 col-md-4 col-xxl-2">
             <a class="block block-rounded block-link-pop text-center" href="<?php echo site_url('daily-schedule'); ?>">
                 <div class="block-content block-content-full ratio ratio-1x1">
                     <div class="d-flex justify-content-center align-items-center">
@@ -30,7 +30,7 @@
     </div>
     <h2 class="content-heading">At a Glance</h2>
     <div class="row push">
-        <div class="col-6 col-md-3 col-xxl-3">
+        <div class="col-6 col-md-4 col-xxl-2">
             <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
@@ -43,7 +43,7 @@
             </a>
         </div>
 
-        <div class="col-6 col-md-3 col-xxl-3">
+        <div class="col-6 col-md-4 col-xxl-2">
             <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
@@ -56,7 +56,7 @@
             </a>
         </div>
 
-        <div class="col-6 col-md-3 col-xxl-3">
+        <div class="col-6 col-md-4 col-xxl-2">
             <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
@@ -69,13 +69,39 @@
             </a>
         </div>
 
-        <div class="col-6 col-md-3 col-xxl-3">
+        <div class="col-6 col-md-4 col-xxl-2">
+            <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                <div class="block-content block-content-full ratio ratio-16x9">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div>
+                            <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['publishedSchedules'])) ?></div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Published Schedules</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-4 col-xxl-2">
             <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
                             <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['scheduleItems'])) ?></div>
-                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Scheduled Items</div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Scheduled Ads</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-4 col-xxl-2">
+            <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                <div class="block-content block-content-full ratio ratio-16x9">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div>
+                            <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['publishedScheduleItems'])) ?></div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Published Scheduled Ads</div>
                         </div>
                     </div>
                 </div>
