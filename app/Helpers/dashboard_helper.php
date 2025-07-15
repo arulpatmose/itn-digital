@@ -1,6 +1,10 @@
 <?php
 
 use CodeIgniter\I18n\Time;
+use App\Models\ScheduleModel;
+use App\Models\CommercialModel;
+use App\Models\ClientModel;
+use App\Models\ProgramModel;
 
 if (!function_exists('get_greeting')) {
     function get_greeting(string $name = 'User'): string
@@ -61,5 +65,27 @@ if (!function_exists('get_greeting')) {
 
         // Pick a random message
         return $greetings[array_rand($greetings)];
+    }
+
+    if (!function_exists('get_total_counts')) {
+        /**
+         * Get total counts for schedules, commercials, clients, and programs.
+         *
+         * @return array Associative array with counts
+         */
+        function get_total_counts(): array
+        {
+            $scheduleModel = new ScheduleModel();
+            $commercialModel = new CommercialModel();
+            $clientModel = new ClientModel();
+            $programModel = new ProgramModel();
+
+            return [
+                'schedules' => $scheduleModel->countAllResults(false),   // false disables reset of query builder
+                'commercials' => $commercialModel->countAllResults(false),
+                'clients' => $clientModel->countAllResults(false),
+                'programs' => $programModel->countAllResults(false),
+            ];
+        }
     }
 }
