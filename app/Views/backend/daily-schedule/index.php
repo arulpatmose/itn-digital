@@ -203,7 +203,7 @@
 </div>
 
 <!-- Schedule Update Form Block Modal -->
-<div class="modal fade" id="schedule-update-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="scheduleUpdateModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-popin" role="document">
         <div class="modal-content">
             <div class="block block-rounded block-transparent mb-0">
@@ -311,7 +311,7 @@
             }
         });
 
-        jQuery('#schedule-update-modal').modal('show');
+        jQuery('#scheduleUpdateModal').modal('show');
 
         // Attach a click event handler to the "Submit" button within the modal
         jQuery('#schedule-update-form-button').on('click', function() {
@@ -332,28 +332,29 @@
                         // Close the modal
                         $('#schedule-update-form').modal('hide');
                         toast.fire({
-                            title: 'The schedule was updated successfully',
+                            title: 'Success',
+                            html: 'The schedule was <b>updated successfully</b>.',
                             showCancelButton: false,
                             showConfirmButton: true
                         }).then(function() {
                             window.location.reload();
-                        })
+                        });
                     } else {
                         toast.fire({
-                            title: 'Failed to update schedule',
-                            text: 'Please try again.'
+                            title: 'Failed',
+                            html: '<span class="text-danger">Failed to update schedule</span><br><small>Please try again.</small>'
                         }).then(function() {
                             window.location.reload();
-                        })
+                        });
                     }
                 },
                 error: function(error) {
                     toast.fire({
-                        title: 'Failed to update schedule!',
-                        text: 'Something went wrong'
+                        title: 'Error',
+                        html: '<span class="text-danger">Something went wrong while updating the schedule!</span>'
                     }).then(function() {
                         window.location.reload();
-                    })
+                    });
                 }
             });
         });
@@ -381,7 +382,7 @@
                 $('#schedule-update-form')[0].reset();
 
                 // Show the modal
-                $('#schedule-update-modal').modal('show');
+                $('#scheduleUpdateModal').modal('show');
 
                 // Attach a click event handler to the "Submit" button within the modal
                 $('#schedule-update-form-button').off('click').on('click', function() {
@@ -404,9 +405,10 @@
                         success: function(response) {
                             if (response.status === 'success') {
                                 // Close the modal
-                                $('#schedule-update-modal').modal('hide');
+                                $('#schedule-update-form').modal('hide');
                                 toast.fire({
-                                    title: 'The schedule was updated successfully',
+                                    title: 'Success',
+                                    html: 'The schedule was <b>updated successfully</b>.',
                                     showCancelButton: false,
                                     showConfirmButton: true
                                 }).then(function() {
@@ -414,8 +416,8 @@
                                 });
                             } else {
                                 toast.fire({
-                                    title: 'Failed to update schedule',
-                                    text: 'Please try again.'
+                                    title: 'Failed',
+                                    html: '<span class="text-danger">Failed to update schedule</span><br><small>Please try again.</small>'
                                 }).then(function() {
                                     window.location.reload();
                                 });
@@ -423,8 +425,8 @@
                         },
                         error: function(error) {
                             toast.fire({
-                                title: 'Failed to update schedule!',
-                                text: 'Something went wrong'
+                                title: 'Error',
+                                html: '<span class="text-danger">Something went wrong while updating the schedule!</span>'
                             }).then(function() {
                                 window.location.reload();
                             });
