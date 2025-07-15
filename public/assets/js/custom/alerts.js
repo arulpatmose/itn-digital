@@ -31,6 +31,7 @@ let toast = Swal.mixin({
  * @function showNotification
  * @param {string} [type='info'] - The type of the notification. Accepts 'info', 'success', 'warning', or 'danger'.
  * @param {string} [message='Your message!'] - The message to display in the notification.
+ * @param {function|null} [callback=null] - Optional callback function to execute after the notification is shown.
  *
  * @example
  * showNotification('success', 'Data saved successfully!');
@@ -38,7 +39,7 @@ let toast = Swal.mixin({
  * showNotification('info', 'This is just an info notice.');
  * showNotification('warning', 'Be cautious about the next step.');
  */
-function showNotification(type = 'info', message = 'Your message!') {
+function showNotification(type = 'info', message = 'Your message!', callback = null) {
     const icons = {
         info: 'fa fa-info-circle me-1',
         success: 'fa fa-check me-1',
@@ -53,6 +54,12 @@ function showNotification(type = 'info', message = 'Your message!') {
         icon: icon,
         message: message
     });
+
+    if (typeof callback === 'function') {
+        setTimeout(() => {
+            callback();
+        }, 1500);
+    }
 }
 
 // Download Commercial Link Function
