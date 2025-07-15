@@ -544,28 +544,28 @@ class APIServices extends BaseController
 
             $concatCommercials = 'CONCAT("<span class=\"me-1 text-success\">", c.ucom_id, "</span>", " - " , c.name, "<span class=\"ms-1 text-gray-dark\">(", c.duration , "s)</span>" ) AS commercial';
             $returnFields = '
-    s.usched_id,
-    s.sched_id,
-    ' . $concatCommercials . ',
-    p.name as program,
-    pl.name as platform,
-    pl.channel as channel,
-    u.first_name as added_by,
-    s.remarks,
-    cl.name as client_name,
-    f.name as format,
-    s.published,
-    s.marketing_ex,
-    s.total_budget,
-    COUNT(CASE WHEN si.deleted_at IS NULL THEN si.scd_id END) AS total_items,
-    SUM(CASE WHEN si.published = 1 AND si.deleted_at IS NULL THEN 1 ELSE 0 END) AS published_items,
-    (CASE 
-        WHEN COUNT(CASE WHEN si.deleted_at IS NULL THEN si.scd_id END) = 0 THEN 0 
-        ELSE ROUND(
-            SUM(CASE WHEN si.published = 1 AND si.deleted_at IS NULL THEN 1 ELSE 0 END) * 100.0 / 
-            COUNT(CASE WHEN si.deleted_at IS NULL THEN si.scd_id END), 2) 
-    END) AS progress
-';
+                s.usched_id,
+                s.sched_id,
+                ' . $concatCommercials . ',
+                p.name as program,
+                pl.name as platform,
+                pl.channel as channel,
+                u.first_name as added_by,
+                s.remarks,
+                cl.name as client_name,
+                f.name as format,
+                s.published,
+                s.marketing_ex,
+                s.total_budget,
+                COUNT(CASE WHEN si.deleted_at IS NULL THEN si.scd_id END) AS total_items,
+                SUM(CASE WHEN si.published = 1 AND si.deleted_at IS NULL THEN 1 ELSE 0 END) AS published_items,
+                (CASE 
+                    WHEN COUNT(CASE WHEN si.deleted_at IS NULL THEN si.scd_id END) = 0 THEN 0 
+                    ELSE ROUND(
+                        SUM(CASE WHEN si.published = 1 AND si.deleted_at IS NULL THEN 1 ELSE 0 END) * 100.0 / 
+                        COUNT(CASE WHEN si.deleted_at IS NULL THEN si.scd_id END), 2) 
+                END) AS progress
+            ';
 
             $results = $this->scheduleModel->getSchedules($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue, $filters);
 
