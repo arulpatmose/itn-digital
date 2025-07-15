@@ -253,31 +253,36 @@ class Schedule extends BaseController
     }
 
     /**
-     * Check if all rows with the same unique ID have the same value in a specific column.
+     * Determines whether all schedule items for a given schedule ID are published.
      *
-     * @param array $data The data to check.
-     * @param string $uniqueIDColumn The column name for unique IDs.
-     * @param string $valueColumn The column name for the value to compare.
-     * @return bool True if all rows with the same unique ID have the same value, false otherwise.
+     * @param array $data The array of schedule items to check.
+     * @param string $uniqueIDColumn The column name representing the unique schedule ID (e.g., 'sched_id').
+     * @param string $valueColumn The column name indicating publication status (e.g., 'published').
+     * 
+     * @return bool Returns true if all items for each schedule ID have the same published value of 1;
+     *              false if any item is unpublished (0) or if no items exist.
      */
     function areAllItemsPublished($data, $uniqueIDColumn, $valueColumn)
     {
-        $uniqueIDs = array(); // To store unique IDs and their associated values
+        if (empty($data)) {
+            return false; // No items, so not published
+        }
 
-        // Iterate through the data and populate the $uniqueIDs array
+        $uniqueIDs = [];
+
         foreach ($data as $row) {
             $uniqueID = $row[$uniqueIDColumn];
             $value = $row[$valueColumn];
 
             if (array_key_exists($uniqueID, $uniqueIDs)) {
                 if ($uniqueIDs[$uniqueID] !== $value) {
-                    return false; // Found a different value for the same unique ID
+                    return false;
                 }
             } else {
                 $uniqueIDs[$uniqueID] = $value;
             }
         }
 
-        return true; // All rows with the same unique ID have the same value
+        return true;
     }
 }
