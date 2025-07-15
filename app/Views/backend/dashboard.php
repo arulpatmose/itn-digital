@@ -14,6 +14,15 @@
 
 <?= $this->section('content') ?>
 <div class="content">
+    <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center py-2 text-center text-md-start">
+        <div class="flex-grow-1 mb-1 mb-md-0">
+            <h2 class="h6 fw-medium text-muted mb-0">
+                <?= get_greeting('<strong>' . esc(auth()->user()?->first_name ?? 'Guest') . '</strong>') ?>
+            </h2>
+        </div>
+    </div>
+</div>
+<div class="content">
     <div class="row push">
         <div class="col-3 col-md-3 col-xxl-2">
             <a class="block block-rounded block-link-pop text-center" href="<?php echo site_url('daily-schedule'); ?>">
