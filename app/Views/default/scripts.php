@@ -24,10 +24,16 @@
      <script src="<?php echo base_url('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js'); ?>"></script>
      <script src="<?php echo base_url('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js'); ?>">
      </script>
+     <script src="<?php echo base_url('assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js'); ?>">
+     </script>
      <script src="<?php echo base_url('assets/js/plugins/sweetalert2/sweetalert2.min.js'); ?>"></script>
      <script src="<?php echo base_url('assets/js/plugins/ion-rangeslider/js/ion.rangeSlider.min.js'); ?>"></script>
      <script src="<?php echo base_url('assets/js/plugins/select2/js/select2.full.min.js'); ?>"></script>
      <script src="<?php echo base_url('assets/js/plugins/flatpickr/flatpickr.min.js'); ?>"></script>
+
+     <script>
+         One.helpersOnLoad(['jq-notify']);
+     </script>
 
      <!-- Global JS Code -->
      <script src="<?php echo base_url('assets/js/custom/global.js?v=' . time()); ?>"></script>
