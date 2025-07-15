@@ -83,10 +83,10 @@ if (!function_exists('get_greeting')) {
             $programModel = new ProgramModel();
 
             return [
-                'schedules' => $scheduleModel->countAllResults(false),
-                'publishedSchedules' => $scheduleModel->where('published', 1)->countAllResults(false),
-                'scheduleItems' => $scheduleItemModel->countAllResults(false),
-                'publishedScheduleItems' => $scheduleItemModel->where('published', 1)->countAllResults(false),
+                'schedules' => $scheduleModel->where('deleted_at', null)->countAllResults(false),
+                'publishedSchedules' => $scheduleModel->where('deleted_at', null)->where('published', 1)->countAllResults(false),
+                'scheduleItems' => $scheduleItemModel->where('deleted_at', null)->countAllResults(false),
+                'publishedScheduleItems' => $scheduleItemModel->where('deleted_at', null)->where('published', 1)->countAllResults(false),
                 'commercials' => $commercialModel->countAllResults(false),
                 'clients' => $clientModel->countAllResults(false),
                 'programs' => $programModel->countAllResults(false),
