@@ -75,7 +75,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
                             <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['publishedSchedules'])) ?></div>
-                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Published Schedules</div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Completed Schedules</div>
                         </div>
                     </div>
                 </div>
