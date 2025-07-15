@@ -239,13 +239,18 @@
                     {
                         targets: ['completion'],
                         render: function(data, type, row, meta) {
-                            const progress = parseFloat(row.progress) || 0;
+                            const total = parseInt(row.total_items) || 0;
+                            const published = parseInt(row.published_items) || 0;
+                            const percent = total > 0 ? Math.round((published / total) * 100) : 0;
 
                             return `
-                                <div class="progress mb-1" style="height: 5px;" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: ${progress}%;"></div>
+                                <div class="progress mb-1" style="height: 5px;" role="progressbar" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-success" style="width: ${percent}%;"></div>
                                 </div>
-                                <p class="fs-xs fw-semibold mb-0">${progress}%</p>
+                                <div class="d-flex justify-content-between fs-xs fw-semibold mb-0">
+                                    <span>${percent}%</span>
+                                    <span>${published}/${total}</span>
+                                </div>
                             `;
                         },
                         width: 200
