@@ -52,6 +52,7 @@ $routes->group('schedules', function ($routes) {
     $routes->get('edit/(:num)', 'Schedules::edit/$1');
     $routes->post('update/(:num)', 'Schedules::update/$1');
     $routes->post('delete', 'Schedules::destroy');
+    $routes->post('fetch-comments', 'Schedules::fetchComments');
 });
 
 $routes->group('schedule', function ($routes) {

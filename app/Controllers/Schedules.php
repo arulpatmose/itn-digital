@@ -292,6 +292,38 @@ class Schedules extends BaseController
         ])->setStatusCode(500); // Internal Server Error
     }
 
+    public function fetchComments()
+    {
+        if (!auth()->user()->can('dailyschedule.edit')) {
+            return $this->response->setStatusCode(403)->setJSON([
+                'status' => 'error',
+                'message' => 'You do not have permissions to access this page!'
+            ]);
+        }
+
+        if ($this->request->isAJAX()) {
+            $scheduleId = $this->request->getPost('schedule_id');
+
+            $response = [
+                'schedule_remarks' => '',
+            ];
+
+            // Get schedule-level remarks only
+            $scheduleRemarks = $this->schedulesModel->getCommentsBySchedule($scheduleId);
+
+            if (!empty($scheduleRemarks['remarks'])) {
+                $response['schedule_remarks'] = esc($scheduleRemarks['remarks']);
+            }
+
+            return $this->response->setJSON($response);
+        }
+
+        return $this->response->setStatusCode(400)->setJSON([
+            'status' => 'error',
+            'message' => 'Invalid request type'
+        ]);
+    }
+
     /**
      * Generates a unique schedule ID using random digits and the current date.
      *

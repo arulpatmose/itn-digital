@@ -110,12 +110,74 @@
         </div>
     </div>
 </div>
+
+<!-- View Comments Modal -->
+<div class="modal fade" id="viewCommentsModal" tabindex="-1" aria-labelledby="viewCommentsModalLabel" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-popin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewCommentsModalLabel">Remarks & Comments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Schedule Remarks -->
+                <ul class="list-group text-start" id="schedule-remarks-list"></ul>
+                <div class="text-muted text-center py-2 d-none" id="no-schedule-remarks-msg">
+                    This schedule does not contain any comments or remarks.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END View Comments Modal -->
 <?= $this->endSection() ?>
 
 <?= $this->section('other-styles') ?>
 <style>
     .dark .dt-scroll-body {
         border-color: #1a1f28 !important;
+    }
+
+    .ripple-dot {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
+        background-color: #d61f47;
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 0 0 rgba(214, 31, 71, 0.7);
+    }
+
+    .ripple-dot::before {
+        content: "";
+        top: 0;
+        right: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #d61f47;
+        border-radius: 50%;
+        z-index: -1;
+        animation: rippleEffect 1.5s ease-out infinite;
+    }
+
+    @keyframes rippleEffect {
+        0% {
+            transform: scale(0.5);
+            opacity: 0.8;
+        }
+
+        70% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(3);
+            opacity: 0;
+        }
     }
 </style>
 <?= $this->endSection() ?>
@@ -291,14 +353,36 @@
                         orderable: false,
                         render: function(data, type, row, meta) {
                             var uri = URI().origin();
+                            var scheduleId = row.sched_id;
+                            var hasRemarks = row.remarks && row.remarks.trim() !== '';
 
-                            return '<div class="btn-group">' +
-                                '<a role="button" class="btn btn-sm btn-success" data-id="' + data + '" href="' + uri + '/schedules/edit/' + data + '" data-bs-toggle="tooltip" aria-label="Edit Schedule" data-bs-title="Edit Schedule" data-bs-placement="left">' +
-                                '<i class="fa fa-fw fa-pencil-alt"></i>' + '</a>' +
-                                '<a role="button" class="btn btn-sm btn-danger" id="delete-schedule-button" data-schedule="' + row.usched_id + '"data-id="' + data + '" href="#" data-url="' + _AppUri + '/schedules/delete' + '" data-bs-toggle="tooltip" aria-label="Remove Schedule" data-bs-title="Remove Schedule" data-bs-placement="top">' +
-                                '<i class="fa fa-fw fa-times"></i>' + '</a>' +
-                                '<a role="button" class="btn btn-sm btn-primary" data-id="' + data + '" href="' + uri + '/schedule/' + data + '" data-bs-toggle="tooltip" aria-label="View Items" data-bs-title="View Items" data-bs-placement="right">' +
-                                '<i class="fa fa-fw fa-eye"></i>' + '</a>' + ' </div>';
+                            var commentButton = `
+                                <a role="button"
+                                class="btn btn-sm btn-warning position-relative"
+                                id="view-comments-button"
+                                data-schedule-id="${scheduleId}"
+                                href="#"
+                                data-bs-toggle="modal"
+                                data-bs-target="#viewCommentsModal"
+                                data-bs-placement="right"
+                                data-bs-title="View Schedule Remarks">
+                                <i class="fa fa-fw fa-comments"></i>
+                                ${hasRemarks ? '<span class="ripple-dot"></span>' : ''}
+                                </a>`;
+
+                            return `
+                                <div class="btn-group">
+                                    <a role="button" class="btn btn-sm btn-success" data-id="${data}" href="${uri}/schedules/edit/${data}" data-bs-toggle="tooltip" aria-label="Edit Schedule" data-bs-title="Edit Schedule" data-bs-placement="left">
+                                        <i class="fa fa-fw fa-pencil-alt"></i>
+                                    </a>
+                                    <a role="button" class="btn btn-sm btn-danger" id="delete-schedule-button" data-schedule="${row.usched_id}" data-id="${data}" href="#" data-url="${_AppUri}/schedules/delete" data-bs-toggle="tooltip" aria-label="Remove Schedule" data-bs-title="Remove Schedule" data-bs-placement="top">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </a>
+                                    <a role="button" class="btn btn-sm btn-primary" data-id="${data}" href="${uri}/schedule/${data}" data-bs-toggle="tooltip" aria-label="View Items" data-bs-title="View Items" data-bs-placement="top">
+                                        <i class="fa fa-fw fa-eye"></i>
+                                    </a>
+                                    ${commentButton}
+                                </div>`;
                         }
                     }
                 ],
@@ -357,6 +441,46 @@
                         console.error("AJAX error:", status, error);
                     }
                 });
+            }
+        });
+    });
+
+    $(document).on('click', '#view-comments-button', function(e) {
+        e.preventDefault();
+
+        const button = $(this);
+        const scheduleId = button.data('schedule-id');
+
+        // Clear previous remarks and hide no-remarks message
+        const remarksList = $('#schedule-remarks-list').empty();
+        $('#no-schedule-remarks-msg').addClass('d-none');
+
+        $.ajax({
+            url: '<?= base_url('schedules/fetch-comments') ?>', // updated URL
+            method: 'POST',
+            data: {
+                schedule_id: scheduleId
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res.schedule_remarks) {
+                    remarksList.append(
+                        `<div class="text-muted text-center py-2">${res.schedule_remarks}</div>`
+                    );
+                } else {
+                    $('#no-schedule-remarks-msg').removeClass('d-none');
+                }
+
+                $('#viewCommentsModal').modal('show');
+            },
+            error: function(xhr) {
+                toast.fire({
+                    title: 'Failed',
+                    icon: 'error',
+                    html: xhr.responseJSON?.message || 'Something went wrong.',
+                    showCancelButton: false,
+                    showConfirmButton: true
+                }).then(() => window.location.reload());
             }
         });
     });
