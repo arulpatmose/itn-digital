@@ -28,8 +28,7 @@
             </a>
         </div>
     </div>
-</div>
-<div class="content">
+    <h2 class="content-heading">At a Glance</h2>
     <div class="row push">
         <div class="col-6 col-md-3 col-xxl-3">
             <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
