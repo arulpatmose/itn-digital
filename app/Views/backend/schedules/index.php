@@ -94,10 +94,10 @@
                                     <th class="completion noOrder">Completion</th>
                                     <th class="scheduleId">Schedule ID</th>
                                     <th class="commercial noOrder">Commercial</th>
-                                    <th class="format noOrder">Format</th>
-                                    <th class="client">Client</th>
                                     <th class="program">Program</th>
                                     <th class="platform noOrder">Platform</th>
+                                    <th class="format noOrder">Format</th>
+                                    <th class="client">Client</th>
                                     <th class="tableAction all text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -189,16 +189,16 @@
                         data: 'commercial'
                     },
                     {
-                        data: 'format'
-                    },
-                    {
-                        data: 'client_name'
-                    },
-                    {
                         data: 'program'
                     },
                     {
                         data: 'platform'
+                    },
+                    {
+                        data: 'format'
+                    },
+                    {
+                        data: 'client_name'
                     },
                     {
                         data: 'sched_id'
