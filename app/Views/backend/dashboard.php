@@ -75,7 +75,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
                             <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['publishedSchedules'])) ?></div>
-                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Completed Schedules</div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Schedules<br>Completed</div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
                             <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['publishedScheduleItems'])) ?></div>
-                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Published Scheduled Ads</div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Scheduled Ads<br>Published</div>
                         </div>
                     </div>
                 </div>
