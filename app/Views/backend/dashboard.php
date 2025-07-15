@@ -36,20 +36,7 @@
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
-                            <div class="fs-2 fw-bold text-body-color-dark"><?= esc($totals['programs']) ?></div>
-                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Programs</div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-6 col-md-3 col-xxl-3">
-            <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
-                <div class="block-content block-content-full ratio ratio-16x9">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <div>
-                            <div class="fs-2 fw-bold text-body-color-dark"><?= esc($totals['clients']) ?></div>
+                            <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['clients'])) ?></div>
                             <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Clients</div>
                         </div>
                     </div>
@@ -62,7 +49,7 @@
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
-                            <div class="fs-2 fw-bold text-body-color-dark"><?= esc($totals['commercials']) ?></div>
+                            <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['commercials'])) ?></div>
                             <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Commercials</div>
                         </div>
                     </div>
@@ -75,8 +62,21 @@
                 <div class="block-content block-content-full ratio ratio-16x9">
                     <div class="d-flex justify-content-center align-items-center">
                         <div>
-                            <div class="fs-2 fw-bold text-body-color-dark"><?= esc($totals['schedules']) ?></div>
+                            <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['schedules'])) ?></div>
                             <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Schedules</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3 col-xxl-3">
+            <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                <div class="block-content block-content-full ratio ratio-16x9">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div>
+                            <div class="fs-2 fw-bold text-body-color-dark"><?= number_format(esc($totals['scheduleItems'])) ?></div>
+                            <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">Scheduled Items</div>
                         </div>
                     </div>
                 </div>

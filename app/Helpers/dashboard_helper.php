@@ -5,6 +5,7 @@ use App\Models\ScheduleModel;
 use App\Models\CommercialModel;
 use App\Models\ClientModel;
 use App\Models\ProgramModel;
+use App\Models\ScheduleItemModel;
 
 if (!function_exists('get_greeting')) {
     function get_greeting(string $name = 'User'): string
@@ -76,12 +77,14 @@ if (!function_exists('get_greeting')) {
         function get_total_counts(): array
         {
             $scheduleModel = new ScheduleModel();
+            $scheduleItemModel = new ScheduleItemModel();
             $commercialModel = new CommercialModel();
             $clientModel = new ClientModel();
             $programModel = new ProgramModel();
 
             return [
-                'schedules' => $scheduleModel->countAllResults(false),   // false disables reset of query builder
+                'schedules' => $scheduleModel->countAllResults(false),
+                'scheduleItems' => $scheduleItemModel->countAllResults(false),
                 'commercials' => $commercialModel->countAllResults(false),
                 'clients' => $clientModel->countAllResults(false),
                 'programs' => $programModel->countAllResults(false),
