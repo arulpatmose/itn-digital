@@ -261,7 +261,7 @@
                 <!-- Schedule Item Comments -->
                 <h6 class="fw-bold mb-2">💬 Remarks added to this Schedule Item</h6>
                 <ul class="list-group text-start" id="schedule-item-comments-list"></ul>
-                <div class="text-muted text-center py-2 d-none" id="no-item-comments-msg">
+                <div class="text-muted text-center py-2 mb-4 d-none" id="no-item-comments-msg">
                     You haven’t added any item-specific remarks yet.
                 </div>
             </div>
