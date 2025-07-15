@@ -10,7 +10,7 @@ class Dashboard extends BaseController
     public function index()
     {
         $data['page_title'] = "Dashboard";
-        $data['page_description'] = "Welcome to ITN Digital Portal! Explore a world of information, resources, and tools at your fingertips.";
+        $data['page_description'] = "Welcome to ITN Digital Portal! Everything you need, all in one place — simplified and supercharged.";
 
         return view('backend/dashboard', $data);
     }
