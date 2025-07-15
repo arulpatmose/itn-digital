@@ -160,6 +160,9 @@ class ScheduleModel extends Model
         $query->join('(' . $clientSubqueryString . ') as cl', 'c.client = cl.client_id');
         $query->join('(' . $formatSubqueryString . ') as f', 'c.format = f.format_id');
 
+        $query->join('schedule_items as si', 'si.sched_id = s.sched_id', 'left');
+        $query->groupBy('s.sched_id');
+
         $data['records'] = $query->get()->getResultArray();
 
         return $data;

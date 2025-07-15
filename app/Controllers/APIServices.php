@@ -543,7 +543,27 @@ class APIServices extends BaseController
             $searchValue = $dtPostData['search']['value']; // Search value
 
             $concatCommercials = 'CONCAT("<span class=\"me-1 text-success\">", c.ucom_id, "</span>", " - " , c.name, "<span class=\"ms-1 text-gray-dark\">(", c.duration , "s)</span>" ) AS commercial';
-            $returnFields = 'usched_id, sched_id,' . $concatCommercials . ', p.name as program, pl.name as platform, pl.channel as channel, u.first_name as added_by, s.remarks, cl.name as client_name, f.name as format, s.published, s.marketing_ex, s.total_budget';
+            $returnFields = '
+                s.usched_id,
+                s.sched_id,
+                ' . $concatCommercials . ',
+                p.name as program,
+                pl.name as platform,
+                pl.channel as channel,
+                u.first_name as added_by,
+                s.remarks,
+                cl.name as client_name,
+                f.name as format,
+                s.published,
+                s.marketing_ex,
+                s.total_budget,
+                COUNT(si.scd_id) AS total_items,
+                SUM(CASE WHEN si.published = 1 THEN 1 ELSE 0 END) AS published_items,
+                    (CASE 
+                        WHEN COUNT(si.scd_id) = 0 THEN 0 
+                    ELSE ROUND(SUM(CASE WHEN si.published = 1 THEN 1 ELSE 0 END) * 100 / COUNT(si.scd_id), 2) 
+                END) AS progress
+            ';
 
             $results = $this->scheduleModel->getSchedules($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue, $filters);
 
@@ -573,7 +593,10 @@ class APIServices extends BaseController
                     "marketing_ex" => $record['marketing_ex'],
                     "total_budget" => $record['total_budget'],
                     "added_by" => $record['added_by'],
-                    "remarks" => $record['remarks']
+                    "remarks" => $record['remarks'],
+                    "total_items" => $record['total_items'],
+                    "published_items" => $record['published_items'],
+                    "progress" => $record['progress'],
                 );
             }
 

@@ -87,19 +87,18 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-vcenter w-100" id="table-schedules">
+                        <table class="table table-striped table-vcenter w-100 nowrap" id="table-schedules">
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center">#</th>
-                                    <th>Schedule ID</th>
-                                    <th>Commercial</th>
-                                    <th>Format</th>
-                                    <th>Client</th>
-                                    <th>Program</th>
-                                    <th>Platform</th>
-                                    <th>Actions</th>
+                                    <th class="publishStatus text-center"></th>
+                                    <th class="completion noOrder">Completion</th>
+                                    <th class="scheduleId">Schedule ID</th>
+                                    <th class="commercial noOrder">Commercial</th>
+                                    <th class="format noOrder">Format</th>
+                                    <th class="client">Client</th>
+                                    <th class="program">Program</th>
+                                    <th class="platform noOrder">Platform</th>
+                                    <th class="tableAction all text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -111,6 +110,14 @@
         </div>
     </div>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('other-styles') ?>
+<style>
+    .dark .dt-scroll-body {
+        border-color: #1a1f28 !important;
+    }
+</style>
 <?= $this->endSection() ?>
 
 <?= $this->section('other-scripts') ?>
@@ -163,25 +170,17 @@
                 ],
                 autoWidth: true,
                 scrollX: true,
-                scrollResize: true,
-                scrollCollapse: true,
                 // responsive: true,
                 stateSave: true,
                 searching: true,
                 order: [
-                    [3, 'desc']
+                    [2, 'desc']
                 ],
                 columns: [{
-                        className: 'dt-control',
-                        orderable: false,
-                        data: null,
-                        defaultContent: ''
-                    },
-                    {
                         data: 'published'
                     },
                     {
-                        data: 'sched_id'
+                        data: 'progress'
                     },
                     {
                         data: 'usched_id'
@@ -204,10 +203,22 @@
                     {
                         data: 'sched_id'
                     }
-
                 ],
                 columnDefs: [{
-                        targets: [1],
+                        targets: ['noOrder'],
+                        orderable: false,
+                    },
+                    {
+                        targets: '_all',
+                        className: 'text-nowrap'
+                    },
+                    {
+                        targets: ['hiddenCols'],
+                        visible: false,
+                        searchable: false
+                    },
+                    {
+                        targets: ['publishStatus'],
                         render: function(data, type, row, meta) {
                             var published;
                             switch (row.published) {
@@ -223,17 +234,24 @@
                             return published;
                         },
                         orderable: false,
-                        width: 50
+                        width: 25
                     },
                     {
-                        targets: [2],
+                        targets: ['completion'],
                         render: function(data, type, row, meta) {
-                            return meta.row + 1;
+                            const progress = parseFloat(row.progress) || 0;
+
+                            return `
+                                <div class="progress mb-1" style="height: 5px;" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-success" style="width: ${progress}%;"></div>
+                                </div>
+                                <p class="fs-xs fw-semibold mb-0">${progress}%</p>
+                            `;
                         },
-                        width: 50
+                        width: 200
                     },
                     {
-                        targets: [3],
+                        targets: ['scheduleId'],
                         render: function(data, type, row, meta) {
                             var uri = URI().origin();
 
@@ -241,11 +259,7 @@
                         }
                     },
                     {
-                        targets: [4],
-                        width: 120
-                    },
-                    {
-                        targets: [8],
+                        targets: ['platform'],
                         render: function(data, type, row, meta) {
                             var platform;
                             switch (row.platform.toLowerCase()) {
@@ -268,7 +282,7 @@
                         }
                     },
                     {
-                        targets: [9],
+                        targets: ['tableAction'],
                         orderable: false,
                         render: function(data, type, row, meta) {
                             var uri = URI().origin();
@@ -287,27 +301,9 @@
                     searchPlaceholder: "Enter Schedule ID"
                 }
             });
-
-            // Add event listener for opening and closing details
-            tableSchedules.on('click', 'td.dt-control', function(e) {
-                let tr = e.target.closest('tr');
-                let row = tableSchedules.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                } else {
-                    // Open this row
-                    row.child(formatScheduleExtra(row.data())).show();
-                }
-            });
         }
     });
-</script>
-<?= $this->endSection() ?>
 
-<?= $this->section('other-scripts') ?>
-<script>
     // Delete Schedules Function
     jQuery(document).on('click', '#delete-schedule-button', function(event) {
         event.preventDefault();
