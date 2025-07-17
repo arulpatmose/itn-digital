@@ -84,49 +84,77 @@ class AuthGroups extends ShieldAuthGroups
      * If a permission is not listed here it cannot be used.
      */
     public array $permissions = [
-        'admin.access'          => 'Can access the sites admin area',
+
+        // 🔐 Admin Area & Core Access
+        'admin.access'          => 'Can access the site\'s admin area',
         'admin.settings'        => 'Can access the main site settings',
         'dashboard.access'      => 'Can access the dashboard',
+        'beta.access'           => 'Can access beta-level features',
+
+        // 👥 Admin & User Management
         'users.manage-admins'   => 'Can manage other admins',
         'users.create'          => 'Can create new non-admin users',
         'users.edit'            => 'Can edit existing non-admin users',
         'users.delete'          => 'Can delete existing non-admin users',
-        'beta.access'           => 'Can access beta-level features',
+
+        // 🧑‍💼 Client Management
         'clients.access'        => 'Can access clients data',
         'clients.create'        => 'Can create new client',
         'clients.edit'          => 'Can edit existing client',
         'clients.delete'        => 'Can delete existing client',
+
+        // 📺 Commercials Management
         'commercials.access'    => 'Can access commercials data',
         'commercials.create'    => 'Can create new commercial',
         'commercials.edit'      => 'Can edit existing commercial',
         'commercials.delete'    => 'Can delete existing commercial',
+
+        // 📝 Formats Management
         'formats.access'        => 'Can access formats data',
         'formats.create'        => 'Can create new format',
         'formats.edit'          => 'Can edit existing format',
         'formats.delete'        => 'Can delete existing format',
+
+        // 🌐 Platforms Management
         'platforms.access'      => 'Can access platforms data',
         'platforms.create'      => 'Can create new platform',
         'platforms.edit'        => 'Can edit existing platform',
         'platforms.delete'      => 'Can delete existing platform',
+
+        // 📌 Spots Management
         'spots.access'          => 'Can access spots data',
         'spots.create'          => 'Can create new spot',
         'spots.edit'            => 'Can edit existing spot',
         'spots.delete'          => 'Can delete existing spot',
+
+        // 🎞️ Programs Management
         'programs.access'       => 'Can access programs data',
         'programs.create'       => 'Can create new program',
         'programs.edit'         => 'Can edit existing program',
         'programs.delete'       => 'Can delete existing program',
+
+        // 🗓️ Schedule Management
         'schedule.access'       => 'Can access schedule data',
         'schedule.create'       => 'Can create new schedule',
         'schedule.edit'         => 'Can edit existing schedule',
         'schedule.delete'       => 'Can delete existing schedule',
+
+        // 🗓️ Schedules (Bulk/Multiple) Management
         'schedules.access'      => 'Can access schedules data',
         'schedules.create'      => 'Can create new schedule',
         'schedules.edit'        => 'Can edit existing schedule',
         'schedules.delete'      => 'Can delete existing schedule',
+
+        // 📆 Daily Schedule Management
         'dailyschedule.access'  => 'Can access daily schedules data',
         'dailyschedule.edit'    => 'Can edit existing daily schedules',
+
+        // 💳 Accounts Management
         'accounts.access'       => 'Can access accounts data',
+
+        // ⚙️ General Settings
+        'settings.access'       => 'Can access general settings',
+        'settings.update'       => 'Can update general settings',
     ];
 
     /**
