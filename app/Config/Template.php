@@ -255,10 +255,10 @@ class Template extends BaseConfig
             )
         ),
         array(
-            'name'       => 'Accounts',
-            'icon'       => 'fa fa-file-invoice-dollar',
-            'url'        => 'accounts',
-            'permission' => 'accounts.access',
+            'name'       => 'Settings',
+            'icon'       => 'fa fa-cog',
+            'url'        => 'settings',
+            'permission' => 'settings.access',
         ),
         array(
             'name'       => 'Users',
