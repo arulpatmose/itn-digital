@@ -28,8 +28,10 @@ class Commercials extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Commercials";
-        $data['page_description'] = "Commercials that convey messages visually to captivate broad audiences.";
+        $data = [
+            'page_title' => 'Commercials',
+            'page_description' => 'Commercials that convey messages visually to captivate broad audiences.',
+        ];
 
         return view('backend/commercials/index', $data);
     }
@@ -42,11 +44,12 @@ class Commercials extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['formats'] = $this->formatModel->select('format_id as id, name')->findAll();
-        $data['clients'] = $this->clientModel->select('client_id as id, name')->findAll();
-
-        $data['page_title'] = "Create a Commercial";
-        $data['page_description'] = "Commercials that convey messages visually to captivate broad audiences.";
+        $data = [
+            'page_title' => 'Create a Commercial',
+            'page_description' => 'Commercials that convey messages visually to captivate broad audiences.',
+            'formats' => $this->formatModel->select('format_id as id, name')->findAll(),
+            'clients' => $this->clientModel->select('client_id as id, name')->findAll()
+        ];
 
         return view('backend/commercials/add_commercial', $data);
     }
@@ -99,15 +102,15 @@ class Commercials extends BaseController
         $commercial = $this->commercialModel->find($id);
 
         if (isset($commercial) && !empty($commercial)) {
-            $data['formats'] = $this->formatModel->select('format_id as id, name')->findAll();
-            $data['clients'] = $this->clientModel->select('client_id as id, name')->findAll();
-
-            $data['commercial'] = $commercial;
-
             $itemName = $commercial['name'];
 
-            $data['page_title'] = "Edit Commercial - " . $itemName;
-            $data['page_description'] = "Commercials that convey messages visually to captivate broad audiences.";
+            $data = [
+                'page_title' => "Edit Commercial - " . $itemName,
+                'page_description' => 'Commercials that convey messages visually to captivate broad audiences.',
+                'formats' => $this->formatModel->select('format_id as id, name')->findAll(),
+                'clients' => $this->clientModel->select('client_id as id, name')->findAll(),
+                'commercial' => $commercial
+            ];
 
             return view('backend/commercials/edit_commercial', $data);
         } else {
