@@ -148,6 +148,22 @@ $routes->group('daily-schedule', function ($routes) {
 
 /*
 | --------------------------------------------------------------------
+| System Settings Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('settings', function ($routes) {
+    // Master index (shows cards)
+    $routes->get('/', 'Settings::index');
+
+    // Individual section routes
+    $routes->get('system', 'Settings::system');
+
+    // Common update route
+    $routes->post('update', 'Settings::updateSettings');
+});
+
+/*
+| --------------------------------------------------------------------
 | Accounts
 | --------------------------------------------------------------------
 */
