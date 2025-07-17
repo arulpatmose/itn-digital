@@ -180,7 +180,8 @@ class AuthGroups extends ShieldAuthGroups
             'schedule.*',
             'schedules.*',
             'dailyschedule.*',
-            'accounts.*'
+            'accounts.*',
+            'settings.*'
         ],
         'admin' => [
             'admin.access',
