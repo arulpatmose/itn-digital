@@ -44,15 +44,12 @@ class Schedules extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $router = service('router');
-        $data['controller'] = class_basename($router->controllerName());
-        $data['method'] = $router->methodName();
-
-        $data['platforms'] = $this->platformModel->select('pfm_id as id, name, channel')->findAll();
-        $data['formats'] = $this->formatModel->select('format_id as id, name')->findAll();
-
-        $data['page_title'] = "Schedules";
-        $data['page_description'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
+        $data = [
+            'platforms'        => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
+            'formats'          => $this->formatModel->select('format_id as id, name')->findAll(),
+            'page_title'       => "Schedules",
+            'page_description' => "Optimize ads. Maximize impact. Perfect timing, every time."
+        ];
 
         return view('backend/schedules/index', $data);
     }
@@ -65,11 +62,12 @@ class Schedules extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['spots'] = $this->spotModel->select('spot_id as id, name')->findAll();
-        $data['platforms'] = $this->platformModel->select('pfm_id as id, name, channel')->findAll();
-
-        $data['page_title'] = "Create Schedule";
-        $data['page_description'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
+        $data = [
+            'spots'             => $this->spotModel->select('spot_id as id, name')->findAll(),
+            'platforms'         => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
+            'page_title'        => "Create Schedule",
+            'page_description'  => "Optimize ads. Maximize impact. Perfect timing, every time."
+        ];
 
         return view('backend/schedules/add_schedule', $data);
     }
@@ -160,17 +158,19 @@ class Schedules extends BaseController
         $schedule = $this->schedulesModel->find($id);
 
         if (isset($schedule) && !empty($schedule)) {
-            $data['schedule'] = $schedule;
+            $data = array_merge($data ?? [], [
+                'schedule'    => $schedule,
+                'platforms'   => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
+                'commercial'  => $this->commercialModel->find($schedule['commercial']),
+                'program'     => $this->programModel->find($schedule['program']),
+            ]);
 
-            $data['platforms'] = $this->platformModel->select('pfm_id as id, name, channel')->findAll();
+            $itemName = $data['commercial']['name'] ?? 'Commercial';
 
-            $data['commercial'] = $this->commercialModel->find($data['schedule']['commercial']);
-            $data['program'] = $this->programModel->find($data['schedule']['program']);
-
-            $itemName = $data['commercial']['name'];
-
-            $data['page_title'] = "Edit Schedule for " . $itemName;
-            $data['page_description'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
+            $data = array_merge($data, [
+                'page_title'       => "Edit Schedule for " . $itemName,
+                'page_description' => "Optimize ads. Maximize impact. Perfect timing, every time.",
+            ]);
 
             return view('backend/schedules/edit_schedule', $data);
         } else {

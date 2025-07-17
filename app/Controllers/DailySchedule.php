@@ -29,27 +29,18 @@ class DailySchedule extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        // Prepare Data for Filter
-        $filterData = array();
+        $filterData = [];
 
-        // Access the request service
         $request = service('request');
-
-        // Retrieve a URL parameter named 'platform'
         $platform = $request->getGet('platform');
 
-        // Check if the 'platform' parameter exists and is valid
         if ($platform !== null && is_numeric($platform) && $platform > 0) {
             $filterData['platform'] = $platform;
-            $data['selectedPlatform'] = $platform;
+            $selectedPlatform = $platform;
         } else {
-            $filterData['platform'] = NULL;
-            $data['selectedPlatform'] = NULL;
+            $filterData['platform'] = null;
+            $selectedPlatform = null;
         }
-
-        $router = service('router');
-        $data['controller'] = class_basename($router->controllerName());
-        $data['method'] = $router->methodName();
 
         if (isset($date) && !is_null($date) && $this->validateDate($date, 'Y-m-d')) {
             $filterData['date'] = $date;
@@ -57,14 +48,17 @@ class DailySchedule extends BaseController
             $filterData['date'] = date('Y-m-d');
         }
 
-        $data['date'] = $filterData['date'];
-        $data['schedule_date'] = date("l jS \of F Y", strtotime($filterData['date']));
+        $pageData = [
+            'selectedPlatform'  => $selectedPlatform,
+            'date'              => $filterData['date'],
+            'schedule_date'     => date("l jS \of F Y", strtotime($filterData['date'])),
+            'schedules'         => $this->scheduleModel->getDailySchedule($filterData),
+            'platforms'         => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
+            'page_title'        => "Daily Commercial Schedule",
+            'page_description'  => "Timed placements for diverse viewer engagement."
+        ];
 
-        $data['schedules'] = $this->scheduleModel->getDailySchedule($filterData);
-        $data['platforms'] = $this->platformModel->select('pfm_id as id, name, channel')->findAll();
-
-        $data['page_title'] = "Daily Commercial Schedule";
-        $data['page_description'] = "Timed placements for diverse viewer engagement.";
+        $data = array_merge($data ?? [], $pageData);
 
         return view('backend/daily-schedule/index', $data);
     }
