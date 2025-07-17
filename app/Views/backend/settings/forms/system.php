@@ -53,6 +53,8 @@
                                     placeholder="Enter Captcha Secret" autocomplete="off" />
                             </div>
 
+                            <input type="hidden" name="group" value="<?= $setting_group ?>">
+
                             <div class="col-md-12 mt-0">
                                 <small class="text-muted d-block mt-3">
                                     To use Google reCAPTCHA v3, register the site and enter the Site Key and Secret above.

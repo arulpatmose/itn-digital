@@ -41,7 +41,7 @@ class Settings extends BaseController
             'page_title'       => "System Settings",
             'page_description' => "Manage System Settings",
             'system_settings' => get_settings('system_settings', true),
-            'settingGroup'    => 'system'
+            'setting_group'    => 'system'
         ];
 
         return view('backend/settings/forms/system', $data);
@@ -61,7 +61,7 @@ class Settings extends BaseController
         $this->settingModel->updateGroupedSettings($postData);
 
         if ($group) {
-            return redirect()->to('settings' . $group)->with('success', 'Settings updated successfully.');
+            return redirect()->to('settings/' . $group)->with('success', 'Settings updated successfully.');
         }
 
         return redirect()->to('settings')->with('success', 'Settings updated successfully.');
