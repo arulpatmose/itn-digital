@@ -449,7 +449,7 @@
     }
 
     function fetchYouTubeViews(videoId, callback) {
-        const apiKey = 'AIzaSyBZsg69_6kXgjYAEYjgEt8iaPaTVcSJItc';
+        const apiKey = '<?= $system_settings['youtube-data-google-api'] ?>';
         const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`;
 
         fetch(apiUrl)

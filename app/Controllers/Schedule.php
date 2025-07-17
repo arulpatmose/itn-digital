@@ -47,9 +47,7 @@ class Schedule extends BaseController
             $data['platform'] = $this->platformModel->find($schedule['platform']);
             $data['program'] = $this->programModel->find($schedule['program']);
 
-            $router = service('router');
-            $data['controller'] = class_basename($router->controllerName());
-            $data['method'] = $router->methodName();
+            $data['system_settings'] = get_settings('system_settings', true);
 
             $data['page_title'] = "Scheduled Items";
             $data['page_description'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
