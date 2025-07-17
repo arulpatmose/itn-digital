@@ -171,6 +171,56 @@
 <!-- END View Comments Modal -->
 <?= $this->endSection() ?>
 
+<?= $this->section('other-styles') ?>
+<style>
+    .dark .dt-scroll-body {
+        border-color: #1a1f28 !important;
+    }
+
+    .ripple-dot {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
+        background-color: #d61f47;
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 0 0 rgba(214, 31, 71, 0.7);
+    }
+
+    .ripple-dot::before {
+        content: "";
+        top: 0;
+        right: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #d61f47;
+        border-radius: 50%;
+        z-index: -1;
+        animation: rippleEffect 1.5s ease-out infinite;
+    }
+
+    @keyframes rippleEffect {
+        0% {
+            transform: scale(0.5);
+            opacity: 0.8;
+        }
+
+        70% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(3);
+            opacity: 0;
+        }
+    }
+</style>
+<?= $this->endSection() ?>
+
 <?= $this->section('other-scripts') ?>
 <script src="<?= base_url('assets/js/plugins/datatables-buttons-jszip/jszip.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/plugins/datatables-buttons/buttons.print.min.js'); ?>"></script>
@@ -189,8 +239,9 @@
                     [5, 10, 15, 20, 50],
                     [5, 10, 15, 20, 50]
                 ],
-                autoWidth: false,
-                responsive: true,
+                autoWidth: true,
+                scrollX: true,
+                responsive: false,
                 stateSave: false,
                 info: true,
                 searching: false,
@@ -465,50 +516,4 @@
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
-<?= $this->endSection() ?>
-
-<?= $this->section('other-styles') ?>
-<style>
-    .ripple-dot {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        width: 10px;
-        height: 10px;
-        background-color: #d61f47;
-        border-radius: 50%;
-        z-index: 10;
-        box-shadow: 0 0 0 rgba(214, 31, 71, 0.7);
-    }
-
-    .ripple-dot::before {
-        content: "";
-        top: 0;
-        right: 0;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: #d61f47;
-        border-radius: 50%;
-        z-index: -1;
-        animation: rippleEffect 1.5s ease-out infinite;
-    }
-
-    @keyframes rippleEffect {
-        0% {
-            transform: scale(0.5);
-            opacity: 0.8;
-        }
-
-        70% {
-            transform: scale(2.5);
-            opacity: 0;
-        }
-
-        100% {
-            transform: scale(3);
-            opacity: 0;
-        }
-    }
-</style>
 <?= $this->endSection() ?>
