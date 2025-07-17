@@ -15,7 +15,7 @@
 <div class="content">
     <div class="row">
         <div class="col-12">
-            <div class="block block-rounded" data-controller="<?php echo $controller; ?>" id="daily-schedule-items-wrapper">
+            <div class="block block-rounded" id="daily-schedule-items-wrapper">
                 <div class="block-header block-header-default">
                     <h3 class="block-title">
                         List of Scheduled Commercials - <?php echo "(" . $schedule_date . ")"; ?>
