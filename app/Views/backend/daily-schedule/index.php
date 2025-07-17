@@ -37,7 +37,7 @@
                                 <select class="js-select2 form-select" id="schedule-filters-platform" name="schedule-filters-platform" data-placeholder="Choose a Platform">
                                     <option></option>
                                     <?php foreach ($platforms as $platform) { ?>
-                                        <option value="<?php echo $platform['id']; ?>" <?php echo ($selectedPlatform === $platform['id']) ? 'selected' : ''; ?>>
+                                        <option value="<?php echo $platform['id']; ?>" <?php echo ($selected_platform === $platform['id']) ? 'selected' : ''; ?>>
                                             <?php echo $platform['name'] . ' - ' . $platform['channel']; ?>
                                         </option>
                                     <?php } ?>

@@ -36,10 +36,10 @@ class DailySchedule extends BaseController
 
         if ($platform !== null && is_numeric($platform) && $platform > 0) {
             $filterData['platform'] = $platform;
-            $selectedPlatform = $platform;
+            $selected_platform = $platform;
         } else {
             $filterData['platform'] = null;
-            $selectedPlatform = null;
+            $selected_platform = null;
         }
 
         if (isset($date) && !is_null($date) && $this->validateDate($date, 'Y-m-d')) {
@@ -49,7 +49,7 @@ class DailySchedule extends BaseController
         }
 
         $pageData = [
-            'selectedPlatform'  => $selectedPlatform,
+            'selected_platform'  => $selected_platform,
             'date'              => $filterData['date'],
             'schedule_date'     => date("l jS \of F Y", strtotime($filterData['date'])),
             'schedules'         => $this->scheduleModel->getDailySchedule($filterData),
