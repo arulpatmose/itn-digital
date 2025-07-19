@@ -174,79 +174,73 @@ class Schedule extends BaseController
 
     public function destroy()
     {
-        // Ensure AJAX request
         if (!$this->request->isAjax()) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Invalid request method. AJAX request required.'
-            ])->setStatusCode(400);
+            ]);
         }
 
         $user = auth()->user();
 
-        // Check base permission to delete schedule items
         if (!$user->can('schedule.delete')) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => '<span class="my-3 d-block">You do not have permission to delete schedules.</span><small>Please contact the Administrator.</small>'
-            ])->setStatusCode(403);
+            ]);
         }
 
         $id = $this->request->getPost('id');
-
-        // Find the schedule item
         $scheduleItem = $this->scheduleItemModel->find($id);
+
         if (!$scheduleItem) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Schedule item not found.'
-            ])->setStatusCode(404);
+            ]);
         }
 
         $scheduleDate = $scheduleItem['sched_date'];
-        $today = Time::today();
+        $cutoffTime = Time::today()->setTime(16, 30); // Today 4:30 PM
         $isPublished = $scheduleItem['published'] === '1';
 
-        // Check user role privilege: admin/superadmin can delete any schedule item
         $isPrivileged = $user->inGroup('superadmin', 'admin');
 
-        // Restrict non-privileged users from deleting published or past schedule items
         if (!$isPrivileged) {
             if ($isPublished) {
                 return $this->response->setJSON([
                     'status' => 'error',
                     'message' => '<span class="my-3 d-block">The scheduled commercial has already been published, so deletion is not permitted.</span><small>Please contact the Administrator.</small>'
-                ])->setStatusCode(403);
+                ]);
             }
 
-            if ($scheduleDate < $today) {
+            $scheduledDate = Time::parse($scheduleDate);
+
+            if ($scheduledDate->isBefore($cutoffTime)) {
                 return $this->response->setJSON([
                     'status' => 'error',
-                    'message' => '<span class="my-3 d-block">Only schedules created today or later can be deleted.</span><small>Please contact the Administrator.</small>'
-                ])->setStatusCode(403);
+                    'message' => '<span class="my-3 d-block">Only future schedules (after 4.30 PM today) can be deleted.</span><small>Please contact the Administrator.</small>'
+                ]);
             }
         }
 
-        // Proceed with deletion of the schedule item
         $query = $this->scheduleItemModel->delete($id);
 
-        // Update schedule published status after deletion
         $items = $this->scheduleItemModel->getScheduleItems($scheduleItem['sched_id']);
         $allPublished = $this->areAllItemsPublished($items, 'sched_id', 'published');
 
-        $scheduleStatus = ['published' => $allPublished ? 1 : 0];
-        $this->schedulesModel->update($scheduleItem['sched_id'], $scheduleStatus, false);
+        $this->schedulesModel->update($scheduleItem['sched_id'], ['published' => $allPublished ? 1 : 0], false);
 
         if ($query) {
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The schedule item was deleted successfully.'
-            ])->setStatusCode(200);
+            ]);
         } else {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'An error occurred while deleting the schedule item.'
-            ])->setStatusCode(500);
+            ]);
         }
     }
 

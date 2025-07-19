@@ -215,7 +215,7 @@ class Schedules extends BaseController
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Invalid request method. AJAX request required.'
-            ])->setStatusCode(400); // Bad Request
+            ]); // Bad Request
         }
 
         $user = auth()->user();
@@ -225,7 +225,7 @@ class Schedules extends BaseController
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => '<span class="my-3 d-block">You do not have permission to delete schedules.</span><small>Please contact the Administrator.</small>'
-            ])->setStatusCode(403); // Forbidden
+            ]); // Forbidden
         }
 
         $id = $this->request->getPost('id');
@@ -242,7 +242,7 @@ class Schedules extends BaseController
 
         $scheduleID = $schedule['sched_id'];
         $scheduleDate = $schedule['created_at'];
-        $today = Time::today();
+        $cutoffTime = Time::today(); // Midnight today
 
         // Check for published items
         $items = $this->scheduleItemModel->where('sched_id', $scheduleID)->findAll();
@@ -264,14 +264,16 @@ class Schedules extends BaseController
                 return $this->response->setJSON([
                     'status' => 'error',
                     'message' => '<span class="my-3 d-block">This schedule includes a commercial that has already been published, and therefore, deletion is not permitted.</span><small>Please contact the Administrator.</small>'
-                ])->setStatusCode(403); // Forbidden
+                ]); // Forbidden
             }
 
-            if ($scheduleDate < $today) {
+            $scheduledDate = Time::parse($scheduleDate);
+
+            if ($scheduledDate->isBefore($cutoffTime)) {
                 return $this->response->setJSON([
                     'status' => 'error',
                     'message' => '<span class="my-3 d-block">Only schedules created today or later can be deleted.</span><small>Please contact the Administrator.</small>'
-                ])->setStatusCode(403); // Forbidden
+                ]); // Forbidden
             }
         }
 
@@ -283,13 +285,13 @@ class Schedules extends BaseController
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The schedule and its items were deleted successfully.'
-            ])->setStatusCode(200); // OK
+            ]); // OK
         }
 
         return $this->response->setJSON([
             'status' => 'error',
             'message' => 'An error occurred while deleting the schedule.'
-        ])->setStatusCode(500); // Internal Server Error
+        ]); // Internal Server Error
     }
 
     public function fetchComments()
