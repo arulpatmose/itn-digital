@@ -142,25 +142,18 @@ class Schedule extends BaseController
                 // Check if all items have been published and update the Schedule as Published or Unpublished
                 $items = $this->scheduleItemModel->getScheduleItems($scheduleID);
 
-                $uniqueIDColumn = 'sched_id';
-                $valueColumn = 'published';
+                $scheduleStatus = [
+                    "published" => 0 // Default: Unpublished
+                ];
 
-                if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
-                    $scheduleStatus = [
-                        "published" => 1
-                    ];
-
-                    $this->schedulesModel->update($scheduleID, $scheduleStatus, false);
-                } else {
-                    $scheduleStatus = [
-                        "published" => 0
-                    ];
-
-                    $this->schedulesModel->update($scheduleID, $scheduleStatus, false);
+                if (!empty($items) && areAllItemsPublished($items, 'published')) {
+                    $scheduleStatus['published'] = 1;
                 }
 
+                $this->schedulesModel->update($scheduleID, $scheduleStatus, false);
+
                 $status = 'success';
-                $message = 'The schedule was addded successfully!';
+                $message = 'The schedule was added successfully!';
             } else {
                 $status = 'error';
                 $message = 'There was an error while adding the schedule!';
@@ -227,7 +220,7 @@ class Schedule extends BaseController
         $query = $this->scheduleItemModel->delete($id);
 
         $items = $this->scheduleItemModel->getScheduleItems($scheduleItem['sched_id']);
-        $allPublished = $this->areAllItemsPublished($items, 'sched_id', 'published');
+        $allPublished = areAllItemsPublished($items, 'published');
 
         $this->schedulesModel->update($scheduleItem['sched_id'], ['published' => $allPublished ? 1 : 0], false);
 
@@ -242,39 +235,5 @@ class Schedule extends BaseController
                 'message' => 'An error occurred while deleting the schedule item.'
             ]);
         }
-    }
-
-    /**
-     * Determines whether all schedule items for a given schedule ID are published.
-     *
-     * @param array $data The array of schedule items to check.
-     * @param string $uniqueIDColumn The column name representing the unique schedule ID (e.g., 'sched_id').
-     * @param string $valueColumn The column name indicating publication status (e.g., 'published').
-     * 
-     * @return bool Returns true if all items for each schedule ID have the same published value of 1;
-     *              false if any item is unpublished (0) or if no items exist.
-     */
-    function areAllItemsPublished($data, $uniqueIDColumn, $valueColumn)
-    {
-        if (empty($data)) {
-            return false; // No items, so not published
-        }
-
-        $uniqueIDs = [];
-
-        foreach ($data as $row) {
-            $uniqueID = $row[$uniqueIDColumn];
-            $value = $row[$valueColumn];
-
-            if (array_key_exists($uniqueID, $uniqueIDs)) {
-                if ($uniqueIDs[$uniqueID] !== $value) {
-                    return false;
-                }
-            } else {
-                $uniqueIDs[$uniqueID] = $value;
-            }
-        }
-
-        return true;
     }
 }

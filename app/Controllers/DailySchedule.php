@@ -42,7 +42,7 @@ class DailySchedule extends BaseController
             $selected_platform = null;
         }
 
-        if (isset($date) && !is_null($date) && $this->validateDate($date, 'Y-m-d')) {
+        if (isset($date) && !is_null($date) && validateDate($date, 'Y-m-d')) {
             $filterData['date'] = $date;
         } else {
             $filterData['date'] = date('Y-m-d');
@@ -133,7 +133,7 @@ class DailySchedule extends BaseController
                 $uniqueIDColumn = 'sched_id';
                 $valueColumn = 'published';
 
-                if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
+                if (areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
                     $scheduleStatus = [
                         "published" => 1
                     ];
@@ -206,7 +206,7 @@ class DailySchedule extends BaseController
                     $uniqueIDColumn = 'sched_id';
                     $valueColumn = 'published';
 
-                    if ($this->areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
+                    if (areAllItemsPublished($items, $uniqueIDColumn, $valueColumn)) {
                         $scheduleStatus = ["published" => 1];
                     } else {
                         $scheduleStatus = ["published" => 0];
@@ -260,54 +260,5 @@ class DailySchedule extends BaseController
 
             return $this->response->setJSON($response);
         }
-    }
-
-    /**
-     * Validate a date string against a specific format.
-     *
-     * @param string $date The date string to validate.
-     * @param string $format The format to validate against (default is 'Y-m-d').
-     * @return bool True if the date is valid, false otherwise.
-     */
-    function validateDate($date, $format = 'Y-m-d')
-    {
-        $d = \DateTime::createFromFormat($format, $date);
-        // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
-        return $d && $d->format($format) === $date;
-    }
-
-    /**
-     * Determines whether all schedule items for a given schedule ID are published.
-     *
-     * @param array $data The array of schedule items to check.
-     * @param string $uniqueIDColumn The column name representing the unique schedule ID (e.g., 'sched_id').
-     * @param string $valueColumn The column name indicating publication status (e.g., 'published').
-     * 
-     * @return bool Returns true if all items for each schedule ID have the same published value of 1;
-     *              false if any item is unpublished (0) or if no items exist.
-     */
-    function areAllItemsPublished($data, $uniqueIDColumn, $valueColumn)
-    {
-        if (empty($data)) {
-            return false; // No items, so not published
-        }
-
-        $uniqueIDs = array(); // To store unique IDs and their associated values
-
-        // Iterate through the data and populate the $uniqueIDs array
-        foreach ($data as $row) {
-            $uniqueID = $row[$uniqueIDColumn];
-            $value = $row[$valueColumn];
-
-            if (array_key_exists($uniqueID, $uniqueIDs)) {
-                if ($uniqueIDs[$uniqueID] !== $value) {
-                    return false; // Found a different value for the same unique ID
-                }
-            } else {
-                $uniqueIDs[$uniqueID] = $value;
-            }
-        }
-
-        return true; // All rows with the same unique ID have the same value
     }
 }
