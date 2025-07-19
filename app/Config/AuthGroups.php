@@ -238,9 +238,11 @@ class AuthGroups extends ShieldAuthGroups
             'schedule.access',
             'schedule.create',
             'schedule.edit',
+            'schedule.delete',
             'schedules.access',
             'schedules.create',
-            'schedules.edit'
+            'schedules.edit',
+            'schedules.delete',
         ],
         'accountant' => [
             'dashboard.*',
