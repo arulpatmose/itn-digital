@@ -151,15 +151,11 @@ $routes->group('daily-schedule', function ($routes) {
 | System Settings Routes
 | --------------------------------------------------------------------
 */
-$routes->group('settings', function ($routes) {
-    // Master index (shows cards)
-    $routes->get('/', 'Settings::index');
-
-    // Individual section routes
-    $routes->get('system', 'Settings::system');
-
-    // Common update route
-    $routes->post('update', 'Settings::updateSettings');
+$routes->group('settings', ['filter' => 'permission:admin.settings'], function ($routes) {
+    $routes->get('/', 'Settings::index', ['filter' => 'permission:admin.settings']);
+    $routes->get('(:segment)', 'Settings::index/$1', ['filter' => 'permission:admin.settings']);
+    $routes->post('update', 'Settings::update', ['filter' => 'permission:admin.settings']);
+    $routes->get('forget/(:segment)/(:segment)', 'Settings::forget/$1/$2', ['filter' => 'permission:admin.settings']);
 });
 
 /*
