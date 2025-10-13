@@ -151,10 +151,6 @@ class AuthGroups extends ShieldAuthGroups
 
         // 💳 Accounts Management
         'accounts.access'       => 'Can access accounts data',
-
-        // ⚙️ General Settings
-        'settings.access'       => 'Can access general settings',
-        'settings.update'       => 'Can update general settings',
     ];
 
     /**
@@ -181,7 +177,6 @@ class AuthGroups extends ShieldAuthGroups
             'schedules.*',
             'dailyschedule.*',
             'accounts.*',
-            'settings.*'
         ],
         'admin' => [
             'admin.access',
