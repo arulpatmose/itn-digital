@@ -2,33 +2,50 @@
 
 if (!function_exists('get_settings')) {
     /**
-     * Fetch settings from the database.
+     * Retrieve settings from the database.
      *
-     * @param string $type     The variable name of the settings (default: 'system_settings').
-     * @param bool   $isJson   Whether to decode JSON or not.
-     * @return mixed           Returns decoded array/object if JSON, raw value otherwise.
+     * @param string $type   The name of the settings variable to fetch (default: 'system_settings').
+     * @param bool   $isJson Indicates whether the retrieved value should be decoded as JSON.
+     * @return mixed         The decoded array/object if JSON, or the raw value if not.
      */
-    function get_settings(string $type = 'system_settings', bool $isJson = false)
+    function get_settings($group, $asArray = false)
     {
-        $db = \Config\Database::connect();
+        $settingsService = service('settings');
+        $fields = [
+            'general' => [
+                'siteName',
+                'siteDescription',
+                'metaKeywords',
+                'metaDescription',
+                'maintenanceMode',
+                'maintenanceMessage'
+            ],
+            'email' => [
+                'fromName',
+                'fromEmail',
+                'protocol',
+                'SMTPHost',
+                'SMTPPort',
+                'SMTPUser',
+                'SMTPPass',
+                'SMTPCrypto'
+            ],
+            'system' => [
+                'youtubeDataGoogleApi',
+                'captchaSiteKey',
+                'captchaSecret'
+            ],
+        ];
 
-        $builder = $db->table('system_settings');
-        $res = $builder->select('*')
-            ->where('variable', $type)
-            ->get()
-            ->getResultArray();
-
-        if (!empty($res)) {
-            $value = $res[0]['value'];
-
-            if ($isJson) {
-                return json_decode($value, true);
-            } else {
-                return esc($value);
+        $settings = [];
+        $namespace = $group === 'email' ? 'Email' : 'App';
+        if (isset($fields[$group])) {
+            foreach ($fields[$group] as $key) {
+                $settings[$key] = $settingsService->get("{$namespace}.{$key}");
             }
         }
 
-        return null;
+        return $asArray ? $settings : (object) $settings;
     }
 }
 

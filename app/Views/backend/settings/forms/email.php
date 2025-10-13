@@ -1,7 +1,7 @@
 <?php
 
 /**
- * system
+ * email
  *
  * Author: Arul Patmose
  *
@@ -19,7 +19,7 @@
             <form class="form-horizontal form-submit-event" action="<?= base_url('settings/update') ?>" method="POST" id="settings-form">
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">General System Settings</h3>
+                        <h3 class="block-title">Email Settings</h3>
                         <div class="block-options">
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Save
