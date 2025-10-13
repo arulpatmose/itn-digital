@@ -111,7 +111,7 @@ class DailySchedule extends BaseController
             $link = trim($this->request->getVar('schedule-link'));
             $remarks = trim($this->request->getVar('schedule-remarks'));
             $published = !empty($link) ? 1 : 0;
-            $updatedBy = !empty($link) ? auth()->id() : 0;
+            $updatedBy = !empty($link) ? auth()->id() : NULL;
 
             // Prepare data to update
             $data = [
