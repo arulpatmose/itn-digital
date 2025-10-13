@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class FormatModel extends Model
 {
     protected $table            = 'formats';
-    protected $primaryKey       = 'format_idid';
+    protected $primaryKey       = 'format_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
