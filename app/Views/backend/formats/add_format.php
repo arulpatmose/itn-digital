@@ -21,11 +21,11 @@
                     <div class="block-header block-header-default">
                         <h3 class="block-title">Format Information</h3>
                         <div class="block-options">
+                            <a role="button" href="<?php echo base_url('formats'); ?>" class="btn btn-sm btn-danger">
+                                Cancel
+                            </a>
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Save
-                            </button>
-                            <button type="button" onclick="history.back()" class="btn btn-sm btn-danger">
-                                Cancel
                             </button>
                         </div>
                     </div>

@@ -28,9 +28,6 @@
                         <span><?php echo $program['name']; ?></span>
                     </h3>
                     <div class="block-options">
-                        <a role="button" href="#" onclick="goBack()" class="btn btn-sm btn-alt-secondary">
-                            Go Back
-                        </a>
                         <a role="button" href="<?php echo base_url('schedules'); ?>" class="btn btn-sm btn-danger">
                             Cancel
                         </a>

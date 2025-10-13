@@ -21,11 +21,11 @@
                         <h3 class="block-title">Schedule Information for <span
                                 class="mx-1 text-success"><?php echo $schedule['usched_id']; ?></span></h3>
                         <div class="block-options">
+                            <a role="button" href="<?php echo base_url('schedule/') . $schedule['sched_id']; ?>" class="btn btn-sm btn-danger">
+                                Cancel
+                            </a>
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Save
-                            </button>
-                            <button type="button" onclick="history.back()" class="btn btn-sm btn-danger">
-                                Cancel
                             </button>
                         </div>
                     </div>

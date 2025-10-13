@@ -20,11 +20,11 @@
                     <div class="block-header block-header-default">
                         <h3 class="block-title">Schedule Information</h3>
                         <div class="block-options">
+                            <a role="button" href="<?php echo base_url('schedules'); ?>" class="btn btn-sm btn-danger">
+                                Cancel
+                            </a>
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Save
-                            </button>
-                            <button type="button" onclick="history.back()" class="btn btn-sm btn-danger">
-                                Cancel
                             </button>
                         </div>
                     </div>
