@@ -37,18 +37,22 @@ class Settings extends BaseController
                     'general' => [
                         'title'       => 'General Settings',
                         'description' => 'Manage site identity and maintenance settings',
+                        'icon'        => 'fa-globe',
                     ],
                     'email' => [
                         'title'       => 'Email Settings',
                         'description' => 'Configure email server and sender details',
+                        'icon'        => 'fa-envelope',
                     ],
                     'system' => [
                         'title'       => 'System Settings',
                         'description' => 'Control core system behavior, logging, and performance options',
+                        'icon'        => 'fa-cogs',
                     ],
                     'auth' => [
                         'title'       => 'Authentication Settings',
                         'description' => 'Manage login, registration, and security configurations',
+                        'icon'        => 'fa-user-shield',
                     ],
                 ],
             ];

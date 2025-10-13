@@ -22,7 +22,7 @@
                     <div class="block-content block-content-full ratio ratio-16x9">
                         <div class="d-flex justify-content-center align-items-center text-center">
                             <div>
-                                <i class="fa fa-2x <?= esc($info['icon'] ?? 'fa-cogs') ?> text-modern"></i>
+                                <i class="fa fa-2x <?= esc($info['icon']) ?> text-modern"></i>
                                 <div class="fs-sm fw-semibold mt-3 text-uppercase">
                                     <?= esc($info['title']) ?>
                                 </div>
