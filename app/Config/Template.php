@@ -258,7 +258,7 @@ class Template extends BaseConfig
             'name'       => 'Settings',
             'icon'       => 'fa fa-cog',
             'url'        => 'settings',
-            'permission' => 'settings.access',
+            'permission' => 'admin.settings',
         ),
         array(
             'name'       => 'Users',
