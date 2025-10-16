@@ -69,9 +69,17 @@ class AuthGroups extends ShieldAuthGroups
             'title'       => 'Content Creator',
             'description' => 'Creates and manages digital contents',
         ],
-        'marketingex' => [
+        'marketing_executive' => [
             'title'       => 'Marketing Executive',
             'description' => 'Drive profit and promote products and services for ITN Digital',
+        ],
+        'resource_manager' => [
+            'title'       => 'Resource Manager',
+            'description' => 'Approves or rejects the booking requests and manages resources/time slots.',
+        ],
+        'secretary' => [
+            'title'       => 'Secretary',
+            'description' => 'Requests bookings on behalf of users or departments.',
         ]
     ];
 
@@ -151,6 +159,37 @@ class AuthGroups extends ShieldAuthGroups
 
         // 💳 Accounts Management
         'accounts.access'       => 'Can access accounts data',
+
+        // 📌 Booking Operations
+        'booking.access'    => 'Can view all bookings',
+        'booking.create'        => 'Can create a new booking',
+        'booking.edit'          => 'Can edit own booking requests',
+        'booking.cancel'        => 'Can cancel own bookings',
+        'booking.approve'       => 'Can approve or reject booking requests',
+
+        // 📅 Schedule & Booking Management
+        'schedule.access'       => 'Can access schedule data',
+        'schedule.create'       => 'Can create new schedule',
+        'schedule.edit'         => 'Can edit existing schedule',
+        'schedule.delete'       => 'Can delete existing schedule',
+
+        // 🏢 Resource Management
+        'resource.access'       => 'Can view all resources',
+        'resource.create'       => 'Can create new resources',
+        'resource.edit'         => 'Can edit existing resources',
+        'resource.delete'       => 'Can delete resources',
+
+        // 🗂 Resource Types Management
+        'resourcetype.access'   => 'Can view all resource types',
+        'resourcetype.create'   => 'Can create new resource types',
+        'resourcetype.edit'     => 'Can edit resource types',
+        'resourcetype.delete'   => 'Can delete resource types',
+
+        // ⏰ Time Slot Management
+        'timeslot.access'       => 'Can view all time slots',
+        'timeslot.create'       => 'Can create new time slots',
+        'timeslot.edit'         => 'Can edit existing time slots',
+        'timeslot.delete'       => 'Can delete time slots',
     ];
 
     /**
@@ -177,6 +216,10 @@ class AuthGroups extends ShieldAuthGroups
             'schedules.*',
             'dailyschedule.*',
             'accounts.*',
+            'resource.*',
+            'resourcetype.*',
+            'timeslot.*',
+            'booking.*',
         ],
         'admin' => [
             'admin.access',
@@ -249,6 +292,30 @@ class AuthGroups extends ShieldAuthGroups
             'clients.access',
             'schedules.access',
             'schedule.access',
-        ]
+        ],
+        'resource_manager' => [
+            'dashboard.*',
+            'resource.access',
+            'resource.create',
+            'resource.edit',
+            'resource.delete',
+            'resourcetype.access',
+            'resourcetype.create',
+            'resourcetype.edit',
+            'resourcetype.delete',
+            'timeslot.access',
+            'timeslot.create',
+            'timeslot.edit',
+            'timeslot.delete',
+            'booking.access',
+            'booking.approve',
+        ],
+        'secretary' => [
+            'dashboard.*',
+            'booking.create',
+            'booking.access',
+            'booking.edit',
+            'booking.cancel',
+        ],
     ];
 }
