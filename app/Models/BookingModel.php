@@ -53,25 +53,26 @@ class BookingModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    // Relationship Helpers
     public function getFullDetails($filters = [])
     {
         $builder = $this->select('
-                        bookings.*, 
-                        users.username as user_name, 
-                        resources.name as resource_name, 
-                        time_slots.label as time_label, 
-                        resource_types.name as resource_type
-                    ')
+            bookings.*, 
+            users.username AS user_name, 
+            resources.name AS resource_name, 
+            time_slots.label AS time_label, 
+            resource_types.name AS resource_type, 
+            booking_purposes.name AS booking_purpose
+        ')
             ->join('users', 'users.id = bookings.user_id', 'left')
             ->join('resources', 'resources.id = bookings.resource_id', 'left')
             ->join('time_slots', 'time_slots.id = bookings.time_slot_id', 'left')
-            ->join('resource_types', 'resource_types.id = resources.type_id', 'left');
+            ->join('resource_types', 'resource_types.id = resources.type_id', 'left')
+            ->join('booking_purposes', 'booking_purposes.id = bookings.purpose_id', 'left');
 
         if (!empty($filters)) {
             $builder->where($filters);
         }
 
-        return $builder->orderBy('booking_date', 'DESC')->findAll();
+        return $builder->orderBy('bookings.booking_date', 'DESC')->findAll();
     }
 }
