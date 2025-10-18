@@ -130,12 +130,14 @@ class Template extends BaseConfig
     // You can use the following array to create your main menu
     public $main_nav = array(
         array(
+            'type'       => 'nav-item',
             'name'       => 'Dashboard',
             'icon'       => 'si si-speedometer',
             'url'        => '',
             'permission' => 'dashboard.access',
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Schedules',
             'icon'       => 'si si-calendar',
             'permission' => 'schedules.access',
@@ -153,6 +155,11 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type'     => 'nav-section',
+            'name'     => 'Management',
+        ),
+        array(
+            'type'       => 'nav-item',
             'name'       => 'Clients',
             'icon'       => 'si si-users',
             'permission' => 'clients.access',
@@ -170,6 +177,7 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Programs',
             'icon'       => 'fa fa-display',
             'permission' => 'programs.access',
@@ -187,6 +195,7 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Ad Spots',
             'icon'       => 'si si-target',
             'permission' => 'spots.access',
@@ -204,6 +213,7 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Ad Formats',
             'icon'       => 'si si-list',
             'permission' => 'formats.access',
@@ -221,6 +231,7 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Platforms',
             'icon'       => 'si si-social-youtube',
             'permission' => 'platforms.access',
@@ -238,6 +249,7 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Ads',
             'icon'       => 'fas fa-ad',
             'permission' => 'commercials.access',
@@ -255,12 +267,18 @@ class Template extends BaseConfig
             )
         ),
         array(
+            'type' => 'nav-section',
+            'name' => 'Administration',
+        ),
+        array(
+            'type'       => 'nav-item',
             'name'       => 'Settings',
             'icon'       => 'fa fa-cog',
             'url'        => 'settings',
             'permission' => 'admin.settings',
         ),
         array(
+            'type'       => 'nav-item',
             'name'       => 'Users',
             'icon'       => 'si si-user',
             'permission' => 'users.manage-admins',
