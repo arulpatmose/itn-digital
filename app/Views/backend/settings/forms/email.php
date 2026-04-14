@@ -14,7 +14,7 @@
 
 <?= $this->section('content') ?>
 <div class="content">
-    <div class="row">
+    <div class="row item-push">
         <div class="col-md-12">
             <form class="form-horizontal form-submit-event" action="<?= base_url('settings/update') ?>" method="POST" id="settings-form">
                 <div class="block block-rounded">
@@ -63,10 +63,9 @@
                 <input type="hidden" name="group" value="<?= $settingGroup ?>">
             </form>
         </div>
-    </div>
 
-    <!-- ── Send Test Email ───────────────────────────── -->
-    <div class="row mt-4">
+        <!-- ── Send Test Email ───────────────────────────── -->
+
         <div class="col-md-12">
             <div class="block block-rounded">
 
