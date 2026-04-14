@@ -12,16 +12,21 @@ $routes->get('/', 'Dashboard::index', ['as' => 'dashboard']);
 | User Management Routes
 | --------------------------------------------------------------------
 */
+// Profile routes — any authenticated user
+$routes->group('users', ['filter' => 'session'], function ($routes) {
+    $routes->get('profile', 'Users::profile');
+    $routes->post('update-profile', 'Users::updateProfile');
+    $routes->post('update-password', 'Users::changePassword');
+});
+
+// User management routes — require users.manage-admins
 $routes->group('users', ['filter' => 'permission:users.manage-admins'], function ($routes) {
-    $routes->get('/', 'Users::index', ['as' => 'users', 'filter' => 'permission:users.manage-admins']);
+    $routes->get('/', 'Users::index', ['as' => 'users']);
     $routes->get('add', 'Users::create', ['filter' => 'permission:users.create']);
     $routes->post('submit', 'Users::store', ['filter' => 'permission:users.create']);
-    $routes->post('update-profile', 'Users::updateProfile', ['filter' => 'permission:users.edit']);
     $routes->post('update-user', 'Users::updateUser', ['filter' => 'permission:users.edit']);
-    $routes->post('update-password', 'Users::changePassword', ['filter' => 'permission:users.edit']);
     $routes->post('update-user-password', 'Users::changeUserPassword', ['filter' => 'permission:users.edit']);
     $routes->post('update-user-groups', 'Users::updateUserGroups', ['filter' => 'permission:users.manage-admins']);
-    $routes->get('profile', 'Users::profile');
     $routes->get('edit/(:num)', 'Users::edit/$1', ['filter' => 'permission:users.edit']);
     $routes->post('delete', 'Users::deleteUser', ['filter' => 'permission:users.delete']);
 });

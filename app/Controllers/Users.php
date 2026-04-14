@@ -18,7 +18,7 @@ class Users extends BaseController
 
     public function index()
     {
-        if (!auth()->user()->can('users.access')) {
+        if (!auth()->user()->can('users.manage-admins')) {
             $status = 'error';
             $message = 'You are not allowed to view this page!';
             return redirect()->back()->with($status, $message);
@@ -182,7 +182,7 @@ class Users extends BaseController
 
     public function deleteUser()
     {
-        if (!auth()->user()->can('users.edit')) {
+        if (!auth()->user()->can('users.delete')) {
             $status = 'error';
             $message = 'You are not allowed to view this page!';
             return redirect()->back()->with($status, $message);
