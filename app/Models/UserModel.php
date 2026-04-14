@@ -22,50 +22,45 @@ class UserModel extends ShieldUserModel
 
     public function getUsers($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue = "")
     {
-        $data = array();
+        $data = [];
 
+        // Whitelist sortable columns to prevent SQL injection
+        $allowedSortColumns = ['id', 'first_name', 'last_name', 'last_active', 'status', 'active'];
+        if (!in_array($columnName, $allowedSortColumns)) {
+            $columnName    = 'id';
+            $columnSortOrder = 'desc';
+        }
+
+        // Total records — all users including soft-deleted
+        $data['totalRecords'] = $this->db->table('users')->countAllResults();
+
+        // Filtered count
+        $filteredBuilder = $this->db->table('users');
+        if ($searchValue !== '') {
+            $filteredBuilder->groupStart()
+                ->like('first_name', $searchValue)
+                ->orLike('last_name', $searchValue)
+                ->groupEnd();
+        }
+        $data['totalRecordwithFilter'] = $filteredBuilder->countAllResults();
+
+        // Fetch records
         $builder = $this->db->table('users');
-        $builder->where('deleted_at IS NULL', null, false);
+        $builder->select($returnFields);
 
-        // Total number of records without filtering
-
-        $data['totalRecords'] = $builder->countAllResults();
-
-        // Total number of records with filtering
-
-        $query = $builder->select('users.id');
-
-        if ($searchValue != '') {
-            $query->orLike('first_name', $searchValue);
+        if ($searchValue !== '') {
+            $builder->groupStart()
+                ->like('first_name', $searchValue)
+                ->orLike('last_name', $searchValue)
+                ->groupEnd();
         }
 
-        $builder->where('deleted_at IS NULL', null, false);
+        $builder->orderBy($columnName, $columnSortOrder);
+        $builder->limit($rowsPerPage, $start);
 
-        $data['totalRecordwithFilter'] = $builder->countAllResults(false);
+        $data['records'] = $builder->get()->getResultArray();
 
-        // Fetch Records
-
-        $query = $builder->select($returnFields);
-
-        if ($searchValue != '') {
-            $query->orLike('first_name', $searchValue);
-        }
-
-        if (isset($columnName) &&  isset($columnSortOrder)) {
-            $query->orderBy($columnName, $columnSortOrder);
-        }
-
-        if (isset($rowsPerPage)) {
-            $query->limit($rowsPerPage);
-        }
-
-        if (isset($start)) {
-            $query->offset($start);
-        }
-
-        $data['records'] = $query->get()->getResultArray();
-
-        return ($data);
+        return $data;
     }
 
     // Function to restore a deleted user

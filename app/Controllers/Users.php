@@ -24,8 +24,13 @@ class Users extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Users";
-        $data['page_description'] = "Individuals accessing content and services via ITN Digital Portal.";
+        $data['page_title']       = 'Users';
+        $data['page_description'] = 'Individuals accessing content and services via ITN Digital Portal.';
+        $data['can_edit']         = auth()->user()->can('users.edit');
+        $data['can_delete']       = auth()->user()->can('users.delete');
+        $data['can_restore']      = auth()->user()->can('users.restore');
+        $data['can_ban']          = auth()->user()->can('users.ban');
+        $data['can_unban']        = auth()->user()->can('users.unban');
 
         return view('backend/users/index', $data);
     }
@@ -198,7 +203,7 @@ class Users extends BaseController
             $user = $users->findById($user_id);
         }
 
-        if ($users->delete($user->id, true)) {
+        if ($users->delete($user->id)) {
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'The user was deleted successfully'
@@ -332,6 +337,71 @@ class Users extends BaseController
         $status = 'error';
         $message = 'You are not allowed to view this page!';
         return redirect()->to('/')->with($status, $message);
+    }
+
+    public function banUser()
+    {
+        if (!$this->request->isAjax()) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid request method. AJAX request required.'
+            ])->setStatusCode(400);
+        }
+
+        if (!auth()->user()->can('users.ban')) {
+            return $this->response->setStatusCode(403)
+                ->setJSON(['status' => 'error', 'message' => 'You are not allowed to do this!']);
+        }
+
+        $user_id = $this->request->getVar('user_id');
+        $reason  = $this->request->getVar('reason') ?? 'No reason provided.';
+
+        $users = auth()->getProvider();
+        $user  = $users->findById($user_id);
+
+        if (!$user) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'User not found.'])->setStatusCode(404);
+        }
+
+        if ($user->isBanned()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'User is already banned.'])->setStatusCode(400);
+        }
+
+        $user->ban($reason);
+
+        return $this->response->setJSON(['status' => 'success', 'message' => 'User has been banned successfully.']);
+    }
+
+    public function unBanUser()
+    {
+        if (!$this->request->isAjax()) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid request method. AJAX request required.'
+            ])->setStatusCode(400);
+        }
+
+        if (!auth()->user()->can('users.unban')) {
+            return $this->response->setStatusCode(403)
+                ->setJSON(['status' => 'error', 'message' => 'You are not allowed to do this!']);
+        }
+
+        $user_id = $this->request->getVar('user_id');
+
+        $users = auth()->getProvider();
+        $user  = $users->findById($user_id);
+
+        if (!$user) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'User not found.'])->setStatusCode(404);
+        }
+
+        if (!$user->isBanned()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'User is not currently banned.'])->setStatusCode(400);
+        }
+
+        $user->unBan();
+
+        return $this->response->setJSON(['status' => 'success', 'message' => 'User has been unbanned successfully.']);
     }
 
     public function restoreUser()

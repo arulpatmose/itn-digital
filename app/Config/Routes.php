@@ -29,6 +29,9 @@ $routes->group('users', ['filter' => 'permission:users.manage-admins'], function
     $routes->post('update-user-groups', 'Users::updateUserGroups', ['filter' => 'permission:users.manage-admins']);
     $routes->get('edit/(:num)', 'Users::edit/$1', ['filter' => 'permission:users.edit']);
     $routes->post('delete', 'Users::deleteUser', ['filter' => 'permission:users.delete']);
+    $routes->post('restore', 'Users::restoreUser', ['filter' => 'permission:users.restore']);
+    $routes->post('ban', 'Users::banUser', ['filter' => 'permission:users.ban']);
+    $routes->post('unban', 'Users::unBanUser', ['filter' => 'permission:users.unban']);
 });
 
 /*

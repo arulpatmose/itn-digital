@@ -634,7 +634,7 @@ class APIServices extends BaseController
             $columnSortOrder = $dtPostData['order'][0]['dir']; // asc or desc
             $searchValue = $dtPostData['search']['value']; // Search value
 
-            $returnFields = 'users.id as id, first_name, last_name, last_active';
+            $returnFields = 'users.id as id, users.first_name, users.last_name, users.active, users.status, users.status_message, users.deleted_at, users.last_active';
 
             $results = $this->userModel->getUsers($returnFields, $columnName, $columnSortOrder, $rowsPerPage, $start, $searchValue);
 
@@ -648,31 +648,39 @@ class APIServices extends BaseController
             $records = $results['records'];
 
             // Prepare Data
-            $data = array();
+            $data = [];
 
-            // Get default groups
+            // Get defined groups for label lookup
             $groups = setting('AuthGroups.groups');
             asort($groups);
 
             foreach ($records as $record) {
-                $_userGroups = $this->userModel->find($record['id'])->getGroups();
+                // withDeleted() ensures soft-deleted users are also found
+                $user        = $this->userModel->withDeleted()->find($record['id']);
+                $userGroups  = [];
 
-                $userGroups = array();
-
-                foreach ($groups as $slug => $group) {
-                    // Check if the slug is in the array and append the title if true
-                    if (in_array($slug, $_userGroups)) {
-                        $userGroups[] = $group['title'];
+                if ($user) {
+                    $_userGroups = $user->getGroups();
+                    foreach ($groups as $slug => $group) {
+                        if (in_array($slug, $_userGroups)) {
+                            $userGroups[] = $group['title'];
+                        }
                     }
                 }
 
-                $data[] = array(
-                    "id" => $record['id'],
-                    "first_name" => $record['first_name'],
-                    "last_name" => $record['last_name'],
-                    "groups" => implode(",", $userGroups),
-                    "last_active" => $record['last_active']
-                );
+                $isDeleted = !empty($record['deleted_at']);
+
+                $data[] = [
+                    'id'             => $record['id'],
+                    'first_name'     => $record['first_name'],
+                    'last_name'      => $record['last_name'],
+                    'email'          => $user ? $user->email : '',
+                    'groups'         => implode(',', $userGroups),
+                    'email_verified' => (bool) $record['active'],
+                    'status'         => $isDeleted ? 'deleted' : ($record['status'] ?? 'active'),
+                    'status_message' => $record['status_message'] ?? '',
+                    'last_active'    => $record['last_active'],
+                ];
             }
 
             // Response

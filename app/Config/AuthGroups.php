@@ -104,6 +104,9 @@ class AuthGroups extends ShieldAuthGroups
         'users.create'          => 'Can create new non-admin users',
         'users.edit'            => 'Can edit existing non-admin users',
         'users.delete'          => 'Can delete existing non-admin users',
+        'users.restore'         => 'Can restore soft-deleted users',
+        'users.ban'             => 'Can ban users from the site',
+        'users.unban'           => 'Can unban users from the site',
 
         // 🧑‍💼 Client Management
         'clients.access'        => 'Can access clients data',
@@ -224,9 +227,13 @@ class AuthGroups extends ShieldAuthGroups
         'admin' => [
             'admin.access',
             'dashboard.*',
+            'users.manage-admins',
             'users.create',
             'users.edit',
             'users.delete',
+            'users.restore',
+            'users.ban',
+            'users.unban',
             'beta.access',
             'schedule.*',
             'schedules.*',
