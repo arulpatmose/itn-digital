@@ -51,12 +51,12 @@ class Auth extends ShieldAuth
         'layout'                      => '\CodeIgniter\Shield\Views\layout',
         'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
         'action_email_2fa_verify'     => '\CodeIgniter\Shield\Views\email_2fa_verify',
-        'action_email_2fa_email'      => '\CodeIgniter\Shield\Views\Email\email_2fa_email',
+        'action_email_2fa_email'      => 'auth/email/email_2fa_email',
         'action_email_activate_show'  => 'auth/email_activate_show',
-        'action_email_activate_email' => '\CodeIgniter\Shield\Views\Email\email_activate_email',
+        'action_email_activate_email' => 'auth/email/email_activate_email',
         'magic-link-login'            => 'auth/magic_link',
         'magic-link-message'          => 'auth/magic_link_message',
-        'magic-link-email'            => '\CodeIgniter\Shield\Views\Email\magic_link_email',
+        'magic-link-email'            => 'auth/email/magic_link_email',
     ];
 
     /**
@@ -98,7 +98,7 @@ class Auth extends ShieldAuth
      * @var array<string, class-string<ActionInterface>|null>
      */
     public array $actions = [
-        'register' => null,
+        'register' => \CodeIgniter\Shield\Authentication\Actions\EmailActivator::class,
         'login'    => null,
     ];
 
@@ -428,7 +428,7 @@ class Auth extends ShieldAuth
      *
      * @var class-string<UserModel>
      */
-    public string $userProvider = UserModel::class;
+    public string $userProvider = \App\Models\UserModel::class;
 
     /**
      * Returns the URL that a user should be redirected
