@@ -191,6 +191,32 @@ class Settings extends BaseController
             ->with('success', 'Settings updated successfully');
     }
 
+    public function testEmail()
+    {
+        if (!auth()->user()->can('admin.settings')) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized.'])->setStatusCode(403);
+        }
+
+        $to = trim($this->request->getPost('test_email') ?? '');
+
+        if (empty($to) || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Please enter a valid email address.']);
+        }
+
+        $sent = send_app_email(
+            $to,
+            'Test Email — ' . site_name(),
+            'emails/test_email',
+            ['recipientEmail' => $to]
+        );
+
+        if ($sent) {
+            return $this->response->setJSON(['success' => true, 'message' => "Test email sent successfully to {$to}."]);
+        }
+
+        return $this->response->setJSON(['success' => false, 'message' => 'Failed to send test email. Please check your SMTP settings and logs.']);
+    }
+
     public function forget($category, $key)
     {
         // Authorization using Shield

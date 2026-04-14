@@ -168,6 +168,7 @@ $routes->group('settings', ['filter' => 'permission:admin.settings'], function (
     $routes->get('/', 'Settings::index', ['filter' => 'permission:admin.settings']);
     $routes->get('(:segment)', 'Settings::index/$1', ['filter' => 'permission:admin.settings']);
     $routes->post('update', 'Settings::update', ['filter' => 'permission:admin.settings']);
+    $routes->post('email-test', 'Settings::testEmail', ['filter' => 'permission:admin.settings']);
     $routes->get('forget/(:segment)/(:segment)', 'Settings::forget/$1/$2', ['filter' => 'permission:admin.settings']);
 });
 

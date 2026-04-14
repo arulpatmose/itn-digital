@@ -64,11 +64,86 @@
             </form>
         </div>
     </div>
+
+    <!-- ── Send Test Email ───────────────────────────── -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="block block-rounded">
+
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Send Test Email</h3>
+                </div>
+
+                <div class="block-content">
+                    <p class="text-muted small mb-3">
+                        Send a test email using the current SMTP configuration above to verify delivery is working correctly.
+                    </p>
+
+                    <div class="row g-3 mb-4 align-items-end">
+                        <div class="col-md-6">
+                            <label for="test_email_address" class="col-form-label">Recipient Email Address</label>
+                            <input type="email"
+                                id="test_email_address"
+                                class="form-control"
+                                placeholder="admin@example.com">
+                        </div>
+
+                        <div class="col-md-3">
+                            <button type="button" id="btn-send-test-email" class="btn btn-primary w-100">
+                                <i class="fa fa-paper-plane me-1"></i> Send
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="test-email-result" class="mt-3" style="display:none;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <?= $this->endSection() ?>
 
 <?= $this->section('other-scripts') ?>
 <script>
+    // 🔹 Send Test Email
+    $('#btn-send-test-email').on('click', function() {
+        const email = $('#test_email_address').val().trim();
+        const $btn = $(this);
+        const $result = $('#test-email-result');
+
+        if (!email) {
+            $result.html('<div class="alert alert-warning">Please enter a recipient email address.</div>').show();
+            return;
+        }
+
+        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-2"></i> Sending…');
+        $result.hide();
+
+        $.ajax({
+            url: '<?= base_url('settings/email-test') ?>',
+            type: 'POST',
+            data: {
+                test_email: email,
+                '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res.success) {
+                    $result.html('<div class="alert alert-success">' + res.message + '</div>').show();
+                } else {
+                    $result.html('<div class="alert alert-danger">' + res.message + '</div>').show();
+                }
+            },
+            error: function() {
+                $result.html('<div class="alert alert-danger">Request failed. Please try again.</div>').show();
+            },
+            complete: function() {
+                $btn.prop('disabled', false).html('<i class="fa fa-paper-plane me-2"></i> Send Test Email');
+            }
+        });
+    });
+
     // SweetAlert2 for Reset to Default using jQuery
     $(document).ready(function() {
         $('.reset-setting').on('click', function(e) {
