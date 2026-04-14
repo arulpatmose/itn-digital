@@ -54,58 +54,83 @@
 <?= $this->section('other-scripts') ?>
 <script>
     // Permission flags from server
-    var _canEdit    = <?= json_encode($can_edit) ?>;
-    var _canDelete  = <?= json_encode($can_delete) ?>;
+    var _canEdit = <?= json_encode($can_edit) ?>;
+    var _canDelete = <?= json_encode($can_delete) ?>;
     var _canRestore = <?= json_encode($can_restore) ?>;
-    var _canBan     = <?= json_encode($can_ban) ?>;
-    var _canUnban   = <?= json_encode($can_unban) ?>;
+    var _canBan = <?= json_encode($can_ban) ?>;
+    var _canUnban = <?= json_encode($can_unban) ?>;
 
     // Datatable for Users
-    jQuery(document).ready(function () {
+    jQuery(document).ready(function() {
         if (jQuery('#table-users').length) {
             jQuery('#table-users').DataTable({
                 ajax: {
                     url: '/api/get-all-users',
-                    data: function (data) { return { data: data }; },
-                    dataSrc: function (data) { return data.aaData; },
+                    data: function(data) {
+                        return {
+                            data: data
+                        };
+                    },
+                    dataSrc: function(data) {
+                        return data.aaData;
+                    },
                     method: 'post'
                 },
                 serverSide: true,
                 processing: true,
                 pagingType: 'full_numbers',
                 pageLength: 10,
-                lengthMenu: [[5, 10, 15, 20, 50], [5, 10, 15, 20, 50]],
+                lengthMenu: [
+                    [5, 10, 15, 20, 50],
+                    [5, 10, 15, 20, 50]
+                ],
                 autoWidth: false,
                 responsive: true,
                 stateSave: true,
                 info: true,
-                columns: [
-                    { data: 'id' },
-                    { data: 'first_name' },
-                    { data: 'last_name' },
-                    { data: 'email' },
-                    { data: 'groups' },
-                    { data: 'email_verified' },
-                    { data: 'status' },
-                    { data: 'last_active' },
-                    { data: 'id' }
-                ],
-                columnDefs: [
+                columns: [{
+                        data: 'id'
+                    },
                     {
+                        data: 'first_name'
+                    },
+                    {
+                        data: 'last_name'
+                    },
+                    {
+                        data: 'email'
+                    },
+                    {
+                        data: 'groups'
+                    },
+                    {
+                        data: 'email_verified'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'last_active'
+                    },
+                    {
+                        data: 'id'
+                    }
+                ],
+                columnDefs: [{
                         targets: [0],
                         width: '4%',
                         orderable: false,
-                        render: function (data, type, row, meta) {
+                        render: function(data, type, row, meta) {
                             return meta.row + 1;
                         }
                     },
                     {
                         targets: [4],
                         orderable: false,
-                        render: function (data, type, row, meta) {
+                        render: function(data, type, row, meta) {
                             if (data && data.trim() !== '') {
                                 var _groups = data.split(',');
-                                return $.map(_groups, function (value) {
+                                return $.map(_groups, function(value) {
                                     return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success me-1">' + value.trim() + '</span>';
                                 }).join('');
                             }
@@ -116,35 +141,43 @@
                         targets: [5],
                         width: '7%',
                         orderable: false,
-                        render: function (data, type, row, meta) {
+                        class: 'text-center',
+                        render: function(data, type, row, meta) {
                             if (row.status === 'deleted') {
-                                return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-secondary-light text-secondary">N/A</span>';
+                                return '<i class="fa fa-fw fa-minus-circle text-secondary" data-bs-toggle="tooltip" title="N/A"></i>';
                             }
-                            return data
-                                ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">Yes</span>'
-                                : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-warning-light text-warning">No</span>';
+                            return data ?
+                                '<i class="fa fa-fw fa-check-circle text-success" data-bs-toggle="tooltip" title="Verified"></i>' :
+                                '<i class="fa fa-fw fa-times-circle text-warning" data-bs-toggle="tooltip" title="Not Verified"></i>';
                         }
                     },
                     {
                         targets: [6],
-                        width: '10%',
-                        render: function (data, type, row, meta) {
+                        width: '15%',
+                        render: function(data, type, row, meta) {
                             if (data === 'deleted') {
-                                return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">Deleted</span>';
+                                return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' +
+                                    '<i class="fa fa-fw fa-trash me-1"></i>Deleted</span>';
                             }
                             if (data === 'banned') {
-                                var msg = row.status_message ? ' <small class="text-muted">(' + row.status_message + ')</small>' : '';
-                                return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-warning-light text-warning">Banned</span>' + msg;
+                                var badge = '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-warning-light text-warning">' +
+                                    '<i class="fa fa-fw fa-ban me-1"></i>Banned</span>';
+                                if (row.status_message) {
+                                    badge += '<div class="fs-xs text-muted mt-3 ps-1" style="max-width:160px; white-space:normal; line-height:1.3;">' +
+                                        row.status_message + '</div>';
+                                }
+                                return badge;
                             }
-                            return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">Active</span>';
+                            return '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' +
+                                '<i class="fa fa-fw fa-circle me-1" style="font-size:.5em; vertical-align:middle;"></i>Active</span>';
                         }
                     },
                     {
                         targets: [8],
                         width: '12%',
                         orderable: false,
-                        render: function (data, type, row, meta) {
-                            var uri     = URI().origin();
+                        render: function(data, type, row, meta) {
+                            var uri = URI().origin();
                             var buttons = '<div class="btn-group">';
 
                             if (row.status === 'deleted') {
@@ -183,9 +216,9 @@
     });
 
     // ── Delete User ──────────────────────────────────────────────────────────
-    jQuery(document).on('click', '.js-delete-user', function (e) {
+    jQuery(document).on('click', '.js-delete-user', function(e) {
         e.preventDefault();
-        var id  = $(this).data('id');
+        var id = $(this).data('id');
         var url = $(this).data('url');
 
         toast.fire({
@@ -195,26 +228,42 @@
             showCloseButton: true,
             confirmButtonText: 'Yes, delete',
             allowOutsideClick: false
-        }).then(function (result) {
+        }).then(function(result) {
             if (result.value) {
                 $.ajax({
-                    url: url, type: 'POST', dataType: 'json',
-                    data: { user_id: id },
-                    success: function (r) {
-                        var icon = r.success ? 'success' : 'error';
-                        toast.fire({ title: icon === 'success' ? 'Deleted' : 'Error', icon: icon, html: r.message })
-                            .then(function () { if (r.success) jQuery('#table-users').DataTable().ajax.reload(null, false); });
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        user_id: id
                     },
-                    error: function () { toast.fire({ title: 'Error', icon: 'error', html: 'An unexpected error occurred.' }); }
+                    success: function(r) {
+                        var icon = r.success ? 'success' : 'error';
+                        toast.fire({
+                                title: icon === 'success' ? 'Deleted' : 'Error',
+                                icon: icon,
+                                html: r.message
+                            })
+                            .then(function() {
+                                if (r.success) jQuery('#table-users').DataTable().ajax.reload(null, false);
+                            });
+                    },
+                    error: function() {
+                        toast.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            html: 'An unexpected error occurred.'
+                        });
+                    }
                 });
             }
         });
     });
 
     // ── Ban User ─────────────────────────────────────────────────────────────
-    jQuery(document).on('click', '.js-ban-user', function (e) {
+    jQuery(document).on('click', '.js-ban-user', function(e) {
         e.preventDefault();
-        var id  = $(this).data('id');
+        var id = $(this).data('id');
         var url = $(this).data('url');
 
         Swal.fire({
@@ -224,28 +273,45 @@
             confirmButtonText: 'Ban User',
             confirmButtonColor: '#f59e0b',
             allowOutsideClick: false,
-            preConfirm: function () {
+            preConfirm: function() {
                 return document.getElementById('ban-reason').value;
             }
-        }).then(function (result) {
+        }).then(function(result) {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: url, type: 'POST', dataType: 'json',
-                    data: { user_id: id, reason: result.value || 'No reason provided.' },
-                    success: function (r) {
-                        toast.fire({ title: r.status === 'success' ? 'Banned' : 'Error', icon: r.status, html: r.message })
-                            .then(function () { if (r.status === 'success') jQuery('#table-users').DataTable().ajax.reload(null, false); });
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        user_id: id,
+                        reason: result.value || 'No reason provided.'
                     },
-                    error: function () { toast.fire({ title: 'Error', icon: 'error', html: 'An unexpected error occurred.' }); }
+                    success: function(r) {
+                        toast.fire({
+                                title: r.status === 'success' ? 'Banned' : 'Error',
+                                icon: r.status,
+                                html: r.message
+                            })
+                            .then(function() {
+                                if (r.status === 'success') jQuery('#table-users').DataTable().ajax.reload(null, false);
+                            });
+                    },
+                    error: function() {
+                        toast.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            html: 'An unexpected error occurred.'
+                        });
+                    }
                 });
             }
         });
     });
 
     // ── Unban User ───────────────────────────────────────────────────────────
-    jQuery(document).on('click', '.js-unban-user', function (e) {
+    jQuery(document).on('click', '.js-unban-user', function(e) {
         e.preventDefault();
-        var id  = $(this).data('id');
+        var id = $(this).data('id');
         var url = $(this).data('url');
 
         toast.fire({
@@ -254,25 +320,41 @@
             showCancelButton: true,
             confirmButtonText: 'Yes, unban',
             allowOutsideClick: false
-        }).then(function (result) {
+        }).then(function(result) {
             if (result.value) {
                 $.ajax({
-                    url: url, type: 'POST', dataType: 'json',
-                    data: { user_id: id },
-                    success: function (r) {
-                        toast.fire({ title: r.status === 'success' ? 'Unbanned' : 'Error', icon: r.status, html: r.message })
-                            .then(function () { if (r.status === 'success') jQuery('#table-users').DataTable().ajax.reload(null, false); });
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        user_id: id
                     },
-                    error: function () { toast.fire({ title: 'Error', icon: 'error', html: 'An unexpected error occurred.' }); }
+                    success: function(r) {
+                        toast.fire({
+                                title: r.status === 'success' ? 'Unbanned' : 'Error',
+                                icon: r.status,
+                                html: r.message
+                            })
+                            .then(function() {
+                                if (r.status === 'success') jQuery('#table-users').DataTable().ajax.reload(null, false);
+                            });
+                    },
+                    error: function() {
+                        toast.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            html: 'An unexpected error occurred.'
+                        });
+                    }
                 });
             }
         });
     });
 
     // ── Restore User ─────────────────────────────────────────────────────────
-    jQuery(document).on('click', '.js-restore-user', function (e) {
+    jQuery(document).on('click', '.js-restore-user', function(e) {
         e.preventDefault();
-        var id  = $(this).data('id');
+        var id = $(this).data('id');
         var url = $(this).data('url');
 
         toast.fire({
@@ -281,16 +363,32 @@
             showCancelButton: true,
             confirmButtonText: 'Yes, restore',
             allowOutsideClick: false
-        }).then(function (result) {
+        }).then(function(result) {
             if (result.value) {
                 $.ajax({
-                    url: url, type: 'POST', dataType: 'json',
-                    data: { user_id: id },
-                    success: function (r) {
-                        toast.fire({ title: r.status === 'success' ? 'Restored' : 'Error', icon: r.status, html: r.message })
-                            .then(function () { if (r.status === 'success') jQuery('#table-users').DataTable().ajax.reload(null, false); });
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        user_id: id
                     },
-                    error: function () { toast.fire({ title: 'Error', icon: 'error', html: 'An unexpected error occurred.' }); }
+                    success: function(r) {
+                        toast.fire({
+                                title: r.status === 'success' ? 'Restored' : 'Error',
+                                icon: r.status,
+                                html: r.message
+                            })
+                            .then(function() {
+                                if (r.status === 'success') jQuery('#table-users').DataTable().ajax.reload(null, false);
+                            });
+                    },
+                    error: function() {
+                        toast.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            html: 'An unexpected error occurred.'
+                        });
+                    }
                 });
             }
         });
