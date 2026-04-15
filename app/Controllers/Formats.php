@@ -59,6 +59,8 @@ class Formats extends BaseController
 
         // Insert into database
         if ($this->formatModel->insert($data, false)) {
+            log_activity('format.created', 'format', (int) $this->formatModel->getInsertID(), "Created format '{$data['name']}'");
+
             $status = 'success';
             $message = 'The format was addded successfully!';
         } else {
@@ -109,6 +111,8 @@ class Formats extends BaseController
 
         // Insert into database
         if ($this->formatModel->update($id, $data, false)) {
+            log_activity('format.updated', 'format', (int) $id, "Updated format '{$data['name']}'");
+
             $status = 'success';
             $message = 'The format was updated successfully!';
         } else {
@@ -137,9 +141,12 @@ class Formats extends BaseController
         }
 
         $id = $this->request->getPost('id');
+        $format = $this->formatModel->find($id);
         $query = $this->formatModel->delete($id);
 
         if ($query) {
+            log_activity('format.deleted', 'format', (int) $id, "Deleted format '" . ($format['name'] ?? $id) . "'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The format was deleted successfully'

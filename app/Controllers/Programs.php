@@ -65,6 +65,8 @@ class Programs extends BaseController
 
         // Insert into database
         if ($this->programModel->insert($data, false)) {
+            log_activity('program.created', 'program', (int) $this->programModel->getInsertID(), "Created program '{$data['name']}'");
+
             return redirect()->to('/programs')->with('success', 'The program was added successfully!');
         }
 
@@ -121,6 +123,8 @@ class Programs extends BaseController
         ];
 
         if ($this->programModel->update($id, $data, false)) {
+            log_activity('program.updated', 'program', (int) $id, "Updated program '{$data['name']}'");
+
             return redirect()->to('/programs')->with('success', 'The program was updated successfully!');
         }
 
@@ -153,6 +157,8 @@ class Programs extends BaseController
         }
 
         if ($this->programModel->delete($id)) {
+            log_activity('program.deleted', 'program', (int) $id, "Deleted program '" . ($program['name'] ?? $id) . "'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The program was deleted successfully'

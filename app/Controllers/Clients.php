@@ -62,6 +62,8 @@ class Clients extends BaseController
 
         // Insert into database
         if ($this->clientModel->insert($data, false)) {
+            log_activity('client.created', 'client', (int) $this->clientModel->getInsertID(), "Created client '{$data['name']}'");
+
             $status = 'success';
             $message = 'The client was addded successfully!';
         } else {
@@ -113,6 +115,8 @@ class Clients extends BaseController
 
         // Insert into database
         if ($this->clientModel->update($id, $data, false)) {
+            log_activity('client.updated', 'client', (int) $id, "Updated client '{$data['name']}'");
+
             $status = 'success';
             $message = 'The client was updated successfully!';
         } else {
@@ -141,9 +145,12 @@ class Clients extends BaseController
         }
 
         $id = $this->request->getPost('id');
+        $client = $this->clientModel->find($id);
         $query = $this->clientModel->delete($id);
 
         if ($query) {
+            log_activity('client.deleted', 'client', (int) $id, "Deleted client '" . ($client['name'] ?? $id) . "'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The client was deleted successfully'

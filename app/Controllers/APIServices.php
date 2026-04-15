@@ -799,4 +799,67 @@ class APIServices extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
     }
+
+    public function getAllActivityLogs()
+    {
+        if (!auth()->user()->can('admin.settings')) {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'Forbidden']);
+        }
+
+        if ($this->request->isAjax()) {
+            $postData   = $this->request->getPost();
+            $dtPostData = $postData['data'];
+
+            $draw        = $dtPostData['draw'];
+            $start       = (int) $dtPostData['start'];
+            $length      = (int) $dtPostData['length'];
+            $columnIndex = $dtPostData['order'][0]['column'];
+            $columnDir   = $dtPostData['order'][0]['dir'];
+            $searchValue = $dtPostData['search']['value'];
+
+            $columnMap = [
+                0 => 'al.id',
+                1 => 'al.created_at',
+                2 => 'al.action',
+                3 => 'al.target_type',
+                4 => 'al.description',
+                5 => 'al.ip_address',
+            ];
+            $orderCol = $columnMap[$columnIndex] ?? 'al.created_at';
+
+            $activityLogModel = new \App\Models\ActivityLogModel();
+
+            $totalRecords          = $activityLogModel->countTotal();
+            $totalRecordwithFilter = $activityLogModel->countTotal($searchValue);
+            $records               = $activityLogModel->getForDataTable($searchValue, $orderCol, $columnDir, $start, $length);
+
+            $data = [];
+            foreach ($records as $row) {
+                $actor = trim(($row['first_name'] ?? '') . ' ' . ($row['last_name'] ?? ''));
+                if ($actor === '') {
+                    $actor = $row['user_id'] ? 'User #' . $row['user_id'] : 'System';
+                }
+
+                $data[] = [
+                    'id'          => $row['id'],
+                    'created_at'  => $row['created_at'],
+                    'action'      => $row['action'],
+                    'target_type' => $row['target_type'],
+                    'target_id'   => $row['target_id'],
+                    'description' => $row['description'],
+                    'ip_address'  => $row['ip_address'],
+                    'actor'       => $actor,
+                ];
+            }
+
+            return $this->response->setJSON([
+                'draw'                 => intval($draw),
+                'iTotalRecords'        => $totalRecords,
+                'iTotalDisplayRecords' => $totalRecordwithFilter,
+                'aaData'               => $data,
+            ]);
+        }
+
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+    }
 }

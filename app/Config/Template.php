@@ -279,6 +279,13 @@ class Template extends BaseConfig
         ),
         array(
             'type'       => 'nav-item',
+            'name'       => 'Activity Log',
+            'icon'       => 'fa fa-history',
+            'url'        => 'activity-log',
+            'permission' => 'admin.settings',
+        ),
+        array(
+            'type'       => 'nav-item',
             'name'       => 'Users',
             'icon'       => 'si si-user',
             'permission' => 'users.manage-admins',

@@ -137,6 +137,8 @@ class Schedules extends BaseController
 
         // Insert into database
         if ($this->schedulesModel->affectedRows() > 0 && $this->scheduleItemModel->affectedRows() > 0) {
+            log_activity('schedule.created', 'schedule', (int) $lastInsertID, "Created schedule '{$scheduleID}'");
+
             $status = 'success';
             $message = 'The schedule was addded successfully!';
         } else {
@@ -197,6 +199,8 @@ class Schedules extends BaseController
 
             // Insert into database
             if ($this->schedulesModel->update($id, $data, false)) {
+                log_activity('schedule.updated', 'schedule', (int) $id, "Updated schedule (id: {$id})");
+
                 $status = 'success';
                 $message = 'The schedule was updated successfully!';
             } else {
@@ -282,6 +286,8 @@ class Schedules extends BaseController
         $query = $this->schedulesModel->where('sched_id', $scheduleID)->delete();
 
         if ($query) {
+            log_activity('schedule.deleted', 'schedule', (int) $id, "Deleted schedule '{$schedule['usched_id']}'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The schedule and its items were deleted successfully.'

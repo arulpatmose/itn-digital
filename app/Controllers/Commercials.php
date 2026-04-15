@@ -81,6 +81,8 @@ class Commercials extends BaseController
 
         // Insert into database
         if ($this->commercialModel->insert($data, false)) {
+            log_activity('commercial.created', 'commercial', (int) $this->commercialModel->getInsertID(), "Created commercial '{$data['name']}' ({$data['ucom_id']})");
+
             $status = 'success';
             $message = 'The commercial was addded successfully!';
         } else {
@@ -140,6 +142,8 @@ class Commercials extends BaseController
 
         // Insert into database
         if ($this->commercialModel->update($id, $data, false)) {
+            log_activity('commercial.updated', 'commercial', (int) $id, "Updated commercial '{$data['name']}'");
+
             $status = 'success';
             $message = 'The commercial was updated successfully!';
         } else {
@@ -168,9 +172,12 @@ class Commercials extends BaseController
         }
 
         $id = $this->request->getPost('id');
+        $commercial = $this->commercialModel->find($id);
         $query = $this->commercialModel->delete($id);
 
         if ($query) {
+            log_activity('commercial.deleted', 'commercial', (int) $id, "Deleted commercial '" . ($commercial['name'] ?? $id) . "'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The commercial was deleted successfully'

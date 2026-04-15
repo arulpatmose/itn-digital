@@ -59,6 +59,8 @@ class Spots extends BaseController
 
         // Insert into database
         if ($this->spotModel->insert($data, false)) {
+            log_activity('spot.created', 'spot', (int) $this->spotModel->getInsertID(), "Created spot '{$data['name']}'");
+
             $status = 'success';
             $message = 'The spot was addded successfully!';
         } else {
@@ -109,6 +111,8 @@ class Spots extends BaseController
 
         // Insert into database
         if ($this->spotModel->update($id, $data, false)) {
+            log_activity('spot.updated', 'spot', (int) $id, "Updated spot '{$data['name']}'");
+
             $status = 'success';
             $message = 'The spot was updated successfully!';
         } else {
@@ -137,9 +141,12 @@ class Spots extends BaseController
         }
 
         $id = $this->request->getPost('id');
+        $spot = $this->spotModel->find($id);
         $query = $this->spotModel->delete($id);
 
         if ($query) {
+            log_activity('spot.deleted', 'spot', (int) $id, "Deleted spot '" . ($spot['name'] ?? $id) . "'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The spot was deleted successfully'

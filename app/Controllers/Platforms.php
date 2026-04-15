@@ -59,6 +59,8 @@ class Platforms extends BaseController
 
         // Insert into database
         if ($this->platformModel->insert($data, false)) {
+            log_activity('platform.created', 'platform', (int) $this->platformModel->getInsertID(), "Created platform '{$data['name']}'");
+
             $status = 'success';
             $message = 'The platform was addded successfully!';
         } else {
@@ -108,6 +110,8 @@ class Platforms extends BaseController
 
         // Insert into database
         if ($this->platformModel->update($id, $data, false)) {
+            log_activity('platform.updated', 'platform', (int) $id, "Updated platform '{$data['name']}'");
+
             $status = 'success';
             $message = 'The platform was updated successfully!';
         } else {
@@ -136,9 +140,12 @@ class Platforms extends BaseController
         }
 
         $id = $this->request->getPost('id');
+        $platform = $this->platformModel->find($id);
         $query = $this->platformModel->delete($id);
 
         if ($query) {
+            log_activity('platform.deleted', 'platform', (int) $id, "Deleted platform '" . ($platform['name'] ?? $id) . "'");
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'The platform was deleted successfully'

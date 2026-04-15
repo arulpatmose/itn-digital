@@ -187,6 +187,8 @@ class Settings extends BaseController
             $settingsService->set("{$namespace}.{$key}", $value);
         }
 
+        log_activity('settings.updated', 'settings', null, "Updated '{$category}' settings");
+
         return redirect()->to('settings/' . $category)
             ->with('success', 'Settings updated successfully');
     }

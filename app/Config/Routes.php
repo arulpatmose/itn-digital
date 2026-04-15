@@ -181,6 +181,15 @@ $routes->get('accounts', 'Accounts::index', ['as' => 'accounts']);
 
 /*
 | --------------------------------------------------------------------
+| Activity Log Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('activity-log', ['filter' => 'permission:admin.settings'], function ($routes) {
+    $routes->get('/', 'ActivityLog::index', ['as' => 'activity_log']);
+});
+
+/*
+| --------------------------------------------------------------------
 | API Service Routes
 | --------------------------------------------------------------------
 */
@@ -195,6 +204,7 @@ $routes->group('api', function ($routes) {
     $routes->post('get-all-users', 'APIServices::getAllUsers');
     $routes->post('get-all-schedules', 'APIServices::getAllSchedules');
     $routes->post('get-schedules-budget', 'APIServices::getAllScheduleForAccounts');
+    $routes->post('get-all-activity-logs', 'APIServices::getAllActivityLogs');
 });
 
 service('auth')->routes($routes);

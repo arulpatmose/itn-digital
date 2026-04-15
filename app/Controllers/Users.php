@@ -75,6 +75,12 @@ class Users extends BaseController
                 // Add to default group
                 $usersModel->addToDefaultGroup($user);
 
+                log_activity('user.created', 'user', $user->id, "Created user '{$user->email}'", [
+                    'first_name' => $user->first_name,
+                    'last_name'  => $user->last_name,
+                    'email'      => $user->email,
+                ]);
+
                 $status = 'success';
                 $message = 'The user was addded successfully!';
             } else {
@@ -147,6 +153,12 @@ class Users extends BaseController
 
             // Insert into database
             if ($users->save($user)) {
+                log_activity('user.updated', 'user', (int) $user_id, "Updated user '{$user->email}'", [
+                    'first_name' => $this->request->getVar('first_name'),
+                    'last_name'  => $this->request->getVar('last_name'),
+                    'email'      => $this->request->getVar('email'),
+                ]);
+
                 $status = 'success';
                 $message = 'The user was updated successfully!';
             } else {
@@ -174,6 +186,8 @@ class Users extends BaseController
 
             // Insert into database
             if ($users->save($user)) {
+                log_activity('user.profile_updated', 'user', $user->id, "Updated own profile");
+
                 $status = 'success';
                 $message = 'The profile was updated successfully!';
             } else {
@@ -204,6 +218,8 @@ class Users extends BaseController
         }
 
         if ($users->delete($user->id)) {
+            log_activity('user.deleted', 'user', $user->id, "Deleted user '{$user->email}'");
+
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'The user was deleted successfully'
@@ -243,6 +259,8 @@ class Users extends BaseController
 
         // Insert into database
         if ($users->save($user)) {
+            log_activity('user.password_changed', 'user', $user->id, "Changed own password");
+
             $status = 'success';
             $message = 'The password was changed successfully!';
         } else {
@@ -278,6 +296,8 @@ class Users extends BaseController
 
             // Insert into database
             if ($users->save($user)) {
+                log_activity('user.password_changed_by_admin', 'user', (int) $user_id, "Admin changed password for user '{$user->email}'");
+
                 $status = 'success';
                 $message = 'The password was changed successfully!';
             } else {
@@ -311,6 +331,10 @@ class Users extends BaseController
         if (isset($user)) {
             // Insert into database
             if ($user->syncGroups(...$groups)) {
+                log_activity('user.groups_updated', 'user', (int) $user_id, "Updated groups for user '{$user->email}'", [
+                    'groups' => $groups,
+                ]);
+
                 $status = 'success';
                 $message = 'The user group(s) was updated successfully!';
             } else {
@@ -369,6 +393,10 @@ class Users extends BaseController
 
         $user->ban($reason);
 
+        log_activity('user.banned', 'user', $user->id, "Banned user '{$user->email}'", [
+            'reason' => $reason,
+        ]);
+
         return $this->response->setJSON(['status' => 'success', 'message' => 'User has been banned successfully.']);
     }
 
@@ -400,6 +428,8 @@ class Users extends BaseController
         }
 
         $user->unBan();
+
+        log_activity('user.unbanned', 'user', $user->id, "Unbanned user '{$user->email}'");
 
         return $this->response->setJSON(['status' => 'success', 'message' => 'User has been unbanned successfully.']);
     }
@@ -433,6 +463,8 @@ class Users extends BaseController
 
         // Restore the user
         if ($this->userModel->restoreUser($user_id)) {
+            log_activity('user.restored', 'user', (int) $user_id, "Restored deleted user (id: {$user_id})");
+
             return $this->response->setJSON(['status' => 'success', 'message' => 'User restored successfully']);
         } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to restore user'])->setStatusCode(500);
