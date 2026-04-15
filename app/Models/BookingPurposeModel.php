@@ -62,9 +62,12 @@ class BookingPurposeModel extends Model
     public function getGroupedActivePurposes(): array
     {
         $purposes = $this->select('booking_purposes.*, booking_purpose_groups.name AS group_name, booking_purpose_groups.sort_order AS group_sort_order')
-            ->join('booking_purpose_groups', 'booking_purpose_groups.id = booking_purposes.group_id', 'inner')
+            ->join('booking_purpose_groups', 'booking_purpose_groups.id = booking_purposes.group_id', 'left')
             ->where('booking_purposes.is_active', 1)
-            ->where('booking_purpose_groups.is_active', 1)
+            ->groupStart()
+                ->where('booking_purpose_groups.is_active', 1)
+                ->orWhere('booking_purposes.group_id IS NULL')
+            ->groupEnd()
             ->orderBy('booking_purpose_groups.sort_order', 'ASC')
             ->orderBy('booking_purpose_groups.name', 'ASC')
             ->orderBy('booking_purposes.name', 'ASC')

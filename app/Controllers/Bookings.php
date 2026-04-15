@@ -108,6 +108,15 @@ class Bookings extends BaseController
             return redirect()->back()->withInput()->with('error', 'Resource, date, time slot, and purpose are required.');
         }
 
+        // Validate date format and ensure it is not in the past
+        $parsedDate = \DateTime::createFromFormat('Y-m-d', $date);
+        if (!$parsedDate || $parsedDate->format('Y-m-d') !== $date) {
+            return redirect()->back()->withInput()->with('error', 'The booking date is invalid.');
+        }
+        if ($date < date('Y-m-d')) {
+            return redirect()->back()->withInput()->with('error', 'The booking date cannot be in the past.');
+        }
+
         $resource = $this->resourceModel->find($resourceId);
         if (!$resource || (int) $resource['status'] !== 1) {
             return redirect()->back()->withInput()->with('error', 'The selected resource is not available for booking.');
