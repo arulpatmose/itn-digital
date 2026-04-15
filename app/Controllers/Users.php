@@ -43,8 +43,12 @@ class Users extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Create a User";
+        $groups = setting('AuthGroups.groups');
+        asort($groups);
+
+        $data['page_title']       = "Create a User";
         $data['page_description'] = "Individuals accessing content and services via ITN Digital Portal.";
+        $data['groups']           = $groups;
 
         return view('backend/users/add_user', $data);
     }
@@ -57,28 +61,41 @@ class Users extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        // $user = new User();
         $usersModel = auth()->getProvider();
         $validation =  \Config\Services::validation();
+        $availableGroups = array_keys(setting('AuthGroups.groups'));
+        $selectedGroups = $this->request->getPost('user-groups');
+        $selectedGroups = is_array($selectedGroups) ? array_values(array_unique($selectedGroups)) : [];
 
         // Prepare data to insert            
         $data = $this->request->getPost();
+        $data['username'] = null;
         $rules = $validation->getRuleGroup('registration');
 
         if ($this->validate($rules)) {
+            if (empty($selectedGroups)) {
+                return redirect()->back()->withInput()->with('error', ['User Role' => 'At least one user role must be selected.']);
+            }
+
+            $invalidGroups = array_diff($selectedGroups, $availableGroups);
+
+            if (!empty($invalidGroups)) {
+                return redirect()->back()->withInput()->with('error', ['User Role' => 'One or more selected user roles are invalid.']);
+            }
+
             $user = new User();
             $user->fill($data);
             if ($usersModel->save($user)) {
                 // To get the complete user object with ID, we need to get from the database
                 $user = $usersModel->findById($usersModel->getInsertID());
 
-                // Add to default group
-                $usersModel->addToDefaultGroup($user);
+                $user->syncGroups(...$selectedGroups);
 
                 log_activity('user.created', 'user', $user->id, "Created user '{$user->email}'", [
                     'first_name' => $user->first_name,
                     'last_name'  => $user->last_name,
                     'email'      => $user->email,
+                    'groups'     => $selectedGroups,
                 ]);
 
                 $status = 'success';
@@ -92,7 +109,7 @@ class Users extends BaseController
             $message = $this->validator->getErrors();
         }
 
-        return redirect()->to('/users')->with($status, $message);
+        return redirect()->back()->withInput()->with($status, $message);
     }
 
     public function edit($id)

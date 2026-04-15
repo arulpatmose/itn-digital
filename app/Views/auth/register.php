@@ -59,12 +59,6 @@
                                             required>
                                     </div>
                                     <div class="mb-4">
-                                        <input type="text" class="form-control form-control-alt form-control-lg"
-                                            id="login-username" name="username" inputmode="text"
-                                            placeholder="<?= lang('Auth.username') ?>" value="<?= old('username') ?>"
-                                            required>
-                                    </div>
-                                    <div class="mb-4">
                                         <input type="password" class="form-control form-control-alt form-control-lg"
                                             id="login-password" name="password" inputmode="text"
                                             placeholder="<?= lang('Auth.password') ?>" required>

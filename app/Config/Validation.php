@@ -43,16 +43,6 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
 
     public $registration = [
-        'username' => [
-            'label' => 'Auth.username',
-            'rules' => [
-                'required',
-                'max_length[30]',
-                'min_length[3]',
-                'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
-                'is_unique[users.username]',
-            ],
-        ],
         'first_name' => [
             'label' => 'First Name',
             'rules' => [
@@ -87,13 +77,6 @@ class Validation extends BaseConfig
     ];
 
     public $registration_errors = [
-        'username'            =>     [
-            'required'         => 'Enter your Unique Username.',
-            'max_length'     => 'Username must not exceed 30 characters.',
-            'min_length'     => 'Username must be atleast 3 characters long.',
-            'regex_match'   => 'Username should contain only numbers and letters.',
-            'is_unique'     => 'Already exists, enter something else'
-        ],
         'email'              => [
             'required'         => 'Enter your Email.',
             'max_length'     => 'Too long, try with another email.',

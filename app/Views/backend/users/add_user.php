@@ -45,16 +45,27 @@
                                     <input type="text" class="form-control" id="email" name="email" inputmode="email" placeholder="<?= lang('Auth.email') ?>" value="<?= old('email') ?>" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label" for="schedule-budget">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" inputmode="text" placeholder="<?= lang('Auth.username') ?>" value="<?= old('username') ?>" required>
-                                </div>
-                                <div class="mb-4">
                                     <label class="form-label" for="schedule-budget">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" inputmode="text" placeholder="<?= lang('Auth.password') ?>" required>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="schedule-budget">Confirm Password</label>
                                     <input type="password" class="form-control" id="confirm-password" name="password_confirm" inputmode="text" placeholder="<?= lang('Auth.passwordConfirm') ?>" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">User Roles</label>
+                                    <div class="space-y-2">
+                                        <?php foreach ($groups as $slug => $group): ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="<?= esc($slug) ?>"
+                                                    id="group-<?= esc($slug) ?>" name="user-groups[]"
+                                                    <?= in_array($slug, old('user-groups', []), true) ? 'checked' : '' ?>>
+                                                <label class="form-check-label" for="group-<?= esc($slug) ?>">
+                                                    <?= esc($group['title']) ?>
+                                                </label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
