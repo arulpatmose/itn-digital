@@ -75,7 +75,11 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'resource_manager' => [
             'title'       => 'Resource Manager',
-            'description' => 'Approves or rejects the booking requests and manages resources/time slots.',
+            'description' => 'Dedicated admin for the booking system — manages resources, resource types, time slots, and approves or rejects booking requests.',
+        ],
+        'booking_user' => [
+            'title'       => 'Booking User',
+            'description' => 'General staff member who can request, view, and cancel their own resource bookings.',
         ],
         'secretary' => [
             'title'       => 'Secretary',
@@ -170,6 +174,10 @@ class AuthGroups extends ShieldAuthGroups
         'booking.edit'          => 'Can edit own booking requests',
         'booking.cancel'        => 'Can cancel own bookings',
         'booking.approve'       => 'Can approve or reject booking requests',
+        'bookingpurpose.access' => 'Can view all booking purposes',
+        'bookingpurpose.create' => 'Can create booking purposes',
+        'bookingpurpose.edit'   => 'Can edit booking purposes',
+        'bookingpurpose.delete' => 'Can delete booking purposes',
 
         // 📅 Schedule & Booking Management
         'schedule.access'       => 'Can access schedule data',
@@ -223,6 +231,7 @@ class AuthGroups extends ShieldAuthGroups
             'resource.*',
             'resourcetype.*',
             'timeslot.*',
+            'bookingpurpose.*',
             'booking.*',
         ],
         'admin' => [
@@ -239,7 +248,16 @@ class AuthGroups extends ShieldAuthGroups
             'schedule.*',
             'schedules.*',
             'programs.*',
-            'dailyschedule.*'
+            'dailyschedule.*',
+            'resource.*',
+            'resourcetype.*',
+            'timeslot.*',
+            'bookingpurpose.*',
+            'booking.access',
+            'booking.create',
+            'booking.edit',
+            'booking.cancel',
+            'booking.approve',
         ],
         'developer' => [
             'admin.access',
@@ -303,20 +321,24 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'resource_manager' => [
             'dashboard.*',
-            'resource.access',
-            'resource.create',
-            'resource.edit',
-            'resource.delete',
-            'resourcetype.access',
-            'resourcetype.create',
-            'resourcetype.edit',
-            'resourcetype.delete',
-            'timeslot.access',
-            'timeslot.create',
-            'timeslot.edit',
-            'timeslot.delete',
+            // Resource management
+            'resource.*',
+            'resourcetype.*',
+            'timeslot.*',
+            'bookingpurpose.*',
+            // Full booking oversight
             'booking.access',
             'booking.approve',
+            'booking.cancel',  // can cancel any booking
+            'booking.edit',
+        ],
+        'booking_user' => [
+            'dashboard.*',
+            // Can request and manage own bookings only
+            'booking.access',
+            'booking.create',
+            'booking.edit',
+            'booking.cancel',
         ],
         'secretary' => [
             'dashboard.*',

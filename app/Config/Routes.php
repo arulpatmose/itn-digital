@@ -203,6 +203,74 @@ $routes->group('activity-log', ['filter' => 'permission:admin.settings'], functi
 
 /*
 | --------------------------------------------------------------------
+| Bookings Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('bookings', ['filter' => 'permission:booking.access'], function ($routes) {
+    $routes->get('/', 'Bookings::index', ['as' => 'bookings', 'filter' => 'permission:booking.approve']);
+    $routes->get('my-bookings', 'Bookings::myBookings', ['as' => 'my_bookings']);
+    $routes->get('create', 'Bookings::create', ['filter' => 'permission:booking.create']);
+    $routes->post('submit', 'Bookings::store', ['filter' => 'permission:booking.create']);
+    $routes->post('approve', 'Bookings::approve', ['filter' => 'permission:booking.approve']);
+    $routes->post('reject', 'Bookings::reject', ['filter' => 'permission:booking.approve']);
+    $routes->post('cancel', 'Bookings::cancel', ['filter' => 'permission:booking.cancel']);
+    $routes->post('available-slots', 'Bookings::availableSlots');
+});
+
+/*
+| --------------------------------------------------------------------
+| Resources Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('resources', ['filter' => 'permission:resource.access'], function ($routes) {
+    $routes->get('/', 'Resources::index', ['as' => 'resources']);
+    $routes->get('add', 'Resources::create', ['filter' => 'permission:resource.create']);
+    $routes->post('submit', 'Resources::store', ['filter' => 'permission:resource.create']);
+    $routes->get('edit/(:num)', 'Resources::edit/$1', ['filter' => 'permission:resource.edit']);
+    $routes->post('update/(:num)', 'Resources::update/$1', ['filter' => 'permission:resource.edit']);
+    $routes->post('delete', 'Resources::destroy', ['filter' => 'permission:resource.delete']);
+    $routes->post('toggle-status', 'Resources::toggleStatus', ['filter' => 'permission:resource.edit']);
+});
+
+/*
+| --------------------------------------------------------------------
+| Resource Types Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('resource-types', ['filter' => 'permission:resourcetype.access'], function ($routes) {
+    $routes->get('/', 'ResourceTypes::index', ['as' => 'resource_types']);
+    $routes->post('submit', 'ResourceTypes::store', ['filter' => 'permission:resourcetype.create']);
+    $routes->post('update/(:num)', 'ResourceTypes::update/$1', ['filter' => 'permission:resourcetype.edit']);
+    $routes->post('delete', 'ResourceTypes::destroy', ['filter' => 'permission:resourcetype.delete']);
+});
+
+/*
+| --------------------------------------------------------------------
+| Time Slots Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('time-slots', ['filter' => 'permission:timeslot.access'], function ($routes) {
+    $routes->get('/', 'TimeSlots::index', ['as' => 'time_slots']);
+    $routes->post('submit', 'TimeSlots::store', ['filter' => 'permission:timeslot.create']);
+    $routes->post('update/(:num)', 'TimeSlots::update/$1', ['filter' => 'permission:timeslot.edit']);
+    $routes->post('delete', 'TimeSlots::destroy', ['filter' => 'permission:timeslot.delete']);
+});
+
+/*
+| --------------------------------------------------------------------
+| Booking Purpose Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('booking-purposes', ['filter' => 'permission:bookingpurpose.access'], function ($routes) {
+    $routes->get('/', 'BookingPurposes::index', ['as' => 'booking_purposes']);
+    $routes->post('submit', 'BookingPurposes::store', ['filter' => 'permission:bookingpurpose.create']);
+    $routes->post('update/(:num)', 'BookingPurposes::update/$1', ['filter' => 'permission:bookingpurpose.edit']);
+    $routes->post('toggle-status', 'BookingPurposes::toggleStatus', ['filter' => 'permission:bookingpurpose.edit']);
+    $routes->post('delete', 'BookingPurposes::destroy', ['filter' => 'permission:bookingpurpose.delete']);
+});
+
+/*
+| --------------------------------------------------------------------
 | API Service Routes
 | --------------------------------------------------------------------
 */

@@ -15,6 +15,7 @@ class BookingModel extends Model
     protected $allowedFields = [
         'user_id',
         'resource_id',
+        'purpose_id',
         'time_slot_id',
         'booking_date',
         'status',
@@ -56,14 +57,18 @@ class BookingModel extends Model
     public function getFullDetails($filters = [])
     {
         $builder = $this->select('
-            bookings.*, 
-            users.username AS user_name, 
-            resources.name AS resource_name, 
-            time_slots.label AS time_label, 
-            resource_types.name AS resource_type, 
+            bookings.*,
+            CONCAT(requester.first_name, " ", requester.last_name) AS user_name,
+            CONCAT(approver.first_name, " ", approver.last_name) AS approved_by_name,
+            resources.name AS resource_name,
+            time_slots.label AS time_label,
+            time_slots.start_time AS time_start,
+            time_slots.end_time AS time_end,
+            resource_types.name AS resource_type,
             booking_purposes.name AS booking_purpose
         ')
-            ->join('users', 'users.id = bookings.user_id', 'left')
+            ->join('users AS requester', 'requester.id = bookings.user_id', 'left')
+            ->join('users AS approver', 'approver.id = bookings.approved_by', 'left')
             ->join('resources', 'resources.id = bookings.resource_id', 'left')
             ->join('time_slots', 'time_slots.id = bookings.time_slot_id', 'left')
             ->join('resource_types', 'resource_types.id = resources.type_id', 'left')
@@ -74,5 +79,19 @@ class BookingModel extends Model
         }
 
         return $builder->orderBy('bookings.booking_date', 'DESC')->findAll();
+    }
+
+    public function isSlotTaken(int $resourceId, string $date, int $timeSlotId, ?int $excludeBookingId = null): bool
+    {
+        $builder = $this->where('resource_id', $resourceId)
+            ->where('booking_date', $date)
+            ->where('time_slot_id', $timeSlotId)
+            ->whereNotIn('status', ['rejected', 'cancelled']);
+
+        if ($excludeBookingId !== null) {
+            $builder->where('id !=', $excludeBookingId);
+        }
+
+        return $builder->countAllResults() > 0;
     }
 }

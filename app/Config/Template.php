@@ -268,6 +268,63 @@ class Template extends BaseConfig
         ),
         array(
             'type' => 'nav-section',
+            'name' => 'Bookings',
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Bookings',
+            'icon'       => 'fa fa-calendar-check',
+            'permission' => 'booking.access',
+            'sub'        => array(
+                array(
+                    'name'       => 'All Bookings',
+                    'url'        => 'bookings',
+                    'permission' => 'booking.approve',
+                ),
+                array(
+                    'name'       => 'My Bookings',
+                    'url'        => 'bookings/my-bookings',
+                    'permission' => 'booking.access',
+                ),
+                array(
+                    'name'       => 'New Booking',
+                    'url'        => 'bookings/create',
+                    'permission' => 'booking.create',
+                ),
+            )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Booking Purposes',
+            'icon'       => 'fa fa-tags',
+            'url'        => 'booking-purposes',
+            'permission' => 'bookingpurpose.access',
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Resources',
+            'icon'       => 'fa fa-door-open',
+            'permission' => 'resource.access',
+            'sub'        => array(
+                array(
+                    'name'       => 'All Resources',
+                    'url'        => 'resources',
+                    'permission' => 'resource.access',
+                ),
+                array(
+                    'name'       => 'Resource Types',
+                    'url'        => 'resource-types',
+                    'permission' => 'resourcetype.access',
+                ),
+                array(
+                    'name'       => 'Time Slots',
+                    'url'        => 'time-slots',
+                    'permission' => 'timeslot.access',
+                ),
+            )
+        ),
+        array(
+            'type' => 'nav-section',
             'name' => 'Administration',
         ),
         array(
