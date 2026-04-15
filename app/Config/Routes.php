@@ -150,10 +150,10 @@ $routes->group('commercials', ['filter' => 'permission:commercials.access'], fun
 | Daily Schedule
 | --------------------------------------------------------------------
 */
-$routes->group('daily-schedule', ['filter' => 'permission:dailyschedule.access'], function ($routes) {
-    $routes->post('edit/(:num)', 'DailySchedule::edit/$1', ['filter' => 'permission:dailyschedule.edit']);
-    $routes->post('update/(:num)', 'DailySchedule::update/$1', ['filter' => 'permission:dailyschedule.edit']);
-    $routes->post('update-bulk', 'DailySchedule::updateBulk', ['filter' => 'permission:dailyschedule.edit']);
+$routes->group('daily-schedule', ['filter' => 'permission:daily_schedule.access'], function ($routes) {
+    $routes->post('edit/(:num)', 'DailySchedule::edit/$1', ['filter' => 'permission:daily_schedule.edit']);
+    $routes->post('update/(:num)', 'DailySchedule::update/$1', ['filter' => 'permission:daily_schedule.edit']);
+    $routes->post('update-bulk', 'DailySchedule::updateBulk', ['filter' => 'permission:daily_schedule.edit']);
     $routes->post('fetch-comments', 'DailySchedule::fetchComments');
     $routes->get('/', 'DailySchedule::index/');
     $routes->get('(:segment)', 'DailySchedule::index/$1');
@@ -237,11 +237,11 @@ $routes->group('resources', ['filter' => 'permission:resource.access'], function
 | Resource Types Routes
 | --------------------------------------------------------------------
 */
-$routes->group('resource-types', ['filter' => 'permission:resourcetype.access'], function ($routes) {
+$routes->group('resource-types', ['filter' => 'permission:resource_type.access'], function ($routes) {
     $routes->get('/', 'ResourceTypes::index', ['as' => 'resource_types']);
-    $routes->post('submit', 'ResourceTypes::store', ['filter' => 'permission:resourcetype.create']);
-    $routes->post('update/(:num)', 'ResourceTypes::update/$1', ['filter' => 'permission:resourcetype.edit']);
-    $routes->post('delete', 'ResourceTypes::destroy', ['filter' => 'permission:resourcetype.delete']);
+    $routes->post('submit', 'ResourceTypes::store', ['filter' => 'permission:resource_type.create']);
+    $routes->post('update/(:num)', 'ResourceTypes::update/$1', ['filter' => 'permission:resource_type.edit']);
+    $routes->post('delete', 'ResourceTypes::destroy', ['filter' => 'permission:resource_type.delete']);
 });
 
 /*
@@ -249,11 +249,11 @@ $routes->group('resource-types', ['filter' => 'permission:resourcetype.access'],
 | Time Slots Routes
 | --------------------------------------------------------------------
 */
-$routes->group('time-slots', ['filter' => 'permission:timeslot.access'], function ($routes) {
+$routes->group('time-slots', ['filter' => 'permission:time_slot.access'], function ($routes) {
     $routes->get('/', 'TimeSlots::index', ['as' => 'time_slots']);
-    $routes->post('submit', 'TimeSlots::store', ['filter' => 'permission:timeslot.create']);
-    $routes->post('update/(:num)', 'TimeSlots::update/$1', ['filter' => 'permission:timeslot.edit']);
-    $routes->post('delete', 'TimeSlots::destroy', ['filter' => 'permission:timeslot.delete']);
+    $routes->post('submit', 'TimeSlots::store', ['filter' => 'permission:time_slot.create']);
+    $routes->post('update/(:num)', 'TimeSlots::update/$1', ['filter' => 'permission:time_slot.edit']);
+    $routes->post('delete', 'TimeSlots::destroy', ['filter' => 'permission:time_slot.delete']);
 });
 
 /*
@@ -261,12 +261,12 @@ $routes->group('time-slots', ['filter' => 'permission:timeslot.access'], functio
 | Booking Purpose Group Routes
 | --------------------------------------------------------------------
 */
-$routes->group('booking-purpose-groups', ['filter' => 'permission:bookingpurposegroup.access'], function ($routes) {
+$routes->group('booking-purpose-groups', ['filter' => 'permission:booking_purpose_group.access'], function ($routes) {
     $routes->get('/', 'BookingPurposeGroups::index', ['as' => 'booking_purpose_groups']);
-    $routes->post('submit', 'BookingPurposeGroups::store', ['filter' => 'permission:bookingpurposegroup.create']);
-    $routes->post('update/(:num)', 'BookingPurposeGroups::update/$1', ['filter' => 'permission:bookingpurposegroup.edit']);
-    $routes->post('toggle-status', 'BookingPurposeGroups::toggleStatus', ['filter' => 'permission:bookingpurposegroup.edit']);
-    $routes->post('delete', 'BookingPurposeGroups::destroy', ['filter' => 'permission:bookingpurposegroup.delete']);
+    $routes->post('submit', 'BookingPurposeGroups::store', ['filter' => 'permission:booking_purpose_group.create']);
+    $routes->post('update/(:num)', 'BookingPurposeGroups::update/$1', ['filter' => 'permission:booking_purpose_group.edit']);
+    $routes->post('toggle-status', 'BookingPurposeGroups::toggleStatus', ['filter' => 'permission:booking_purpose_group.edit']);
+    $routes->post('delete', 'BookingPurposeGroups::destroy', ['filter' => 'permission:booking_purpose_group.delete']);
 });
 
 /*
@@ -274,12 +274,12 @@ $routes->group('booking-purpose-groups', ['filter' => 'permission:bookingpurpose
 | Booking Purpose Routes
 | --------------------------------------------------------------------
 */
-$routes->group('booking-purposes', ['filter' => 'permission:bookingpurpose.access'], function ($routes) {
+$routes->group('booking-purposes', ['filter' => 'permission:booking_purpose.access'], function ($routes) {
     $routes->get('/', 'BookingPurposes::index', ['as' => 'booking_purposes']);
-    $routes->post('submit', 'BookingPurposes::store', ['filter' => 'permission:bookingpurpose.create']);
-    $routes->post('update/(:num)', 'BookingPurposes::update/$1', ['filter' => 'permission:bookingpurpose.edit']);
-    $routes->post('toggle-status', 'BookingPurposes::toggleStatus', ['filter' => 'permission:bookingpurpose.edit']);
-    $routes->post('delete', 'BookingPurposes::destroy', ['filter' => 'permission:bookingpurpose.delete']);
+    $routes->post('submit', 'BookingPurposes::store', ['filter' => 'permission:booking_purpose.create']);
+    $routes->post('update/(:num)', 'BookingPurposes::update/$1', ['filter' => 'permission:booking_purpose.edit']);
+    $routes->post('toggle-status', 'BookingPurposes::toggleStatus', ['filter' => 'permission:booking_purpose.edit']);
+    $routes->post('delete', 'BookingPurposes::destroy', ['filter' => 'permission:booking_purpose.delete']);
 });
 
 /*

@@ -302,7 +302,7 @@ class Schedules extends BaseController
 
     public function fetchComments()
     {
-        if (!auth()->user()->can('dailyschedule.edit')) {
+        if (!auth()->user()->can('daily_schedule.edit')) {
             return $this->response->setStatusCode(403)->setJSON([
                 'status' => 'error',
                 'message' => 'You do not have permissions to access this page!'

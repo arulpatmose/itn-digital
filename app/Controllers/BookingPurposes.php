@@ -19,7 +19,7 @@ class BookingPurposes extends BaseController
 
     public function index()
     {
-        if (!auth()->user()->can('bookingpurpose.access')) {
+        if (!auth()->user()->can('booking_purpose.access')) {
             return redirect()->back()->with('error', 'You do not have permission to access that page!');
         }
 
@@ -43,7 +43,7 @@ class BookingPurposes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurpose.create')) {
+        if (!auth()->user()->can('booking_purpose.create')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -68,7 +68,7 @@ class BookingPurposes extends BaseController
         ], true);
 
         if ($id) {
-            log_activity('bookingpurpose.created', 'booking_purpose', $id, "Created booking purpose '{$name}'");
+            log_activity('booking_purpose.created', 'booking_purpose', $id, "Created booking purpose '{$name}'");
             $purpose = $this->bookingPurposeModel->getWithGroup((int) $id);
             return $this->response->setJSON([
                 'status'  => 'success',
@@ -86,7 +86,7 @@ class BookingPurposes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurpose.edit')) {
+        if (!auth()->user()->can('booking_purpose.edit')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -109,7 +109,7 @@ class BookingPurposes extends BaseController
             'description' => $description ?: null,
             'is_active'   => $isActive === 1 ? 1 : 0,
         ])) {
-            log_activity('bookingpurpose.updated', 'booking_purpose', (int) $id, "Updated booking purpose '{$name}'");
+            log_activity('booking_purpose.updated', 'booking_purpose', (int) $id, "Updated booking purpose '{$name}'");
             return $this->response->setJSON(['status' => 'success', 'message' => 'Booking purpose updated successfully.']);
         }
 
@@ -122,7 +122,7 @@ class BookingPurposes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurpose.delete')) {
+        if (!auth()->user()->can('booking_purpose.delete')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -134,7 +134,7 @@ class BookingPurposes extends BaseController
         }
 
         if ($this->bookingPurposeModel->delete($id)) {
-            log_activity('bookingpurpose.deleted', 'booking_purpose', $id, "Deleted booking purpose '{$purpose['name']}'");
+            log_activity('booking_purpose.deleted', 'booking_purpose', $id, "Deleted booking purpose '{$purpose['name']}'");
             return $this->response->setJSON(['status' => 'success', 'message' => 'Booking purpose deleted.']);
         }
 
@@ -147,7 +147,7 @@ class BookingPurposes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurpose.edit')) {
+        if (!auth()->user()->can('booking_purpose.edit')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -162,7 +162,7 @@ class BookingPurposes extends BaseController
 
         if ($this->bookingPurposeModel->update($id, ['is_active' => $newStatus])) {
             $statusLabel = $newStatus === 1 ? 'active' : 'inactive';
-            log_activity('bookingpurpose.status_changed', 'booking_purpose', $id, "Changed booking purpose '{$purpose['name']}' status to {$statusLabel}");
+            log_activity('booking_purpose.status_changed', 'booking_purpose', $id, "Changed booking purpose '{$purpose['name']}' status to {$statusLabel}");
 
             return $this->response->setJSON([
                 'status'     => 'success',

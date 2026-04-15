@@ -14,7 +14,7 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">Booking Purposes</h3>
                     <div class="block-options">
-                        <?php if (auth()->user()->can('bookingpurpose.create')): ?>
+                        <?php if (auth()->user()->can('booking_purpose.create')): ?>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-purpose">
                                 Add New
                             </button>
@@ -48,7 +48,7 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <?php if (auth()->user()->can('bookingpurpose.edit')): ?>
+                                            <?php if (auth()->user()->can('booking_purpose.edit')): ?>
                                                 <div class="form-check form-switch d-inline-flex justify-content-center mb-0">
                                                     <input class="form-check-input booking-purpose-status-toggle" type="checkbox" role="switch"
                                                         data-id="<?= $purpose['id'] ?>"
@@ -61,7 +61,7 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <?php if (auth()->user()->can('bookingpurpose.edit')): ?>
+                                                <?php if (auth()->user()->can('booking_purpose.edit')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-success btn-edit-purpose"
                                                         data-id="<?= $purpose['id'] ?>"
@@ -74,7 +74,7 @@
                                                         <i class="fa fa-pencil-alt"></i>
                                                     </button>
                                                 <?php endif; ?>
-                                                <?php if (auth()->user()->can('bookingpurpose.delete')): ?>
+                                                <?php if (auth()->user()->can('booking_purpose.delete')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-danger btn-delete-purpose"
                                                         data-id="<?= $purpose['id'] ?>"
@@ -182,8 +182,8 @@
 <?= $this->section('other-scripts') ?>
 <script>
 $(function () {
-    var canEditPurpose = <?= json_encode(auth()->user()->can('bookingpurpose.edit')) ?>;
-    var canDeletePurpose = <?= json_encode(auth()->user()->can('bookingpurpose.delete')) ?>;
+    var canEditPurpose = <?= json_encode(auth()->user()->can('booking_purpose.edit')) ?>;
+    var canDeletePurpose = <?= json_encode(auth()->user()->can('booking_purpose.delete')) ?>;
     var purposeTable = null;
 
     function escapeHtml(value) {

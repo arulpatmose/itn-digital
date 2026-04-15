@@ -297,17 +297,17 @@ class Template extends BaseConfig
             'type'       => 'nav-item',
             'name'       => 'Booking Setup',
             'icon'       => 'fa fa-tags',
-            'permission' => 'bookingpurpose.access',
+            'permission' => 'booking_purpose.access',
             'sub'        => array(
                 array(
                     'name'       => 'Purpose Groups',
                     'url'        => 'booking-purpose-groups',
-                    'permission' => 'bookingpurposegroup.access',
+                    'permission' => 'booking_purpose_group.access',
                 ),
                 array(
                     'name'       => 'Booking Purposes',
                     'url'        => 'booking-purposes',
-                    'permission' => 'bookingpurpose.access',
+                    'permission' => 'booking_purpose.access',
                 ),
             )
         ),
@@ -325,12 +325,12 @@ class Template extends BaseConfig
                 array(
                     'name'       => 'Resource Types',
                     'url'        => 'resource-types',
-                    'permission' => 'resourcetype.access',
+                    'permission' => 'resource_type.access',
                 ),
                 array(
                     'name'       => 'Time Slots',
                     'url'        => 'time-slots',
-                    'permission' => 'timeslot.access',
+                    'permission' => 'time_slot.access',
                 ),
             )
         ),

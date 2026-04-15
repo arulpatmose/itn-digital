@@ -16,7 +16,7 @@ class TimeSlots extends BaseController
 
     public function index()
     {
-        if (!auth()->user()->can('timeslot.access')) {
+        if (!auth()->user()->can('time_slot.access')) {
             return redirect()->back()->with('error', 'You do not have permission to access that page!');
         }
 
@@ -38,7 +38,7 @@ class TimeSlots extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('timeslot.create')) {
+        if (!auth()->user()->can('time_slot.create')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -57,7 +57,7 @@ class TimeSlots extends BaseController
         ], true);
 
         if ($id) {
-            log_activity('timeslot.created', 'time_slot', $id, "Created time slot '{$label}'");
+            log_activity('time_slot.created', 'time_slot', $id, "Created time slot '{$label}'");
             $slot = $this->timeSlotModel->find($id);
             return $this->response->setJSON(['status' => 'success', 'message' => "Time slot '{$label}' added.", 'data' => $slot]);
         }
@@ -74,7 +74,7 @@ class TimeSlots extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('timeslot.edit')) {
+        if (!auth()->user()->can('time_slot.edit')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -87,7 +87,7 @@ class TimeSlots extends BaseController
         }
 
         if ($this->timeSlotModel->update($id, ['label' => $label, 'start_time' => $startTime, 'end_time' => $endTime])) {
-            log_activity('timeslot.updated', 'time_slot', (int) $id, "Updated time slot '{$label}'");
+            log_activity('time_slot.updated', 'time_slot', (int) $id, "Updated time slot '{$label}'");
             return $this->response->setJSON(['status' => 'success', 'message' => 'Time slot updated successfully.']);
         }
 
@@ -103,7 +103,7 @@ class TimeSlots extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('timeslot.delete')) {
+        if (!auth()->user()->can('time_slot.delete')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -115,7 +115,7 @@ class TimeSlots extends BaseController
         }
 
         if ($this->timeSlotModel->delete($id)) {
-            log_activity('timeslot.deleted', 'time_slot', $id, "Deleted time slot '{$slot['label']}'");
+            log_activity('time_slot.deleted', 'time_slot', $id, "Deleted time slot '{$slot['label']}'");
             return $this->response->setJSON(['status' => 'success', 'message' => 'Time slot deleted.']);
         }
 

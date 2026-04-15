@@ -162,8 +162,8 @@ class AuthGroups extends ShieldAuthGroups
         'schedules.delete'      => 'Can delete existing schedule',
 
         // 📆 Daily Schedule Management
-        'dailyschedule.access'  => 'Can access daily schedules data',
-        'dailyschedule.edit'    => 'Can edit existing daily schedules',
+        'daily_schedule.access'  => 'Can access daily schedules data',
+        'daily_schedule.edit'    => 'Can edit existing daily schedules',
 
         // 💳 Accounts Management
         'accounts.access'       => 'Can access accounts data',
@@ -174,14 +174,14 @@ class AuthGroups extends ShieldAuthGroups
         'booking.edit'          => 'Can edit own booking requests',
         'booking.cancel'        => 'Can cancel own bookings',
         'booking.approve'       => 'Can approve or reject booking requests',
-        'bookingpurposegroup.access' => 'Can view all booking purpose groups',
-        'bookingpurposegroup.create' => 'Can create booking purpose groups',
-        'bookingpurposegroup.edit'   => 'Can edit booking purpose groups',
-        'bookingpurposegroup.delete' => 'Can delete booking purpose groups',
-        'bookingpurpose.access' => 'Can view all booking purposes',
-        'bookingpurpose.create' => 'Can create booking purposes',
-        'bookingpurpose.edit'   => 'Can edit booking purposes',
-        'bookingpurpose.delete' => 'Can delete booking purposes',
+        'booking_purpose_group.access' => 'Can view all booking purpose groups',
+        'booking_purpose_group.create' => 'Can create booking purpose groups',
+        'booking_purpose_group.edit'   => 'Can edit booking purpose groups',
+        'booking_purpose_group.delete' => 'Can delete booking purpose groups',
+        'booking_purpose.access' => 'Can view all booking purposes',
+        'booking_purpose.create' => 'Can create booking purposes',
+        'booking_purpose.edit'   => 'Can edit booking purposes',
+        'booking_purpose.delete' => 'Can delete booking purposes',
 
         // 📅 Schedule & Booking Management
         'schedule.access'       => 'Can access schedule data',
@@ -196,16 +196,16 @@ class AuthGroups extends ShieldAuthGroups
         'resource.delete'       => 'Can delete resources',
 
         // 🗂 Resource Types Management
-        'resourcetype.access'   => 'Can view all resource types',
-        'resourcetype.create'   => 'Can create new resource types',
-        'resourcetype.edit'     => 'Can edit resource types',
-        'resourcetype.delete'   => 'Can delete resource types',
+        'resource_type.access'   => 'Can view all resource types',
+        'resource_type.create'   => 'Can create new resource types',
+        'resource_type.edit'     => 'Can edit resource types',
+        'resource_type.delete'   => 'Can delete resource types',
 
         // ⏰ Time Slot Management
-        'timeslot.access'       => 'Can view all time slots',
-        'timeslot.create'       => 'Can create new time slots',
-        'timeslot.edit'         => 'Can edit existing time slots',
-        'timeslot.delete'       => 'Can delete time slots',
+        'time_slot.access'       => 'Can view all time slots',
+        'time_slot.create'       => 'Can create new time slots',
+        'time_slot.edit'         => 'Can edit existing time slots',
+        'time_slot.delete'       => 'Can delete time slots',
     ];
 
     /**
@@ -230,13 +230,13 @@ class AuthGroups extends ShieldAuthGroups
             'spots.*',
             'schedule.*',
             'schedules.*',
-            'dailyschedule.*',
+            'daily_schedule.*',
             'accounts.*',
             'resource.*',
-            'resourcetype.*',
-            'timeslot.*',
-            'bookingpurposegroup.*',
-            'bookingpurpose.*',
+            'resource_type.*',
+            'time_slot.*',
+            'booking_purpose_group.*',
+            'booking_purpose.*',
             'booking.*',
         ],
         'admin' => [
@@ -253,12 +253,12 @@ class AuthGroups extends ShieldAuthGroups
             'schedule.*',
             'schedules.*',
             'programs.*',
-            'dailyschedule.*',
+            'daily_schedule.*',
             'resource.*',
-            'resourcetype.*',
-            'timeslot.*',
-            'bookingpurposegroup.*',
-            'bookingpurpose.*',
+            'resource_type.*',
+            'time_slot.*',
+            'booking_purpose_group.*',
+            'booking_purpose.*',
             'booking.access',
             'booking.create',
             'booking.edit',
@@ -274,7 +274,7 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'webeditor' => [
             'dashboard.*',
-            'dailyschedule.*',
+            'daily_schedule.*',
             'clients.access',
             'programs.access',
             'commercials.access',
@@ -294,7 +294,7 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'scheduler' => [
             'dashboard.*',
-            'dailyschedule.access',
+            'daily_schedule.access',
             'clients.access',
             'clients.create',
             'clients.edit',
@@ -329,10 +329,10 @@ class AuthGroups extends ShieldAuthGroups
             'dashboard.*',
             // Resource management
             'resource.*',
-            'resourcetype.*',
-            'timeslot.*',
-            'bookingpurposegroup.*',
-            'bookingpurpose.*',
+            'resource_type.*',
+            'time_slot.*',
+            'booking_purpose_group.*',
+            'booking_purpose.*',
             // Full booking oversight
             'booking.access',
             'booking.approve',

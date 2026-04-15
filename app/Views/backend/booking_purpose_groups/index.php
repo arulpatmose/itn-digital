@@ -14,7 +14,7 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">Booking Purpose Groups</h3>
                     <div class="block-options">
-                        <?php if (auth()->user()->can('bookingpurposegroup.create')): ?>
+                        <?php if (auth()->user()->can('booking_purpose_group.create')): ?>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-group">
                                 Add New
                             </button>
@@ -50,7 +50,7 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <?php if (auth()->user()->can('bookingpurposegroup.edit')): ?>
+                                            <?php if (auth()->user()->can('booking_purpose_group.edit')): ?>
                                                 <div class="form-check form-switch d-inline-flex justify-content-center mb-0">
                                                     <input class="form-check-input group-status-toggle" type="checkbox" role="switch"
                                                         data-id="<?= $group['id'] ?>"
@@ -63,7 +63,7 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <?php if (auth()->user()->can('bookingpurposegroup.edit')): ?>
+                                                <?php if (auth()->user()->can('booking_purpose_group.edit')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-success btn-edit-group"
                                                         data-id="<?= $group['id'] ?>"
@@ -75,7 +75,7 @@
                                                         <i class="fa fa-pencil-alt"></i>
                                                     </button>
                                                 <?php endif; ?>
-                                                <?php if (auth()->user()->can('bookingpurposegroup.delete')): ?>
+                                                <?php if (auth()->user()->can('booking_purpose_group.delete')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-danger btn-delete-group"
                                                         data-id="<?= $group['id'] ?>"
@@ -175,8 +175,8 @@
 <?= $this->section('other-scripts') ?>
 <script>
 $(function () {
-    var canEdit   = <?= json_encode(auth()->user()->can('bookingpurposegroup.edit')) ?>;
-    var canDelete = <?= json_encode(auth()->user()->can('bookingpurposegroup.delete')) ?>;
+    var canEdit   = <?= json_encode(auth()->user()->can('booking_purpose_group.edit')) ?>;
+    var canDelete = <?= json_encode(auth()->user()->can('booking_purpose_group.delete')) ?>;
     var groupTable = null;
 
     function escapeHtml(value) {

@@ -14,7 +14,7 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">Time Slots</h3>
                     <div class="block-options">
-                        <?php if (auth()->user()->can('timeslot.create')): ?>
+                        <?php if (auth()->user()->can('time_slot.create')): ?>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-slot">
                                 Add New
                             </button>
@@ -42,7 +42,7 @@
                                         <td><?= esc(substr($slot['end_time'], 0, 5)) ?></td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <?php if (auth()->user()->can('timeslot.edit')): ?>
+                                                <?php if (auth()->user()->can('time_slot.edit')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-success btn-edit-slot"
                                                         data-id="<?= $slot['id'] ?>"
@@ -53,7 +53,7 @@
                                                         <i class="fa fa-pencil-alt"></i>
                                                     </button>
                                                 <?php endif; ?>
-                                                <?php if (auth()->user()->can('timeslot.delete')): ?>
+                                                <?php if (auth()->user()->can('time_slot.delete')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-danger btn-delete-slot"
                                                         data-id="<?= $slot['id'] ?>"
@@ -151,8 +151,8 @@
 <?= $this->section('other-scripts') ?>
 <script>
 $(function () {
-    var canEditSlot = <?= json_encode(auth()->user()->can('timeslot.edit')) ?>;
-    var canDeleteSlot = <?= json_encode(auth()->user()->can('timeslot.delete')) ?>;
+    var canEditSlot = <?= json_encode(auth()->user()->can('time_slot.edit')) ?>;
+    var canDeleteSlot = <?= json_encode(auth()->user()->can('time_slot.delete')) ?>;
     var slotTable = null;
 
     function escapeHtml(value) {

@@ -16,7 +16,7 @@ class ResourceTypes extends BaseController
 
     public function index()
     {
-        if (!auth()->user()->can('resourcetype.access')) {
+        if (!auth()->user()->can('resource_type.access')) {
             return redirect()->back()->with('error', 'You do not have permission to access that page!');
         }
 
@@ -38,7 +38,7 @@ class ResourceTypes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('resourcetype.create')) {
+        if (!auth()->user()->can('resource_type.create')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -52,7 +52,7 @@ class ResourceTypes extends BaseController
         $id = $this->resourceTypeModel->insert(['name' => $name, 'description' => $description ?: null], true);
 
         if ($id) {
-            log_activity('resourcetype.created', 'resource_type', $id, "Created resource type '{$name}'");
+            log_activity('resource_type.created', 'resource_type', $id, "Created resource type '{$name}'");
             $type = $this->resourceTypeModel->find($id);
             return $this->response->setJSON(['status' => 'success', 'message' => "Resource type '{$name}' added.", 'data' => $type]);
         }
@@ -69,7 +69,7 @@ class ResourceTypes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('resourcetype.edit')) {
+        if (!auth()->user()->can('resource_type.edit')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -81,7 +81,7 @@ class ResourceTypes extends BaseController
         }
 
         if ($this->resourceTypeModel->update($id, ['name' => $name, 'description' => $description ?: null])) {
-            log_activity('resourcetype.updated', 'resource_type', (int) $id, "Updated resource type '{$name}'");
+            log_activity('resource_type.updated', 'resource_type', (int) $id, "Updated resource type '{$name}'");
             return $this->response->setJSON(['status' => 'success', 'message' => "Resource type updated successfully."]);
         }
 
@@ -97,7 +97,7 @@ class ResourceTypes extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('resourcetype.delete')) {
+        if (!auth()->user()->can('resource_type.delete')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -109,7 +109,7 @@ class ResourceTypes extends BaseController
         }
 
         if ($this->resourceTypeModel->delete($id)) {
-            log_activity('resourcetype.deleted', 'resource_type', $id, "Deleted resource type '{$type['name']}'");
+            log_activity('resource_type.deleted', 'resource_type', $id, "Deleted resource type '{$type['name']}'");
             return $this->response->setJSON(['status' => 'success', 'message' => 'Resource type deleted.']);
         }
 

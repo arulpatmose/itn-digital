@@ -14,7 +14,7 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">Resource Types</h3>
                     <div class="block-options">
-                        <?php if (auth()->user()->can('resourcetype.create')): ?>
+                        <?php if (auth()->user()->can('resource_type.create')): ?>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-type">
                                 Add New
                             </button>
@@ -40,7 +40,7 @@
                                         <td class="text-muted small"><?= esc($type['description'] ?? '—') ?></td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <?php if (auth()->user()->can('resourcetype.edit')): ?>
+                                                <?php if (auth()->user()->can('resource_type.edit')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-success btn-edit-type"
                                                         data-id="<?= $type['id'] ?>"
@@ -50,7 +50,7 @@
                                                         <i class="fa fa-pencil-alt"></i>
                                                     </button>
                                                 <?php endif; ?>
-                                                <?php if (auth()->user()->can('resourcetype.delete')): ?>
+                                                <?php if (auth()->user()->can('resource_type.delete')): ?>
                                                     <button type="button"
                                                         class="btn btn-sm btn-danger btn-delete-type"
                                                         data-id="<?= $type['id'] ?>"
@@ -128,8 +128,8 @@
 <?= $this->section('other-scripts') ?>
 <script>
 $(function () {
-    var canEditType = <?= json_encode(auth()->user()->can('resourcetype.edit')) ?>;
-    var canDeleteType = <?= json_encode(auth()->user()->can('resourcetype.delete')) ?>;
+    var canEditType = <?= json_encode(auth()->user()->can('resource_type.edit')) ?>;
+    var canDeleteType = <?= json_encode(auth()->user()->can('resource_type.delete')) ?>;
     var typeTable = null;
 
     function escapeHtml(value) {

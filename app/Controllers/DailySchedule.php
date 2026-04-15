@@ -23,7 +23,7 @@ class DailySchedule extends BaseController
 
     public function index($date = null)
     {
-        if (!auth()->user()->can('dailyschedule.access')) {
+        if (!auth()->user()->can('daily_schedule.access')) {
             $status = 'error';
             $message = 'You do not have permissions to access that page!';
             return redirect()->back()->with($status, $message);
@@ -65,7 +65,7 @@ class DailySchedule extends BaseController
 
     public function edit($id)
     {
-        if (!auth()->user()->can('dailyschedule.edit')) {
+        if (!auth()->user()->can('daily_schedule.edit')) {
             $status = 'error';
             $message = 'You do not have permissions to access this page!';
 
@@ -94,7 +94,7 @@ class DailySchedule extends BaseController
 
     public function update($id)
     {
-        if (!auth()->user()->can('dailyschedule.edit')) {
+        if (!auth()->user()->can('daily_schedule.edit')) {
             $status = 'error';
             $message = 'You do not have permissions to access this page!';
 
@@ -158,7 +158,7 @@ class DailySchedule extends BaseController
 
     public function updateBulk()
     {
-        if (!auth()->user()->can('dailyschedule.edit')) {
+        if (!auth()->user()->can('daily_schedule.edit')) {
             $status = 'error';
             $message = 'You do not have permissions to access this page!';
 
@@ -225,7 +225,7 @@ class DailySchedule extends BaseController
 
     public function fetchComments()
     {
-        if (!auth()->user()->can('dailyschedule.edit')) {
+        if (!auth()->user()->can('daily_schedule.edit')) {
             $status = 'error';
             $message = 'You do not have permissions to access this page!';
 

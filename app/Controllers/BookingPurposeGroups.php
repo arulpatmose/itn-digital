@@ -19,7 +19,7 @@ class BookingPurposeGroups extends BaseController
 
     public function index()
     {
-        if (!auth()->user()->can('bookingpurposegroup.access')) {
+        if (!auth()->user()->can('booking_purpose_group.access')) {
             return redirect()->back()->with('error', 'You do not have permission to access that page!');
         }
 
@@ -41,7 +41,7 @@ class BookingPurposeGroups extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurposegroup.create')) {
+        if (!auth()->user()->can('booking_purpose_group.create')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -65,7 +65,7 @@ class BookingPurposeGroups extends BaseController
         ], true);
 
         if ($id) {
-            log_activity('bookingpurposegroup.created', 'bookingpurposegroup', $id, "Created booking purpose group '{$name}'");
+            log_activity('booking_purpose_group.created', 'booking_purpose_group', $id, "Created booking purpose group '{$name}'");
             $group = $this->groupModel->find((int) $id);
             return $this->response->setJSON([
                 'status'  => 'success',
@@ -83,7 +83,7 @@ class BookingPurposeGroups extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurposegroup.edit')) {
+        if (!auth()->user()->can('booking_purpose_group.edit')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -111,7 +111,7 @@ class BookingPurposeGroups extends BaseController
             'sort_order'  => $sortOrder,
             'is_active'   => $isActive === 1 ? 1 : 0,
         ])) {
-            log_activity('bookingpurposegroup.updated', 'bookingpurposegroup', (int) $id, "Updated booking purpose group '{$name}'");
+            log_activity('booking_purpose_group.updated', 'booking_purpose_group', (int) $id, "Updated booking purpose group '{$name}'");
             return $this->response->setJSON([
                 'status'  => 'success',
                 'message' => 'Purpose group updated successfully.',
@@ -134,7 +134,7 @@ class BookingPurposeGroups extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurposegroup.delete')) {
+        if (!auth()->user()->can('booking_purpose_group.delete')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -155,7 +155,7 @@ class BookingPurposeGroups extends BaseController
         }
 
         if ($this->groupModel->delete($id)) {
-            log_activity('bookingpurposegroup.deleted', 'bookingpurposegroup', $id, "Deleted booking purpose group '{$group['name']}'");
+            log_activity('booking_purpose_group.deleted', 'booking_purpose_group', $id, "Deleted booking purpose group '{$group['name']}'");
             return $this->response->setJSON(['status' => 'success', 'message' => "Purpose group '{$group['name']}' deleted."]);
         }
 
@@ -168,7 +168,7 @@ class BookingPurposeGroups extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
         }
 
-        if (!auth()->user()->can('bookingpurposegroup.edit')) {
+        if (!auth()->user()->can('booking_purpose_group.edit')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
         }
 
@@ -183,7 +183,7 @@ class BookingPurposeGroups extends BaseController
 
         if ($this->groupModel->update($id, ['is_active' => $newStatus])) {
             $statusLabel = $newStatus === 1 ? 'active' : 'inactive';
-            log_activity('bookingpurposegroup.status_changed', 'bookingpurposegroup', $id, "Changed purpose group '{$group['name']}' status to {$statusLabel}");
+            log_activity('booking_purpose_group.status_changed', 'booking_purpose_group', $id, "Changed purpose group '{$group['name']}' status to {$statusLabel}");
 
             return $this->response->setJSON([
                 'status'     => 'success',
