@@ -286,6 +286,13 @@ class Template extends BaseConfig
         ),
         array(
             'type'       => 'nav-item',
+            'name'       => 'Migrations',
+            'icon'       => 'fa fa-database',
+            'url'        => 'migrations',
+            'permission' => 'admin.migrations',
+        ),
+        array(
+            'type'       => 'nav-item',
             'name'       => 'Users',
             'icon'       => 'si si-user',
             'permission' => 'users.manage-admins',

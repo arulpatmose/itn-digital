@@ -181,6 +181,19 @@ $routes->get('accounts', 'Accounts::index', ['as' => 'accounts']);
 
 /*
 | --------------------------------------------------------------------
+| Migration Runner Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('migrations', ['filter' => 'permission:admin.migrations'], function ($routes) {
+    $routes->get('/', 'MigrationRunner::index', ['as' => 'migrations']);
+    $routes->post('run', 'MigrationRunner::run');
+    $routes->post('run-single', 'MigrationRunner::runSingle');
+    $routes->post('sync', 'MigrationRunner::sync');
+    $routes->post('rollback/(:num)', 'MigrationRunner::rollback/$1');
+});
+
+/*
+| --------------------------------------------------------------------
 | Activity Log Routes
 | --------------------------------------------------------------------
 */

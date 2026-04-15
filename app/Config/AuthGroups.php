@@ -96,6 +96,7 @@ class AuthGroups extends ShieldAuthGroups
         // 🔐 Admin Area & Core Access
         'admin.access'          => 'Can access the site\'s admin area',
         'admin.settings'        => 'Can access the main site settings',
+        'admin.migrations'      => 'Can run and manage database migrations',
         'dashboard.access'      => 'Can access the dashboard',
         'beta.access'           => 'Can access beta-level features',
 
