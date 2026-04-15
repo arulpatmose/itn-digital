@@ -54,7 +54,9 @@
                 ajax: {
                     url: '/api/get-all-activity-logs',
                     data: function(data) {
-                        return { data: data };
+                        return {
+                            data: data
+                        };
                     },
                     dataSrc: function(data) {
                         return data.aaData;
@@ -63,7 +65,9 @@
                 },
                 serverSide: true,
                 processing: true,
-                order: [[1, 'desc']],
+                order: [
+                    [1, 'desc']
+                ],
                 pagingType: 'full_numbers',
                 pageLength: 25,
                 lengthMenu: [
@@ -74,17 +78,29 @@
                 responsive: true,
                 stateSave: false,
                 info: true,
-                columns: [
-                    { data: 'id' },
-                    { data: 'created_at' },
-                    { data: 'action' },
-                    { data: 'target_type' },
-                    { data: 'description' },
-                    { data: 'ip_address' },
-                    { data: 'actor' }
-                ],
-                columnDefs: [
+                columns: [{
+                        data: 'id'
+                    },
                     {
+                        data: 'created_at'
+                    },
+                    {
+                        data: 'action'
+                    },
+                    {
+                        data: 'target_type'
+                    },
+                    {
+                        data: 'description'
+                    },
+                    {
+                        data: 'ip_address'
+                    },
+                    {
+                        data: 'actor'
+                    }
+                ],
+                columnDefs: [{
                         targets: [0],
                         width: '4%',
                         orderable: false,
@@ -108,20 +124,20 @@
                             if (!data) return '';
                             var parts = data.split('.');
                             var colorMap = {
-                                'created':  'success',
-                                'updated':  'info',
-                                'deleted':  'danger',
+                                'created': 'success',
+                                'updated': 'info',
+                                'deleted': 'danger',
                                 'restored': 'secondary',
-                                'banned':   'warning',
+                                'banned': 'warning',
                                 'unbanned': 'warning',
                                 'password_changed': 'dark',
                                 'password_changed_by_admin': 'dark',
                                 'profile_updated': 'info',
                                 'groups_updated': 'info',
                             };
-                            var verb   = parts[1] || 'action';
-                            var color  = colorMap[verb] || 'primary';
-                            return '<span class="badge bg-' + color + '-light text-' + color + ' fs-xs fw-semibold">' + data + '</span>';
+                            var verb = parts[1] || 'action';
+                            var color = colorMap[verb] || 'primary';
+                            return '<span class="badge bg-' + color + ' text-white fs-xs fw-semibold">' + data + '</span>';
                         }
                     },
                     {
