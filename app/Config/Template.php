@@ -327,12 +327,14 @@ class Template extends BaseConfig
                     'url'        => 'resource-types',
                     'permission' => 'resource_type.access',
                 ),
-                array(
-                    'name'       => 'Time Slots',
-                    'url'        => 'time-slots',
-                    'permission' => 'time_slot.access',
-                ),
             )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Time Slots',
+            'icon'       => 'fa fa-clock',
+            'url'        => 'time-slots',
+            'permission' => 'time_slot.access',
         ),
         array(
             'type' => 'nav-section',
