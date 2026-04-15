@@ -132,14 +132,14 @@ class Template extends BaseConfig
         array(
             'type'       => 'nav-item',
             'name'       => 'Dashboard',
-            'icon'       => 'si si-speedometer',
+            'icon'       => 'fa fa-tachometer-alt',
             'url'        => '',
             'permission' => 'dashboard.access',
         ),
         array(
             'type'       => 'nav-item',
             'name'       => 'Schedules',
-            'icon'       => 'si si-calendar',
+            'icon'       => 'fa fa-calendar-alt',
             'permission' => 'schedules.access',
             'sub'        => array(
                 array(
@@ -161,7 +161,7 @@ class Template extends BaseConfig
         array(
             'type'       => 'nav-item',
             'name'       => 'Clients',
-            'icon'       => 'si si-users',
+            'icon'       => 'fa fa-users',
             'permission' => 'clients.access',
             'sub'        => array(
                 array(
@@ -197,7 +197,7 @@ class Template extends BaseConfig
         array(
             'type'       => 'nav-item',
             'name'       => 'Ad Spots',
-            'icon'       => 'si si-target',
+            'icon'       => 'fa fa-bullseye',
             'permission' => 'spots.access',
             'sub'        => array(
                 array(
@@ -215,7 +215,7 @@ class Template extends BaseConfig
         array(
             'type'       => 'nav-item',
             'name'       => 'Ad Formats',
-            'icon'       => 'si si-list',
+            'icon'       => 'fa fa-th-list',
             'permission' => 'formats.access',
             'sub'        => array(
                 array(
@@ -233,7 +233,7 @@ class Template extends BaseConfig
         array(
             'type'       => 'nav-item',
             'name'       => 'Platforms',
-            'icon'       => 'si si-social-youtube',
+            'icon'       => 'fa fa-tv',
             'permission' => 'platforms.access',
             'sub'        => array(
                 array(
@@ -364,7 +364,7 @@ class Template extends BaseConfig
         array(
             'type'       => 'nav-item',
             'name'       => 'Users',
-            'icon'       => 'si si-user',
+            'icon'       => 'fa fa-user',
             'permission' => 'users.manage-admins',
             'sub'        => array(
                 array(
