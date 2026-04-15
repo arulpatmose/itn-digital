@@ -295,10 +295,21 @@ class Template extends BaseConfig
         ),
         array(
             'type'       => 'nav-item',
-            'name'       => 'Booking Purposes',
+            'name'       => 'Booking Setup',
             'icon'       => 'fa fa-tags',
-            'url'        => 'booking-purposes',
             'permission' => 'bookingpurpose.access',
+            'sub'        => array(
+                array(
+                    'name'       => 'Purpose Groups',
+                    'url'        => 'booking-purpose-groups',
+                    'permission' => 'bookingpurposegroup.access',
+                ),
+                array(
+                    'name'       => 'Booking Purposes',
+                    'url'        => 'booking-purposes',
+                    'permission' => 'bookingpurpose.access',
+                ),
+            )
         ),
         array(
             'type'       => 'nav-item',

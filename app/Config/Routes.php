@@ -258,6 +258,19 @@ $routes->group('time-slots', ['filter' => 'permission:timeslot.access'], functio
 
 /*
 | --------------------------------------------------------------------
+| Booking Purpose Group Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('booking-purpose-groups', ['filter' => 'permission:bookingpurposegroup.access'], function ($routes) {
+    $routes->get('/', 'BookingPurposeGroups::index', ['as' => 'booking_purpose_groups']);
+    $routes->post('submit', 'BookingPurposeGroups::store', ['filter' => 'permission:bookingpurposegroup.create']);
+    $routes->post('update/(:num)', 'BookingPurposeGroups::update/$1', ['filter' => 'permission:bookingpurposegroup.edit']);
+    $routes->post('toggle-status', 'BookingPurposeGroups::toggleStatus', ['filter' => 'permission:bookingpurposegroup.edit']);
+    $routes->post('delete', 'BookingPurposeGroups::destroy', ['filter' => 'permission:bookingpurposegroup.delete']);
+});
+
+/*
+| --------------------------------------------------------------------
 | Booking Purpose Routes
 | --------------------------------------------------------------------
 */
