@@ -65,47 +65,64 @@ if (!function_exists('send_app_email')) {
     {
         helper(['email', 'settings']);
 
-        // Get email settings from DB
         $emailSettings = get_settings('email', true);
 
-        // Create emailer instance with DB config
-        $email = emailer([
-            'protocol'    => $emailSettings['protocol'] ?? 'smtp',
+        // Prepare message
+        $message = $isView ? view($view, $data, ['debug' => true]) : $view;
+
+        // ---------- 1. TRY SMTP ----------
+        $smtpConfig = [
+            'protocol'    => 'smtp',
             'SMTPHost'    => $emailSettings['SMTPHost'] ?? '',
             'SMTPPort'    => $emailSettings['SMTPPort'] ?? 587,
             'SMTPUser'    => $emailSettings['SMTPUser'] ?? '',
             'SMTPPass'    => $emailSettings['SMTPPass'] ?? '',
-            'SMTPCrypto'  => $emailSettings['SMTPCrypto'] ?? 'tls',
+            'SMTPCrypto'  => ($emailSettings['SMTPCrypto'] ?? 'tls') === 'none' ? '' : $emailSettings['SMTPCrypto'],
             'mailType'    => 'html',
             'charset'     => 'utf-8',
             'newline'     => "\r\n",
+            'CRLF'        => "\r\n",
             'wordWrap'    => true,
-        ])->setFrom(
-            $emailSettings['fromEmail'],
-            $emailSettings['fromName'] ?? ''
-        );
+        ];
 
-        // Recipient(s)
+        $email = emailer($smtpConfig);
+        $email->setFrom($emailSettings['fromEmail'], $emailSettings['fromName'] ?? '');
         $email->setTo($to);
-
-        // Subject
         $email->setSubject($subject);
+        $email->setMessage($message);
 
-        // Message
-        if ($isView) {
-            $email->setMessage(view($view, $data, ['debug' => true]));
-        } else {
-            $email->setMessage($view); // Treat as raw HTML string
+        if ($email->send()) {
+            return true; // ✅ SMTP success
         }
 
-        // Send and handle errors
-        if ($email->send(false) === false) {
-            log_message('error', $email->printDebugger(['headers']));
-            return false;
-        }
-
+        // Log SMTP failure
+        log_message('error', 'SMTP FAILED: ' . $email->printDebugger(['headers']));
         $email->clear();
-        return true;
+
+        // ---------- 2. FALLBACK TO SENDMAIL ----------
+        $sendmailConfig = [
+            'protocol' => 'sendmail',
+            'mailPath' => '/usr/sbin/sendmail',
+            'mailType' => 'html',
+            'charset'  => 'utf-8',
+            'newline'  => "\r\n",
+            'CRLF'     => "\r\n",
+        ];
+
+        $email = emailer($sendmailConfig);
+        $email->setFrom($emailSettings['fromEmail'], $emailSettings['fromName'] ?? '');
+        $email->setTo($to);
+        $email->setSubject($subject);
+        $email->setMessage($message);
+
+        if ($email->send()) {
+            log_message('warning', 'Fallback to sendmail succeeded.');
+            return true; // ✅ fallback success
+        }
+
+        // Final failure
+        log_message('critical', 'Sendmail ALSO FAILED: ' . $email->printDebugger(['headers']));
+        return false;
     }
 }
 
