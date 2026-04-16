@@ -33,6 +33,13 @@ class Bookings extends BaseController
             'page_title'       => 'All Bookings',
             'page_description' => 'Manage and review resource booking requests.',
             'bookings'         => $this->bookingModel->getFullDetails(),
+            'resources'        => $this->resourceModel
+                ->select('resources.id, resources.name, resource_types.name as type_name')
+                ->join('resource_types', 'resource_types.id = resources.type_id')
+                ->orderBy('resources.name', 'ASC')
+                ->findAll(),
+            'purposes'         => $this->purposeModel->orderBy('name', 'ASC')->findAll(),
+            'users'            => $this->bookingModel->getBookingUsersList(),
         ];
 
         return view('backend/bookings/index', $data);

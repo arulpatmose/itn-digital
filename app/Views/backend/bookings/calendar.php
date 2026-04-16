@@ -25,38 +25,49 @@
                 <div class="block-content block-content-full">
 
                     <!-- Filters -->
-                    <div class="row g-2 mb-4">
-                        <div class="col-sm-4 col-md-3">
-                            <select class="form-select form-select-sm" id="filter-resource">
-                                <option value="">All Resources</option>
-                                <?php foreach ($resources as $r): ?>
-                                    <option value="<?= $r['id'] ?>">
-                                        <?= esc($r['name']) ?> (<?= esc($r['type_name']) ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-resource">
+                                    Resource
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearCalendarFilter('filter-resource')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-resource" style="width:100%;" data-placeholder="All Resources">
+                                    <option></option>
+                                    <?php foreach ($resources as $r): ?>
+                                        <option value="<?= $r['id'] ?>"><?= esc($r['name']) ?> (<?= esc($r['type_name']) ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-sm-4 col-md-3">
-                            <select class="form-select form-select-sm" id="filter-purpose">
-                                <option value="">All Purposes</option>
-                                <?php foreach ($purposes as $p): ?>
-                                    <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-purpose">
+                                    Purpose
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearCalendarFilter('filter-purpose')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-purpose" style="width:100%;" data-placeholder="All Purposes">
+                                    <option></option>
+                                    <?php foreach ($purposes as $p): ?>
+                                        <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-sm-4 col-md-3">
-                            <select class="form-select form-select-sm" id="filter-status">
-                                <option value="">All Statuses</option>
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4 col-md-3">
-                            <button class="btn btn-sm btn-outline-secondary" id="btn-reset-filters">
-                                <i class="fa fa-times me-1"></i> Reset
-                            </button>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-status">
+                                    Status
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearCalendarFilter('filter-status')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-status" style="width:100%;" data-placeholder="All Statuses">
+                                    <option></option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -136,15 +147,16 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('other-scripts') ?>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
 <script>
+    var bookingCalendar;
+
     $(function() {
 
         var calendarEl = document.getElementById('booking-calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        bookingCalendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             headerToolbar: {
                 left: 'prev,next today',
@@ -238,18 +250,26 @@
             }
         });
 
-        calendar.render();
+        bookingCalendar.render();
 
-        // Refetch on filter change
-        $('#filter-resource, #filter-purpose, #filter-status').on('change', function() {
-            calendar.refetchEvents();
+        // Initialise Select2 on filters
+        ['#filter-resource', '#filter-purpose', '#filter-status'].forEach(function(sel) {
+            $(sel).select2({
+                placeholder: $(sel).data('placeholder') || 'All',
+                dropdownParent: document.querySelector('#page-container')
+            });
         });
 
-        $('#btn-reset-filters').on('click', function() {
-            $('#filter-resource, #filter-purpose, #filter-status').val('');
-            calendar.refetchEvents();
+        // Refetch on select or clear via Select2
+        $('#filter-resource, #filter-purpose, #filter-status').on('select2:select select2:unselect', function() {
+            bookingCalendar.refetchEvents();
         });
 
     });
+
+    function clearCalendarFilter(id) {
+        $('#' + id).val(null).trigger('change');
+        bookingCalendar.refetchEvents();
+    }
 </script>
 <?= $this->endSection() ?>

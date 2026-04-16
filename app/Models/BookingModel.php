@@ -81,6 +81,20 @@ class BookingModel extends Model
     }
 
     /**
+     * Return distinct users who have at least one booking, for filter dropdowns.
+     */
+    public function getBookingUsersList(): array
+    {
+        return $this->db->table('bookings')
+            ->select('users.id, CONCAT(users.first_name, " ", users.last_name) AS full_name')
+            ->join('users', 'users.id = bookings.user_id', 'left')
+            ->distinct()
+            ->orderBy('full_name', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
+    /**
      * Return bookings for the calendar view, optionally filtered by date range,
      * resource, purpose, and status.
      */

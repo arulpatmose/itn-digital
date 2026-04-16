@@ -16,6 +16,68 @@
                     <h3 class="block-title">All Bookings</h3>
                 </div>
                 <div class="block-content block-content-full">
+
+                    <!-- Filters -->
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="booking-filter-resource">
+                                    Resource
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearBookingFilter('booking-filter-resource')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="booking-filter-resource" style="width:100%;" data-placeholder="All Resources">
+                                    <option></option>
+                                    <?php foreach ($resources as $r): ?>
+                                        <option value="<?= $r['id'] ?>"><?= esc($r['name']) ?> (<?= esc($r['type_name']) ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="booking-filter-purpose">
+                                    Purpose
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearBookingFilter('booking-filter-purpose')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="booking-filter-purpose" style="width:100%;" data-placeholder="All Purposes">
+                                    <option></option>
+                                    <?php foreach ($purposes as $p): ?>
+                                        <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="booking-filter-user">
+                                    Requested By
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearBookingFilter('booking-filter-user')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="booking-filter-user" style="width:100%;" data-placeholder="All Users">
+                                    <option></option>
+                                    <?php foreach ($users as $u): ?>
+                                        <option value="<?= $u['id'] ?>"><?= esc($u['full_name']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="booking-filter-status">
+                                    Status
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearBookingFilter('booking-filter-status')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="booking-filter-status" style="width:100%;" data-placeholder="All Statuses">
+                                    <option></option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped table-vcenter w-100 nowrap" id="table-bookings">
                             <thead>
@@ -34,7 +96,10 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($bookings as $i => $b): ?>
-                                    <tr>
+                                    <tr data-resource-id="<?= $b['resource_id'] ?>"
+                                        data-purpose-id="<?= $b['purpose_id'] ?>"
+                                        data-user-id="<?= $b['user_id'] ?>"
+                                        data-status="<?= $b['status'] ?>">
                                         <td class="text-muted"><?= $i + 1 ?></td>
                                         <td><?= esc(date('d M Y', strtotime($b['booking_date']))) ?></td>
                                         <td>
@@ -133,8 +198,36 @@
             });
         <?php endif; ?>
 
+        // Initialise Select2 on each filter
+        ['#booking-filter-resource', '#booking-filter-purpose', '#booking-filter-user', '#booking-filter-status'].forEach(function(sel) {
+            $(sel).select2({
+                placeholder: $(sel).data('placeholder') || 'All',
+                dropdownParent: document.querySelector('#page-container')
+            });
+        });
+
+        // Custom DataTables search using data-* attributes on <tr>
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            if (settings.nTable.id !== 'table-bookings') return true;
+
+            var row        = $(settings.aoData[dataIndex].nTr);
+            var resourceId = $('#booking-filter-resource').val();
+            var purposeId  = $('#booking-filter-purpose').val();
+            var userId     = $('#booking-filter-user').val();
+            var status     = $('#booking-filter-status').val();
+
+            if (resourceId && row.data('resource-id') != resourceId) return false;
+            if (purposeId  && row.data('purpose-id')  != purposeId)  return false;
+            if (userId     && row.data('user-id')     != userId)      return false;
+            if (status     && row.data('status')      !== status)     return false;
+
+            return true;
+        });
+
+        var table;
+
         if ($('#table-bookings').length) {
-            $('#table-bookings').DataTable({
+            table = $('#table-bookings').DataTable({
                 pagingType: 'full_numbers',
                 pageLength: 10,
                 lengthMenu: [
@@ -205,6 +298,11 @@
                 }
             });
         }
+
+        // Trigger DataTable redraw on Select2 select or clear
+        $('#booking-filter-resource, #booking-filter-purpose, #booking-filter-user, #booking-filter-status').on('select2:select select2:unselect', function() {
+            if (table) table.draw();
+        });
 
         // Approve / Reject modal
         var _pendingAction = null;
@@ -307,5 +405,11 @@
         });
 
     });
+
+    function clearBookingFilter(id) {
+        $('#' + id).val(null).trigger('change');
+        var tbl = $('#table-bookings').length ? $('#table-bookings').DataTable() : null;
+        if (tbl) tbl.draw();
+    }
 </script>
 <?= $this->endSection() ?>

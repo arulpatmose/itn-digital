@@ -17,7 +17,7 @@
                     <div class="block-options">
                         <?php if (auth()->user()->can('booking.create')): ?>
                             <a href="<?= base_url('bookings/create') ?>" class="btn btn-sm btn-primary">
-                                <i class="fa fa-plus me-1"></i> New Booking
+                                New Booking
                             </a>
                         <?php endif; ?>
                     </div>

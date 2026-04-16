@@ -277,7 +277,7 @@ class Template extends BaseConfig
             'permission' => 'booking.access',
             'sub'        => array(
                 array(
-                    'name'       => 'Calendar',
+                    'name'       => 'Booking Calendar',
                     'url'        => 'bookings/calendar',
                     'permission' => 'booking.access',
                 ),
