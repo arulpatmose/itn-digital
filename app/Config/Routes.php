@@ -246,18 +246,6 @@ $routes->group('resource-types', ['filter' => 'permission:resource_type.access']
 
 /*
 | --------------------------------------------------------------------
-| Time Slots Routes
-| --------------------------------------------------------------------
-*/
-$routes->group('time-slots', ['filter' => 'permission:time_slot.access'], function ($routes) {
-    $routes->get('/', 'TimeSlots::index', ['as' => 'time_slots']);
-    $routes->post('submit', 'TimeSlots::store', ['filter' => 'permission:time_slot.create']);
-    $routes->post('update/(:num)', 'TimeSlots::update/$1', ['filter' => 'permission:time_slot.edit']);
-    $routes->post('delete', 'TimeSlots::destroy', ['filter' => 'permission:time_slot.delete']);
-});
-
-/*
-| --------------------------------------------------------------------
 | Booking Purpose Group Routes
 | --------------------------------------------------------------------
 */

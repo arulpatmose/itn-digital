@@ -330,13 +330,6 @@ class Template extends BaseConfig
             )
         ),
         array(
-            'type'       => 'nav-item',
-            'name'       => 'Time Slots',
-            'icon'       => 'fa fa-clock',
-            'url'        => 'time-slots',
-            'permission' => 'time_slot.access',
-        ),
-        array(
             'type' => 'nav-section',
             'name' => 'Administration',
         ),

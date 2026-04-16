@@ -5,21 +5,18 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\BookingModel;
 use App\Models\ResourceModel;
-use App\Models\TimeSlotModel;
 use App\Models\BookingPurposeModel;
 
 class Bookings extends BaseController
 {
     protected $bookingModel;
     protected $resourceModel;
-    protected $timeSlotModel;
     protected $purposeModel;
 
     public function __construct()
     {
         $this->bookingModel  = new BookingModel();
         $this->resourceModel = new ResourceModel();
-        $this->timeSlotModel = new TimeSlotModel();
         $this->purposeModel  = new BookingPurposeModel();
     }
 
@@ -32,12 +29,10 @@ class Bookings extends BaseController
             return redirect()->back()->with('error', 'You do not have permission to access that page!');
         }
 
-        $bookings = $this->bookingModel->getFullDetails();
-
         $data = [
             'page_title'       => 'All Bookings',
             'page_description' => 'Manage and review resource booking requests.',
-            'bookings'         => $bookings,
+            'bookings'         => $this->bookingModel->getFullDetails(),
         ];
 
         return view('backend/bookings/index', $data);
@@ -52,13 +47,10 @@ class Bookings extends BaseController
             return redirect()->back()->with('error', 'You do not have permission to access that page!');
         }
 
-        $userId   = auth()->id();
-        $bookings = $this->bookingModel->getFullDetails(['bookings.user_id' => $userId]);
-
         $data = [
             'page_title'       => 'My Bookings',
             'page_description' => 'View and manage your resource booking requests.',
-            'bookings'         => $bookings,
+            'bookings'         => $this->bookingModel->getFullDetails(['bookings.user_id' => auth()->id()]),
         ];
 
         return view('backend/bookings/my_bookings', $data);
@@ -82,7 +74,6 @@ class Bookings extends BaseController
                 ->where('resources.status', 1)
                 ->orderBy('resources.name', 'ASC')
                 ->findAll(),
-            'time_slots'       => $this->timeSlotModel->orderBy('start_time')->findAll(),
             'purpose_groups'   => $this->getGroupedPurposes(),
         ];
 
@@ -99,16 +90,27 @@ class Bookings extends BaseController
         }
 
         $resourceId = (int) $this->request->getPost('resource_id');
-        $timeSlotId = (int) $this->request->getPost('time_slot_id');
         $date       = $this->request->getPost('booking_date');
+        $startTime  = trim($this->request->getPost('start_time') ?? '');
+        $endTime    = trim($this->request->getPost('end_time')   ?? '');
         $purposeId  = (int) $this->request->getPost('purpose_id');
         $remarks    = trim($this->request->getPost('remarks') ?? '');
 
-        if (!$resourceId || !$timeSlotId || !$date || !$purposeId) {
-            return redirect()->back()->withInput()->with('error', 'Resource, date, time slot, and purpose are required.');
+        if (!$resourceId || !$date || !$startTime || !$endTime || !$purposeId) {
+            return redirect()->back()->withInput()->with('error', 'Resource, date, start time, end time, and purpose are required.');
         }
 
-        // Validate date format and ensure it is not in the past
+        // Validate time format (HH:MM or HH:MM:SS)
+        $timePattern = '/^\d{2}:\d{2}(:\d{2})?$/';
+        if (!preg_match($timePattern, $startTime) || !preg_match($timePattern, $endTime)) {
+            return redirect()->back()->withInput()->with('error', 'The time format is invalid.');
+        }
+
+        if ($startTime >= $endTime) {
+            return redirect()->back()->withInput()->with('error', 'End time must be after start time.');
+        }
+
+        // Validate date
         $parsedDate = \DateTime::createFromFormat('Y-m-d', $date);
         if (!$parsedDate || $parsedDate->format('Y-m-d') !== $date) {
             return redirect()->back()->withInput()->with('error', 'The booking date is invalid.');
@@ -127,16 +129,16 @@ class Bookings extends BaseController
             return redirect()->back()->withInput()->with('error', 'The selected booking purpose is invalid.');
         }
 
-        // Availability check
-        if ($this->bookingModel->isSlotTaken($resourceId, $date, $timeSlotId)) {
-            return redirect()->back()->withInput()->with('error', 'That time slot is already booked for the selected date. Please choose another.');
+        if ($this->bookingModel->isSlotTaken($resourceId, $date, $startTime, $endTime)) {
+            return redirect()->back()->withInput()->with('error', 'The selected time range overlaps with an existing booking. Please choose another time.');
         }
 
         $data = [
             'user_id'      => auth()->id(),
             'resource_id'  => $resourceId,
             'purpose_id'   => $purposeId,
-            'time_slot_id' => $timeSlotId,
+            'start_time'   => $startTime,
+            'end_time'     => $endTime,
             'booking_date' => $date,
             'status'       => 'pending',
             'remarks'      => $remarks ?: null,
@@ -145,7 +147,6 @@ class Bookings extends BaseController
         if ($this->bookingModel->insert($data, false)) {
             $bookingId = $this->bookingModel->getInsertID();
             log_activity('booking.created', 'booking', $bookingId, "Created booking for date {$date}");
-
             return redirect()->to('/bookings/my-bookings')->with('success', 'Your booking request has been submitted successfully!');
         }
 
@@ -177,8 +178,14 @@ class Bookings extends BaseController
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Only pending bookings can be approved.']);
         }
 
-        if ($this->bookingModel->isSlotTaken((int) $booking['resource_id'], $booking['booking_date'], (int) $booking['time_slot_id'], $id)) {
-            return $this->response->setStatusCode(409)->setJSON(['status' => 'error', 'message' => 'This slot is no longer available for approval.']);
+        if ($this->bookingModel->isSlotTaken(
+            (int) $booking['resource_id'],
+            $booking['booking_date'],
+            $booking['start_time'],
+            $booking['end_time'],
+            $id
+        )) {
+            return $this->response->setStatusCode(409)->setJSON(['status' => 'error', 'message' => 'This time range is no longer available — another booking was approved first.']);
         }
 
         $updated = $this->bookingModel->update($id, [
@@ -258,7 +265,6 @@ class Bookings extends BaseController
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Only pending or approved bookings can be cancelled.']);
         }
 
-        // Only owner can cancel their own booking unless they have approve permission
         if ($booking['user_id'] !== auth()->id() && !auth()->user()->can('booking.approve')) {
             return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'You can only cancel your own bookings.']);
         }
@@ -272,7 +278,8 @@ class Bookings extends BaseController
     }
 
     /**
-     * AJAX — return available/unavailable time slots for a resource + date combo.
+     * AJAX — return existing booked ranges for a resource + date.
+     * The client generates the time grid and marks blocked slots itself.
      */
     public function availableSlots()
     {
@@ -287,30 +294,15 @@ class Bookings extends BaseController
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'resource_id and booking_date are required.']);
         }
 
-        $allSlots = $this->timeSlotModel->orderBy('start_time')->findAll();
-
-        // Get taken slot IDs for this resource+date
-        $takenSlotIds = $this->bookingModel
-            ->select('time_slot_id')
+        $bookings = $this->bookingModel->db->table('bookings')
+            ->select('start_time, end_time')
             ->where('resource_id', $resourceId)
             ->where('booking_date', $date)
             ->whereNotIn('status', ['rejected', 'cancelled'])
-            ->findAll();
+            ->get()
+            ->getResultArray();
 
-        $takenIds = array_column($takenSlotIds, 'time_slot_id');
-
-        $slots = [];
-        foreach ($allSlots as $slot) {
-            $slots[] = [
-                'id'         => $slot['id'],
-                'label'      => $slot['label'],
-                'start_time' => $slot['start_time'],
-                'end_time'   => $slot['end_time'],
-                'available'  => !in_array($slot['id'], $takenIds),
-            ];
-        }
-
-        return $this->response->setJSON(['status' => 'success', 'slots' => $slots]);
+        return $this->response->setJSON(['status' => 'success', 'bookings' => $bookings]);
     }
 
     protected function getGroupedPurposes(): array

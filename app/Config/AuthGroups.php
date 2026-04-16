@@ -75,7 +75,7 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'resource_manager' => [
             'title'       => 'Resource Manager',
-            'description' => 'Dedicated admin for the booking system — manages resources, resource types, time slots, and approves or rejects booking requests.',
+            'description' => 'Dedicated admin for the booking system — manages resources, resource types, booking purposes, and approves or rejects booking requests.',
         ],
         'booking_user' => [
             'title'       => 'Booking User',
@@ -201,11 +201,6 @@ class AuthGroups extends ShieldAuthGroups
         'resource_type.edit'     => 'Can edit resource types',
         'resource_type.delete'   => 'Can delete resource types',
 
-        // ⏰ Time Slot Management
-        'time_slot.access'       => 'Can view all time slots',
-        'time_slot.create'       => 'Can create new time slots',
-        'time_slot.edit'         => 'Can edit existing time slots',
-        'time_slot.delete'       => 'Can delete time slots',
     ];
 
     /**
@@ -234,7 +229,6 @@ class AuthGroups extends ShieldAuthGroups
             'accounts.*',
             'resource.*',
             'resource_type.*',
-            'time_slot.*',
             'booking_purpose_group.*',
             'booking_purpose.*',
             'booking.*',
@@ -256,7 +250,6 @@ class AuthGroups extends ShieldAuthGroups
             'daily_schedule.*',
             'resource.*',
             'resource_type.*',
-            'time_slot.*',
             'booking_purpose_group.*',
             'booking_purpose.*',
             'booking.access',
@@ -330,7 +323,6 @@ class AuthGroups extends ShieldAuthGroups
             // Resource management
             'resource.*',
             'resource_type.*',
-            'time_slot.*',
             'booking_purpose_group.*',
             'booking_purpose.*',
             // Full booking oversight
