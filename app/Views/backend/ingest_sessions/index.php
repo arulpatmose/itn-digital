@@ -13,7 +13,7 @@
                     <h3 class="block-title">Ingest Sessions</h3>
                     <div class="block-options">
                         <?php if (auth()->user()->can('ingest_sessions.create')): ?>
-                            <a href="<?= base_url('ingest-sessions/create') ?>" class="btn btn-sm btn-primary">New Session</a>
+                            <a href="<?= base_url('transactions/ingest') ?>" class="btn btn-sm btn-primary">New Session</a>
                         <?php endif; ?>
                     </div>
                 </div>
