@@ -81,6 +81,55 @@ class BookingModel extends Model
     }
 
     /**
+     * Return bookings for the calendar view, optionally filtered by date range,
+     * resource, purpose, and status.
+     */
+    public function getCalendarEvents(
+        ?string $start,
+        ?string $end,
+        int $resourceId = 0,
+        int $purposeId  = 0,
+        ?string $status = null
+    ): array {
+        $builder = $this->db->table('bookings')
+            ->select('
+                bookings.id,
+                bookings.booking_date,
+                bookings.start_time,
+                bookings.end_time,
+                bookings.status,
+                bookings.remarks,
+                bookings.approval_remarks,
+                CONCAT(u.first_name, " ", u.last_name) AS user_name,
+                resources.name        AS resource_name,
+                resource_types.name   AS resource_type,
+                booking_purposes.name AS purpose_name
+            ')
+            ->join('users AS u',        'u.id = bookings.user_id',                   'left')
+            ->join('resources',         'resources.id = bookings.resource_id',        'left')
+            ->join('resource_types',    'resource_types.id = resources.type_id',      'left')
+            ->join('booking_purposes',  'booking_purposes.id = bookings.purpose_id',  'left');
+
+        if ($start) {
+            $builder->where('bookings.booking_date >=', date('Y-m-d', strtotime($start)));
+        }
+        if ($end) {
+            $builder->where('bookings.booking_date <=', date('Y-m-d', strtotime($end)));
+        }
+        if ($resourceId) {
+            $builder->where('bookings.resource_id', $resourceId);
+        }
+        if ($purposeId) {
+            $builder->where('bookings.purpose_id', $purposeId);
+        }
+        if ($status && in_array($status, ['pending', 'approved', 'rejected', 'cancelled'], true)) {
+            $builder->where('bookings.status', $status);
+        }
+
+        return $builder->get()->getResultArray();
+    }
+
+    /**
      * Overlap detection: returns true if any active booking on the same resource+date
      * overlaps with the requested [startTime, endTime) window.
      *

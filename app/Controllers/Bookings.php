@@ -305,6 +305,87 @@ class Bookings extends BaseController
         return $this->response->setJSON(['status' => 'success', 'bookings' => $bookings]);
     }
 
+    /**
+     * Calendar view — read-only visual calendar of all bookings.
+     */
+    public function calendar()
+    {
+        if (!auth()->user()->can('booking.access')) {
+            return redirect()->back()->with('error', 'You do not have permission to access that page!');
+        }
+
+        $resources = $this->resourceModel
+            ->select('resources.id, resources.name, resource_types.name as type_name')
+            ->join('resource_types', 'resource_types.id = resources.type_id')
+            ->where('resources.status', 1)
+            ->orderBy('resources.name', 'ASC')
+            ->findAll();
+
+        $purposes = $this->purposeModel
+            ->where('is_active', 1)
+            ->orderBy('name', 'ASC')
+            ->findAll();
+
+        $data = [
+            'page_title'       => 'Booking Calendar',
+            'page_description' => 'Visual calendar of all resource bookings.',
+            'resources'        => $resources,
+            'purposes'         => $purposes,
+        ];
+
+        return view('backend/bookings/calendar', $data);
+    }
+
+    /**
+     * AJAX — return bookings as FullCalendar events JSON.
+     * Params: start, end (ISO date strings from FullCalendar), resource_id, purpose_id, status.
+     */
+    public function calendarEvents()
+    {
+        if (!auth()->user()->can('booking.access')) {
+            return $this->response->setStatusCode(403)->setJSON([]);
+        }
+
+        $start      = $this->request->getGet('start');
+        $end        = $this->request->getGet('end');
+        $resourceId = (int) $this->request->getGet('resource_id');
+        $purposeId  = (int) $this->request->getGet('purpose_id');
+        $status     = $this->request->getGet('status');
+
+        $bookings = $this->bookingModel->getCalendarEvents($start, $end, $resourceId, $purposeId, $status);
+
+        $statusColors = [
+            'approved'  => '#198754',
+            'pending'   => '#e08500',
+            'rejected'  => '#dc3545',
+            'cancelled' => '#6c757d',
+        ];
+
+        $events = [];
+        foreach ($bookings as $b) {
+            $color = $statusColors[$b['status']] ?? '#0d6efd';
+            $events[] = [
+                'id'    => $b['id'],
+                'title' => $b['resource_name'] . ' — ' . $b['purpose_name'],
+                'start' => $b['booking_date'] . 'T' . $b['start_time'],
+                'end'   => $b['booking_date'] . 'T' . $b['end_time'],
+                'color' => $color,
+                'extendedProps' => [
+                    'status'           => $b['status'],
+                    'resource'         => $b['resource_name'],
+                    'resource_type'    => $b['resource_type'],
+                    'purpose'          => $b['purpose_name'],
+                    'user'             => $b['user_name'],
+                    'remarks'          => $b['remarks'] ?? '',
+                    'approval_remarks' => $b['approval_remarks'] ?? '',
+                    'time_range'       => substr($b['start_time'], 0, 5) . ' – ' . substr($b['end_time'], 0, 5),
+                ],
+            ];
+        }
+
+        return $this->response->setJSON($events);
+    }
+
     protected function getGroupedPurposes(): array
     {
         return $this->purposeModel->getGroupedActivePurposes();

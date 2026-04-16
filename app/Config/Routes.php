@@ -215,6 +215,8 @@ $routes->group('bookings', ['filter' => 'permission:booking.access'], function (
     $routes->post('reject', 'Bookings::reject', ['filter' => 'permission:booking.approve']);
     $routes->post('cancel', 'Bookings::cancel', ['filter' => 'permission:booking.cancel']);
     $routes->post('available-slots', 'Bookings::availableSlots');
+    $routes->get('calendar', 'Bookings::calendar');
+    $routes->get('calendar-events', 'Bookings::calendarEvents');
 });
 
 /*
