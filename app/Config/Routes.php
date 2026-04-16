@@ -197,8 +197,9 @@ $routes->group('migrations', ['filter' => 'permission:admin.migrations'], functi
 | Activity Log Routes
 | --------------------------------------------------------------------
 */
-$routes->group('activity-log', ['filter' => 'permission:admin.settings'], function ($routes) {
+$routes->group('activity-log', ['filter' => 'permission:activity_log.access'], function ($routes) {
     $routes->get('/', 'ActivityLog::index', ['as' => 'activity_log']);
+    $routes->post('get-logs', 'ActivityLog::getLogs');
 });
 
 /*

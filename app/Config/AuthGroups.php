@@ -226,6 +226,11 @@ class AuthGroups extends ShieldAuthGroups
         'ingest_sessions.close'     => 'Can close ingest sessions',
         'ingest.reports'            => 'Can view chip and ingest reports',
 
+        // 📋 Activity Log
+        'activity_log.access'       => 'Can access the activity log page',
+        'activity_log.all'          => 'Can view all users\' activity log entries without restriction',
+        'activity_log.own'          => 'Can view only their own activity log entries',
+
     ];
 
     /**
@@ -262,6 +267,7 @@ class AuthGroups extends ShieldAuthGroups
             'transactions.*',
             'ingest_sessions.*',
             'ingest.reports',
+            'activity_log.*',
         ],
         'admin' => [
             'admin.access',
@@ -292,6 +298,8 @@ class AuthGroups extends ShieldAuthGroups
             'transactions.*',
             'ingest_sessions.*',
             'ingest.reports',
+            'activity_log.access',
+            'activity_log.all',
         ],
         'ingestor' => [
             'dashboard.*',
@@ -300,6 +308,8 @@ class AuthGroups extends ShieldAuthGroups
             'transactions.*',
             'ingest_sessions.*',
             'ingest.reports',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'developer' => [
             'admin.access',
@@ -307,6 +317,8 @@ class AuthGroups extends ShieldAuthGroups
             'users.create',
             'users.edit',
             'beta.access',
+            'activity_log.access',
+            'activity_log.all',
         ],
         'webeditor' => [
             'dashboard.*',
@@ -323,6 +335,8 @@ class AuthGroups extends ShieldAuthGroups
             'schedules.access',
             'schedules.create',
             'schedules.edit',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'user' => [],
         'beta' => [
@@ -349,10 +363,14 @@ class AuthGroups extends ShieldAuthGroups
             'schedules.create',
             'schedules.edit',
             'schedules.delete',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'accountant' => [
             'dashboard.*',
-            'accounts.*'
+            'accounts.*',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'marketingex' => [
             'dashboard.*',
@@ -360,6 +378,8 @@ class AuthGroups extends ShieldAuthGroups
             'clients.access',
             'schedules.access',
             'schedule.access',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'resource_manager' => [
             'dashboard.*',
@@ -371,16 +391,19 @@ class AuthGroups extends ShieldAuthGroups
             // Full booking oversight
             'booking.access',
             'booking.approve',
-            'booking.cancel',  // can cancel any booking
+            'booking.cancel',
             'booking.edit',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'booking_user' => [
             'dashboard.*',
-            // Can request and manage own bookings only
             'booking.access',
             'booking.create',
             'booking.edit',
             'booking.cancel',
+            'activity_log.access',
+            'activity_log.own',
         ],
         'secretary' => [
             'dashboard.*',
@@ -388,6 +411,8 @@ class AuthGroups extends ShieldAuthGroups
             'booking.access',
             'booking.edit',
             'booking.cancel',
+            'activity_log.access',
+            'activity_log.own',
         ],
     ];
 }
