@@ -1,4 +1,6 @@
-<?php /** @var array $participant, $users */ ?>
+<?php
+
+/** @var array $participant, $users */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -17,8 +19,8 @@
                         </div>
                     </div>
                     <div class="block-content">
-                        <div class="row py-sm-3 py-md-4">
-                            <div class="col-sm-10 col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
 
                                 <div class="mb-4">
                                     <label class="form-label" for="name">Name <span class="text-danger">*</span></label>

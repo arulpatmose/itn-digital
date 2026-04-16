@@ -15,15 +15,15 @@
                         </div>
                     </div>
                     <div class="block-content">
-                        <div class="row py-sm-3 py-md-4">
-                            <div class="col-sm-10 col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
 
                                 <div class="mb-4">
                                     <label class="form-label" for="chip_type">Chip Type <span class="text-danger">*</span></label>
                                     <select class="form-select" id="chip_type" name="chip_type" required>
                                         <option value="">— Select type —</option>
-                                        <option value="SXS"     <?= old('chip_type') === 'SXS'     ? 'selected' : '' ?>>SXS</option>
-                                        <option value="SD"      <?= old('chip_type') === 'SD'      ? 'selected' : '' ?>>SD</option>
+                                        <option value="SXS" <?= old('chip_type') === 'SXS'     ? 'selected' : '' ?>>SXS</option>
+                                        <option value="SD" <?= old('chip_type') === 'SD'      ? 'selected' : '' ?>>SD</option>
                                         <option value="MicroSD" <?= old('chip_type') === 'MicroSD' ? 'selected' : '' ?>>MicroSD</option>
                                     </select>
                                 </div>

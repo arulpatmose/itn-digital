@@ -1,4 +1,6 @@
-<?php /** @var array $transactions */ ?>
+<?php
+
+/** @var array $transactions */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -15,36 +17,36 @@
                 <div class="block-content">
                     <div class="row g-3 pb-3">
                         <?php if (auth()->user()->can('transactions.receive')): ?>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <a href="<?= base_url('transactions/receive') ?>" class="btn btn-success w-100 py-3">
-                                <i class="fa fa-arrow-circle-down d-block fs-3 mb-1"></i>
-                                Receive
-                            </a>
-                        </div>
+                            <div class="col-6 col-md-3">
+                                <a href="<?= base_url('transactions/receive') ?>" class="btn btn-success w-100 py-3">
+                                    <i class="fa fa-arrow-circle-down d-block fs-3 mb-1"></i>
+                                    Receive
+                                </a>
+                            </div>
                         <?php endif; ?>
                         <?php if (auth()->user()->can('transactions.transfer')): ?>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <a href="<?= base_url('transactions/transfer') ?>" class="btn btn-info w-100 py-3">
-                                <i class="fa fa-exchange-alt d-block fs-3 mb-1"></i>
-                                Transfer
-                            </a>
-                        </div>
+                            <div class="col-6 col-md-3">
+                                <a href="<?= base_url('transactions/transfer') ?>" class="btn btn-info w-100 py-3">
+                                    <i class="fa fa-exchange-alt d-block fs-3 mb-1"></i>
+                                    Transfer
+                                </a>
+                            </div>
                         <?php endif; ?>
                         <?php if (auth()->user()->can('transactions.handover')): ?>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <a href="<?= base_url('transactions/handover') ?>" class="btn btn-warning w-100 py-3">
-                                <i class="fa fa-hand-holding d-block fs-3 mb-1"></i>
-                                Handover
-                            </a>
-                        </div>
+                            <div class="col-6 col-md-3">
+                                <a href="<?= base_url('transactions/handover') ?>" class="btn btn-warning w-100 py-3">
+                                    <i class="fa fa-hand-holding d-block fs-3 mb-1"></i>
+                                    Handover
+                                </a>
+                            </div>
                         <?php endif; ?>
                         <?php if (auth()->user()->can('transactions.ingest')): ?>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <a href="<?= base_url('transactions/ingest') ?>" class="btn btn-primary w-100 py-3">
-                                <i class="fa fa-layer-group d-block fs-3 mb-1"></i>
-                                Ingest
-                            </a>
-                        </div>
+                            <div class="col-6 col-md-3">
+                                <a href="<?= base_url('transactions/ingest') ?>" class="btn btn-primary w-100 py-3">
+                                    <i class="fa fa-layer-group d-block fs-3 mb-1"></i>
+                                    Ingest
+                                </a>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -82,7 +84,7 @@
                                         <td class="text-nowrap"><?= date('d M Y H:i', strtotime($tx['created_at'])) ?></td>
                                         <td>
                                             <?php
-                                            $txClass = match($tx['transaction_type']) {
+                                            $txClass = match ($tx['transaction_type']) {
                                                 'RECEIVE'  => 'bg-success',
                                                 'TRANSFER' => 'bg-info',
                                                 'HANDOVER' => 'bg-warning text-dark',
@@ -121,30 +123,47 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
-$(function () {
-    <?php if ($flash = session()->getFlashdata('success')): ?>
-    Swal.fire({ icon: 'success', title: 'Success', text: <?= json_encode($flash) ?>, confirmButtonColor: '#28a745' });
-    <?php endif; ?>
-    <?php if ($flash = session()->getFlashdata('error')): ?>
-    Swal.fire({ icon: 'error', title: 'Error', text: <?= json_encode($flash) ?>, confirmButtonColor: '#dc3545' });
-    <?php endif; ?>
-
-    $('#table-transactions').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 25,
-        autoWidth: false,
-        responsive: true,
-        stateSave: true,
-        order: [[1, 'desc']],
-        columnDefs: [{ targets: 'noOrder', orderable: false }],
-        drawCallback: function () {
-            var api = this.api();
-            var start = api.page.info().start;
-            api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
-                cell.innerHTML = start + i + 1;
+    $(function() {
+        <?php if ($flash = session()->getFlashdata('success')): ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#28a745'
             });
-        }
+        <?php endif; ?>
+        <?php if ($flash = session()->getFlashdata('error')): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#dc3545'
+            });
+        <?php endif; ?>
+
+        $('#table-transactions').DataTable({
+            pagingType: 'full_numbers',
+            pageLength: 25,
+            autoWidth: false,
+            responsive: true,
+            stateSave: true,
+            order: [
+                [1, 'desc']
+            ],
+            columnDefs: [{
+                targets: 'noOrder',
+                orderable: false
+            }],
+            drawCallback: function() {
+                var api = this.api();
+                var start = api.page.info().start;
+                api.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = start + i + 1;
+                });
+            }
+        });
     });
-});
 </script>
 <?= $this->endSection() ?>

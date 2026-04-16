@@ -7,7 +7,7 @@
 <?= $this->section('content') ?>
 <div class="content">
     <div class="row">
-        <div class="col-md-12 col-lg-10 col-xl-8">
+        <div class="col-md-12 col-lg-6 col-xl-6">
             <form action="<?= base_url('transactions/ingest') ?>" method="POST">
                 <?= csrf_field() ?>
                 <div class="block block-rounded">
@@ -19,8 +19,8 @@
                         </div>
                     </div>
                     <div class="block-content">
-                        <div class="row py-sm-3 py-md-4">
-                            <div class="col-md-10 col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12">
                                 <p class="text-muted mb-4">A new ingest session will be created for this transaction.</p>
 
                                 <h5 class="mb-3">Session Details</h5>

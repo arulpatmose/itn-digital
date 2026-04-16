@@ -1,4 +1,6 @@
-<?php /** @var array $chips, $participants */ ?>
+<?php
+
+/** @var array $chips, $participants */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -6,7 +8,7 @@
 <div class="content">
 
     <!-- Summary cards -->
-    <div class="row mb-4">
+    <div class="row">
         <?php
         $byType = array_count_values(array_column($chips, 'chip_type'));
         $unassigned = count(array_filter($chips, fn($c) => empty($c['holder_name'])));
@@ -73,7 +75,7 @@
                                         <td><strong><?= esc($chip['chip_code']) ?></strong></td>
                                         <td>
                                             <?php
-                                            $typeClass = match($chip['chip_type']) {
+                                            $typeClass = match ($chip['chip_type']) {
                                                 'SXS'     => 'bg-primary',
                                                 'SD'      => 'bg-info',
                                                 'MicroSD' => 'bg-warning text-dark',
@@ -98,7 +100,7 @@
                                         <td><?= $chip['holder_type'] ? '<span class="badge bg-secondary">' . esc($chip['holder_type'] === 'librarian' ? 'library' : $chip['holder_type']) . '</span>' : ($chip['last_tx_type'] === 'INGEST' ? '<span class="badge bg-warning text-dark">ingest</span>' : '—') ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url('reports/chip-history/' . $chip['id']) ?>"
-                                               class="btn btn-sm btn-alt-secondary">
+                                                class="btn btn-sm btn-alt-secondary">
                                                 <i class="fa fa-history"></i> Timeline
                                             </a>
                                         </td>
@@ -116,23 +118,30 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
-$(function () {
-    $('#table-overview').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 25,
-        autoWidth: false,
-        responsive: true,
-        stateSave: true,
-        order: [[1, 'asc']],
-        columnDefs: [{ targets: 'noOrder', orderable: false }],
-        drawCallback: function () {
-            var api = this.api();
-            var start = api.page.info().start;
-            api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
-                cell.innerHTML = start + i + 1;
-            });
-        }
+    $(function() {
+        $('#table-overview').DataTable({
+            pagingType: 'full_numbers',
+            pageLength: 25,
+            autoWidth: false,
+            responsive: true,
+            stateSave: true,
+            order: [
+                [1, 'asc']
+            ],
+            columnDefs: [{
+                targets: 'noOrder',
+                orderable: false
+            }],
+            drawCallback: function() {
+                var api = this.api();
+                var start = api.page.info().start;
+                api.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = start + i + 1;
+                });
+            }
+        });
     });
-});
 </script>
 <?= $this->endSection() ?>

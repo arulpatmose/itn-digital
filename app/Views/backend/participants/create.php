@@ -1,4 +1,6 @@
-<?php /** @var array $users */ ?>
+<?php
+
+/** @var array $users */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -17,8 +19,8 @@
                         </div>
                     </div>
                     <div class="block-content">
-                        <div class="row py-sm-3 py-md-4">
-                            <div class="col-sm-10 col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
 
                                 <div class="mb-4">
                                     <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
@@ -31,7 +33,7 @@
                                     <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                                     <select class="form-select" id="type" name="type" required>
                                         <option value="">— Select type —</option>
-                                        <option value="staff"    <?= old('type') === 'staff'    ? 'selected' : '' ?>>Staff</option>
+                                        <option value="staff" <?= old('type') === 'staff'    ? 'selected' : '' ?>>Staff</option>
                                         <option value="producer" <?= old('type') === 'producer' ? 'selected' : '' ?>>Producer</option>
                                         <option value="librarian" <?= old('type') === 'librarian' ? 'selected' : '' ?>>Librarian</option>
                                     </select>
