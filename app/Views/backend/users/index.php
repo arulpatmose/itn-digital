@@ -65,7 +65,7 @@
         if (jQuery('#table-users').length) {
             jQuery('#table-users').DataTable({
                 ajax: {
-                    url: '/api/get-all-users',
+                    url: '<?= base_url('api/get-all-users') ?>',
                     data: function(data) {
                         return {
                             data: data

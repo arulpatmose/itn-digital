@@ -61,7 +61,7 @@
         if (jQuery('#table-commercials').length) {
             jQuery('#table-commercials').DataTable({
                 ajax: {
-                    url: '/api/get-all-commercials',
+                    url: '<?= base_url('api/get-all-commercials') ?>',
                     data: function(data) {
                         return {
                             data: data

@@ -55,7 +55,7 @@
         if (jQuery('#table-platforms').length) {
             jQuery('#table-platforms').DataTable({
                 ajax: {
-                    url: '/api/get-all-platforms',
+                    url: '<?= base_url('api/get-all-platforms') ?>',
                     data: function(data) {
                         return {
                             data: data

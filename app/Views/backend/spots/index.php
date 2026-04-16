@@ -56,7 +56,7 @@
         if (jQuery('#table-spots').length) {
             jQuery('#table-spots').DataTable({
                 ajax: {
-                    url: '/api/get-all-spots',
+                    url: '<?= base_url('api/get-all-spots') ?>',
                     data: function(data) {
                         return {
                             data: data

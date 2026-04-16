@@ -54,7 +54,7 @@
         if (jQuery('#table-formats').length) {
             jQuery('#table-formats').DataTable({
                 ajax: {
-                    url: '/api/get-all-formats',
+                    url: '<?= base_url('api/get-all-formats') ?>',
                     data: function(data) {
                         return {
                             data: data

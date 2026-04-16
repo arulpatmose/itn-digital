@@ -193,7 +193,7 @@
         if (jQuery('#table-schedules').length) {
             var tableSchedules = jQuery('#table-schedules').DataTable({
                 ajax: {
-                    url: '/api/get-all-schedules',
+                    url: '<?= base_url('api/get-all-schedules') ?>',
                     data: function(data) {
                         // Custom filter values
                         var dateRange = $('#schedule-date-range').val();

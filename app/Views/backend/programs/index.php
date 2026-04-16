@@ -56,7 +56,7 @@
         if (jQuery('#table-programs').length) {
             jQuery('#table-programs').DataTable({
                 ajax: {
-                    url: '/api/get-all-programs',
+                    url: '<?= base_url('api/get-all-programs') ?>',
                     data: function(data) {
                         return {
                             data: data

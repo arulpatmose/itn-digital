@@ -154,7 +154,7 @@ jQuery(document).ready(function () {
             placeholder: el.data('placeholder') || false,
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             ajax: {
-                url: '/api/get-select-options',
+                url: _AppUri + '/api/get-select-options',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -185,7 +185,7 @@ jQuery(document).ready(function () {
             placeholder: el.data('placeholder') || false,
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             ajax: {
-                url: '/api/get-select-options',
+                url: _AppUri + '/api/get-select-options',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -215,7 +215,7 @@ jQuery(document).ready(function () {
             placeholder: el.data('placeholder') || false,
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             ajax: {
-                url: '/api/get-select-options',
+                url: _AppUri + '/api/get-select-options',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -257,7 +257,7 @@ jQuery(document).ready(function () {
             placeholder: el.data('placeholder') || false,
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             ajax: {
-                url: '/api/get-select-options',
+                url: _AppUri + '/api/get-select-options',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -290,7 +290,7 @@ jQuery(document).ready(function () {
             placeholder: el.data('placeholder') || false,
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             ajax: {
-                url: '/api/get-select-options',
+                url: _AppUri + '/api/get-select-options',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -323,7 +323,7 @@ jQuery(document).ready(function () {
             placeholder: el.data('placeholder') || false,
             dropdownParent: document.querySelector(el.data('container') || '#page-container'),
             ajax: {
-                url: '/api/get-select-options',
+                url: _AppUri + '/api/get-select-options',
                 type: "post",
                 dataType: 'json',
                 delay: 250,

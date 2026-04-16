@@ -141,7 +141,7 @@
         if (jQuery('#table-schedule-budget').length) {
             var tableScheduleBudget = jQuery('#table-schedule-budget').DataTable({
                 ajax: {
-                    url: '/api/get-schedules-budget',
+                    url: '<?= base_url('api/get-schedules-budget') ?>',
                     data: function(data) {
                         // Custom filter values
                         var dateRange = $('#schedule-date-range').val();

@@ -54,7 +54,7 @@
         if (jQuery('#table-clients').length) {
             jQuery('#table-clients').DataTable({
                 ajax: {
-                    url: '/api/get-all-clients',
+                    url: '<?= base_url('api/get-all-clients') ?>',
                     data: function(data) {
                         return {
                             data: data

@@ -52,7 +52,7 @@
         if (jQuery('#table-activity-log').length) {
             jQuery('#table-activity-log').DataTable({
                 ajax: {
-                    url: '/api/get-all-activity-logs',
+                    url: '<?= base_url('api/get-all-activity-logs') ?>',
                     data: function(data) {
                         return {
                             data: data
