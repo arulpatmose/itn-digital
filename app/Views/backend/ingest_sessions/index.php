@@ -45,7 +45,7 @@
                                             <?php
                                             $statusClass = match ($s['status']) {
                                                 'open'    => 'bg-success',
-                                                'partial' => 'bg-warning text-dark',
+                                                'partial' => 'bg-warning',
                                                 'closed'  => 'bg-secondary',
                                                 default   => 'bg-dark',
                                             };

@@ -87,7 +87,7 @@
                                             $txClass = match ($tx['transaction_type']) {
                                                 'RECEIVE'  => 'bg-success',
                                                 'TRANSFER' => 'bg-info',
-                                                'HANDOVER' => 'bg-warning text-dark',
+                                                'HANDOVER' => 'bg-warning',
                                                 'INGEST'   => 'bg-primary',
                                                 'RETURN'   => 'bg-secondary',
                                                 default    => 'bg-dark',

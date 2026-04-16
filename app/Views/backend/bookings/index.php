@@ -117,7 +117,7 @@
                                                 'approved'  => 'bg-success',
                                                 'rejected'  => 'bg-danger',
                                                 'cancelled' => 'bg-secondary',
-                                                default     => 'bg-warning text-dark',
+                                                default     => 'bg-warning',
                                             };
                                             ?>
                                             <span class="badge <?= $statusClass ?>"><?= ucfirst($b['status']) ?></span>
@@ -198,28 +198,28 @@
             });
         <?php endif; ?>
 
-        // Initialise Select2 on each filter
-        ['#booking-filter-resource', '#booking-filter-purpose', '#booking-filter-user', '#booking-filter-status'].forEach(function(sel) {
-            $(sel).select2({
-                placeholder: $(sel).data('placeholder') || 'All',
-                dropdownParent: document.querySelector('#page-container')
+            // Initialise Select2 on each filter
+            ['#booking-filter-resource', '#booking-filter-purpose', '#booking-filter-user', '#booking-filter-status'].forEach(function(sel) {
+                $(sel).select2({
+                    placeholder: $(sel).data('placeholder') || 'All',
+                    dropdownParent: document.querySelector('#page-container')
+                });
             });
-        });
 
         // Custom DataTables search using data-* attributes on <tr>
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             if (settings.nTable.id !== 'table-bookings') return true;
 
-            var row        = $(settings.aoData[dataIndex].nTr);
+            var row = $(settings.aoData[dataIndex].nTr);
             var resourceId = $('#booking-filter-resource').val();
-            var purposeId  = $('#booking-filter-purpose').val();
-            var userId     = $('#booking-filter-user').val();
-            var status     = $('#booking-filter-status').val();
+            var purposeId = $('#booking-filter-purpose').val();
+            var userId = $('#booking-filter-user').val();
+            var status = $('#booking-filter-status').val();
 
             if (resourceId && row.data('resource-id') != resourceId) return false;
-            if (purposeId  && row.data('purpose-id')  != purposeId)  return false;
-            if (userId     && row.data('user-id')     != userId)      return false;
-            if (status     && row.data('status')      !== status)     return false;
+            if (purposeId && row.data('purpose-id') != purposeId) return false;
+            if (userId && row.data('user-id') != userId) return false;
+            if (status && row.data('status') !== status) return false;
 
             return true;
         });

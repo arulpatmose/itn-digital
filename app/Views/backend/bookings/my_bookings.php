@@ -57,7 +57,7 @@
                                                 'approved'  => 'bg-success',
                                                 'rejected'  => 'bg-danger',
                                                 'cancelled' => 'bg-secondary',
-                                                default     => 'bg-warning text-dark',
+                                                default     => 'bg-warning',
                                             };
                                             ?>
                                             <span class="badge <?= $statusClass ?>"><?= ucfirst($b['status']) ?></span>

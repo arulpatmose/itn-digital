@@ -1,4 +1,6 @@
-<?php /** @var array $participants */ ?>
+<?php
+
+/** @var array $participants */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -36,10 +38,10 @@
                                         <td><strong><?= esc($p['name']) ?></strong></td>
                                         <td>
                                             <?php
-                                            $typeClass = match($p['type']) {
+                                            $typeClass = match ($p['type']) {
                                                 'ingestor'   => 'bg-primary',
                                                 'producer'   => 'bg-info',
-                                                'librarian'  => 'bg-warning text-dark',
+                                                'librarian'  => 'bg-warning',
                                                 default      => 'bg-secondary',
                                             };
                                             ?>
@@ -56,8 +58,8 @@
                                             <div class="btn-group">
                                                 <?php if (auth()->user()->can('participants.edit')): ?>
                                                     <a href="<?= base_url('participants/edit/' . $p['id']) ?>"
-                                                       class="btn btn-sm btn-success" title="Edit"
-                                                       data-bs-toggle="tooltip">
+                                                        class="btn btn-sm btn-success" title="Edit"
+                                                        data-bs-toggle="tooltip">
                                                         <i class="fa fa-pencil-alt"></i>
                                                     </a>
                                                 <?php endif; ?>
@@ -84,60 +86,90 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
-$(function () {
-    <?php if ($flash = session()->getFlashdata('success')): ?>
-    Swal.fire({ icon: 'success', title: 'Success', text: <?= json_encode($flash) ?>, confirmButtonColor: '#28a745' });
-    <?php endif; ?>
-    <?php if ($flash = session()->getFlashdata('error')): ?>
-    Swal.fire({ icon: 'error', title: 'Error', text: <?= json_encode($flash) ?>, confirmButtonColor: '#dc3545' });
-    <?php endif; ?>
-
-    var table = $('#table-participants').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 25,
-        autoWidth: false,
-        responsive: true,
-        stateSave: true,
-        order: [[1, 'asc']],
-        columnDefs: [{ targets: 'noOrder', orderable: false }],
-        drawCallback: function () {
-            var api = this.api();
-            var start = api.page.info().start;
-            api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
-                cell.innerHTML = start + i + 1;
+    $(function() {
+        <?php if ($flash = session()->getFlashdata('success')): ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#28a745'
             });
-        }
-    });
+        <?php endif; ?>
+        <?php if ($flash = session()->getFlashdata('error')): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#dc3545'
+            });
+        <?php endif; ?>
 
-    $(document).on('click', '.btn-delete-participant', function () {
-        var id   = $(this).data('id');
-        var name = $(this).data('name');
-        Swal.fire({
-            icon: 'warning',
-            title: 'Delete ' + name + '?',
-            text: 'This cannot be undone.',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete',
-            confirmButtonColor: '#dc3545',
-        }).then(function (result) {
-            if (!result.isConfirmed) return;
-            $.ajax({
-                url: '<?= base_url('participants/delete') ?>',
-                type: 'POST',
-                data: { id: id },
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status === 'success') {
-                        table.row($('.btn-delete-participant[data-id="' + id + '"]').closest('tr')).remove().draw(false);
-                        toast.fire({ icon: 'success', title: res.message });
-                    } else {
-                        toast.fire({ icon: 'error', title: res.message });
+        var table = $('#table-participants').DataTable({
+            pagingType: 'full_numbers',
+            pageLength: 25,
+            autoWidth: false,
+            responsive: true,
+            stateSave: true,
+            order: [
+                [1, 'asc']
+            ],
+            columnDefs: [{
+                targets: 'noOrder',
+                orderable: false
+            }],
+            drawCallback: function() {
+                var api = this.api();
+                var start = api.page.info().start;
+                api.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = start + i + 1;
+                });
+            }
+        });
+
+        $(document).on('click', '.btn-delete-participant', function() {
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Delete ' + name + '?',
+                text: 'This cannot be undone.',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete',
+                confirmButtonColor: '#dc3545',
+            }).then(function(result) {
+                if (!result.isConfirmed) return;
+                $.ajax({
+                    url: '<?= base_url('participants/delete') ?>',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.status === 'success') {
+                            table.row($('.btn-delete-participant[data-id="' + id + '"]').closest('tr')).remove().draw(false);
+                            toast.fire({
+                                icon: 'success',
+                                title: res.message
+                            });
+                        } else {
+                            toast.fire({
+                                icon: 'error',
+                                title: res.message
+                            });
+                        }
+                    },
+                    error: function() {
+                        toast.fire({
+                            icon: 'error',
+                            title: 'An error occurred.'
+                        });
                     }
-                },
-                error: function () { toast.fire({ icon: 'error', title: 'An error occurred.' }); }
+                });
             });
         });
     });
-});
 </script>
 <?= $this->endSection() ?>

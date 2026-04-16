@@ -73,7 +73,7 @@
                             </span>
                         </div>
                         <div class="col-auto">
-                            <span class="badge <?= $pending_count > 0 ? 'bg-warning text-dark' : 'bg-secondary' ?>">
+                            <span class="badge <?= $pending_count > 0 ? 'bg-warning' : 'bg-secondary' ?>">
                                 <?= $pending_count ?> pending
                             </span>
                         </div>
@@ -121,7 +121,7 @@
                                         <?php if ($m['recorded']): ?>
                                             <span class="badge bg-success">Recorded</span>
                                         <?php else: ?>
-                                            <span class="badge bg-warning text-dark">Pending</span>
+                                            <span class="badge bg-warning">Pending</span>
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-center">
@@ -174,55 +174,55 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
-$(function () {
+    $(function() {
 
-    // Flash messages via SweetAlert2
-    <?php if ($flash = session()->getFlashdata('success')): ?>
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: <?= json_encode($flash) ?>,
-        confirmButtonColor: '#28a745',
-    });
-    <?php endif; ?>
+        // Flash messages via SweetAlert2
+        <?php if ($flash = session()->getFlashdata('success')): ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#28a745',
+            });
+        <?php endif; ?>
 
-    <?php if ($flash = session()->getFlashdata('error')): ?>
-    Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: <?= json_encode($flash) ?>,
-        confirmButtonColor: '#dc3545',
-    });
-    <?php endif; ?>
+        <?php if ($flash = session()->getFlashdata('error')): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#dc3545',
+            });
+        <?php endif; ?>
 
-    // Intercept all confirm forms
-    $(document).on('submit', '.swal-confirm-form', function (e) {
-        e.preventDefault();
+        // Intercept all confirm forms
+        $(document).on('submit', '.swal-confirm-form', function(e) {
+            e.preventDefault();
 
-        var $form    = $(this);
-        var title    = $form.data('swal-title')        || 'Are you sure?';
-        var html     = $form.data('swal-html')         || '';
-        var icon     = $form.data('swal-icon')         || 'warning';
-        var btnText  = $form.data('swal-confirm-text') || 'Yes, proceed';
-        var btnColor = $form.data('swal-confirm-color')|| '#3085d6';
+            var $form = $(this);
+            var title = $form.data('swal-title') || 'Are you sure?';
+            var html = $form.data('swal-html') || '';
+            var icon = $form.data('swal-icon') || 'warning';
+            var btnText = $form.data('swal-confirm-text') || 'Yes, proceed';
+            var btnColor = $form.data('swal-confirm-color') || '#3085d6';
 
-        Swal.fire({
-            title: title,
-            html: html,
-            icon: icon,
-            showCancelButton: true,
-            confirmButtonColor: btnColor,
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: btnText,
-            cancelButtonText: 'Cancel',
-            reverseButtons: true,
-        }).then(function (result) {
-            if (result.isConfirmed) {
-                $form[0].submit();
-            }
+            Swal.fire({
+                title: title,
+                html: html,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: btnColor,
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: btnText,
+                cancelButtonText: 'Cancel',
+                reverseButtons: true,
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    $form[0].submit();
+                }
+            });
         });
-    });
 
-});
+    });
 </script>
 <?= $this->endSection() ?>

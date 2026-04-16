@@ -78,7 +78,7 @@
                                             $typeClass = match ($chip['chip_type']) {
                                                 'SXS'     => 'bg-primary',
                                                 'SD'      => 'bg-info',
-                                                'MicroSD' => 'bg-warning text-dark',
+                                                'MicroSD' => 'bg-warning',
                                                 default   => 'bg-secondary',
                                             };
                                             ?>
@@ -97,7 +97,7 @@
                                                 <span class="text-muted">Unassigned</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?= $chip['holder_type'] ? '<span class="badge bg-secondary">' . esc($chip['holder_type'] === 'librarian' ? 'library' : $chip['holder_type']) . '</span>' : ($chip['last_tx_type'] === 'INGEST' ? '<span class="badge bg-warning text-dark">ingest</span>' : '—') ?></td>
+                                        <td><?= $chip['holder_type'] ? '<span class="badge bg-secondary">' . esc($chip['holder_type'] === 'librarian' ? 'library' : $chip['holder_type']) . '</span>' : ($chip['last_tx_type'] === 'INGEST' ? '<span class="badge bg-warning">ingest</span>' : '—') ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url('reports/chip-history/' . $chip['id']) ?>"
                                                 class="btn btn-sm btn-alt-secondary">
