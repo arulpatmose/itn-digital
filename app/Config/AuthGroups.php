@@ -81,6 +81,10 @@ class AuthGroups extends ShieldAuthGroups
             'title'       => 'Booking User',
             'description' => 'General staff member who can request, view, and cancel their own resource bookings.',
         ],
+        'ingestor' => [
+            'title'       => 'Ingestor',
+            'description' => 'Handles chip tracking, ingest sessions, and all related chip transactions.',
+        ],
         'secretary' => [
             'title'       => 'Secretary',
             'description' => 'Requests bookings on behalf of users or departments.',
@@ -201,6 +205,28 @@ class AuthGroups extends ShieldAuthGroups
         'resource_type.edit'     => 'Can edit resource types',
         'resource_type.delete'   => 'Can delete resource types',
 
+        // 📼 Chip Tracking & Ingest
+        'chips.view'                => 'Can view chips and current holders',
+        'chips.create'              => 'Can register new chips',
+        'chips.edit'                => 'Can edit chip details',
+        'chips.delete'              => 'Can delete chips',
+        'participants.view'         => 'Can view participants (staff, producers, library)',
+        'participants.create'       => 'Can create participants',
+        'participants.edit'         => 'Can edit participants',
+        'participants.delete'       => 'Can delete participants',
+        'transactions.view'         => 'Can view chip transaction history',
+        'transactions.create'       => 'Can create chip transactions',
+        'transactions.receive'      => 'Can record chip receipts',
+        'transactions.transfer'     => 'Can transfer chips between participants',
+        'transactions.handover'     => 'Can hand over chips to producers or library',
+        'transactions.ingest'       => 'Can ingest chips into a session',
+        'transactions.return'       => 'Can record chip returns',
+        'ingest_sessions.view'      => 'Can view ingest sessions',
+        'ingest_sessions.create'    => 'Can create ingest sessions',
+        'ingest_sessions.edit'      => 'Can edit ingest sessions',
+        'ingest_sessions.close'     => 'Can close ingest sessions',
+        'ingest.reports'            => 'Can view chip and ingest reports',
+
     ];
 
     /**
@@ -232,6 +258,11 @@ class AuthGroups extends ShieldAuthGroups
             'booking_purpose_group.*',
             'booking_purpose.*',
             'booking.*',
+            'chips.*',
+            'participants.*',
+            'transactions.*',
+            'ingest_sessions.*',
+            'ingest.reports',
         ],
         'admin' => [
             'admin.access',
@@ -257,6 +288,19 @@ class AuthGroups extends ShieldAuthGroups
             'booking.edit',
             'booking.cancel',
             'booking.approve',
+            'chips.*',
+            'participants.*',
+            'transactions.*',
+            'ingest_sessions.*',
+            'ingest.reports',
+        ],
+        'ingestor' => [
+            'dashboard.*',
+            'chips.*',
+            'participants.*',
+            'transactions.*',
+            'ingest_sessions.*',
+            'ingest.reports',
         ],
         'developer' => [
             'admin.access',

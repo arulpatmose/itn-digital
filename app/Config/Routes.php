@@ -274,6 +274,60 @@ $routes->group('booking-purposes', ['filter' => 'permission:booking_purpose.acce
 
 /*
 | --------------------------------------------------------------------
+| Chip Tracking Routes
+| --------------------------------------------------------------------
+*/
+$routes->group('chips', ['filter' => 'permission:chips.view'], function ($routes) {
+    $routes->get('/', 'Chips::index', ['as' => 'chips']);
+    $routes->get('create', 'Chips::create', ['filter' => 'permission:chips.create']);
+    $routes->post('store', 'Chips::store', ['filter' => 'permission:chips.create']);
+    $routes->get('edit/(:num)', 'Chips::edit/$1', ['filter' => 'permission:chips.edit']);
+    $routes->post('update/(:num)', 'Chips::update/$1', ['filter' => 'permission:chips.edit']);
+    $routes->get('detail/(:num)', 'Chips::detail/$1');
+    $routes->post('delete', 'Chips::destroy', ['filter' => 'permission:chips.delete']);
+    $routes->get('api-list', 'Chips::apiList');
+});
+
+$routes->group('participants', ['filter' => 'permission:participants.view'], function ($routes) {
+    $routes->get('/', 'Participants::index', ['as' => 'participants']);
+    $routes->get('create', 'Participants::create', ['filter' => 'permission:participants.create']);
+    $routes->post('store', 'Participants::store', ['filter' => 'permission:participants.create']);
+    $routes->get('edit/(:num)', 'Participants::edit/$1', ['filter' => 'permission:participants.edit']);
+    $routes->post('update/(:num)', 'Participants::update/$1', ['filter' => 'permission:participants.edit']);
+    $routes->post('delete', 'Participants::destroy', ['filter' => 'permission:participants.delete']);
+    $routes->get('api-list', 'Participants::apiList');
+});
+
+$routes->group('transactions', ['filter' => 'permission:transactions.view'], function ($routes) {
+    $routes->get('/', 'Transactions::index', ['as' => 'transactions']);
+    $routes->get('receive', 'Transactions::receive', ['filter' => 'permission:transactions.receive']);
+    $routes->post('receive', 'Transactions::receive', ['filter' => 'permission:transactions.receive']);
+    $routes->get('transfer', 'Transactions::transfer', ['filter' => 'permission:transactions.transfer']);
+    $routes->post('transfer', 'Transactions::transfer', ['filter' => 'permission:transactions.transfer']);
+    $routes->get('handover', 'Transactions::handover', ['filter' => 'permission:transactions.handover']);
+    $routes->post('handover', 'Transactions::handover', ['filter' => 'permission:transactions.handover']);
+    $routes->get('ingest', 'Transactions::ingest', ['filter' => 'permission:transactions.ingest']);
+    $routes->post('ingest', 'Transactions::ingest', ['filter' => 'permission:transactions.ingest']);
+    $routes->get('return', 'Transactions::returnChips', ['filter' => 'permission:transactions.return']);
+    $routes->post('return', 'Transactions::returnChips', ['filter' => 'permission:transactions.return']);
+});
+
+$routes->group('ingest-sessions', ['filter' => 'permission:ingest_sessions.view'], function ($routes) {
+    $routes->get('/', 'IngestSessions::index', ['as' => 'ingest_sessions']);
+    $routes->get('create', 'IngestSessions::create', ['filter' => 'permission:ingest_sessions.create']);
+    $routes->post('store', 'IngestSessions::store', ['filter' => 'permission:ingest_sessions.create']);
+    $routes->get('(:num)', 'IngestSessions::view/$1');
+    $routes->post('(:num)/ingest-chips', 'IngestSessions::ingestChips/$1', ['filter' => 'permission:transactions.ingest']);
+    $routes->post('(:num)/close', 'IngestSessions::close/$1', ['filter' => 'permission:ingest_sessions.close']);
+});
+
+$routes->group('reports', ['filter' => 'permission:ingest.reports'], function ($routes) {
+    $routes->get('chip-history/(:num)', 'ChipReports::chipHistory/$1');
+    $routes->get('chips-overview', 'ChipReports::overview');
+});
+
+/*
+| --------------------------------------------------------------------
 | API Service Routes
 | --------------------------------------------------------------------
 */

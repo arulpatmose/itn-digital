@@ -336,6 +336,104 @@ class Template extends BaseConfig
         ),
         array(
             'type' => 'nav-section',
+            'name' => 'Ingest',
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Chips',
+            'icon'       => 'fa fa-memory',
+            'permission' => 'chips.view',
+            'sub'        => array(
+                array(
+                    'name'       => 'All Chips',
+                    'url'        => 'chips',
+                    'permission' => 'chips.view',
+                ),
+                array(
+                    'name'       => 'Register Chip',
+                    'url'        => 'chips/create',
+                    'permission' => 'chips.create',
+                ),
+            )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Participants',
+            'icon'       => 'fa fa-users',
+            'permission' => 'participants.view',
+            'sub'        => array(
+                array(
+                    'name'       => 'All Participants',
+                    'url'        => 'participants',
+                    'permission' => 'participants.view',
+                ),
+                array(
+                    'name'       => 'Add Participant',
+                    'url'        => 'participants/create',
+                    'permission' => 'participants.create',
+                ),
+            )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Transactions',
+            'icon'       => 'fa fa-exchange-alt',
+            'permission' => 'transactions.view',
+            'sub'        => array(
+                array(
+                    'name'       => 'Transaction Log',
+                    'url'        => 'transactions',
+                    'permission' => 'transactions.view',
+                ),
+                array(
+                    'name'       => 'Receive',
+                    'url'        => 'transactions/receive',
+                    'permission' => 'transactions.receive',
+                ),
+                array(
+                    'name'       => 'Transfer',
+                    'url'        => 'transactions/transfer',
+                    'permission' => 'transactions.transfer',
+                ),
+                array(
+                    'name'       => 'Handover',
+                    'url'        => 'transactions/handover',
+                    'permission' => 'transactions.handover',
+                ),
+                array(
+                    'name'       => 'Return',
+                    'url'        => 'transactions/return',
+                    'permission' => 'transactions.return',
+                ),
+            )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Ingest Sessions',
+            'icon'       => 'fa fa-layer-group',
+            'permission' => 'ingest_sessions.view',
+            'sub'        => array(
+                array(
+                    'name'       => 'All Sessions',
+                    'url'        => 'ingest-sessions',
+                    'permission' => 'ingest_sessions.view',
+                ),
+                array(
+                    'name'       => 'New Session',
+                    'url'        => 'ingest-sessions/create',
+                    'permission' => 'ingest_sessions.create',
+                ),
+            )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Chip Reports',
+            'icon'       => 'fa fa-chart-bar',
+            'url'        => 'reports/chips-overview',
+            'permission' => 'ingest.reports',
+        ),
+        array(
+            'type' => 'nav-section',
             'name' => 'Administration',
         ),
         array(
