@@ -37,9 +37,13 @@
 
                         <dt class="col-sm-4">Holder</dt>
                         <dd class="col-sm-8">
-                            <?= $chip['holder_name']
-                                ? esc($chip['holder_name']) . ' <span class="badge bg-secondary">' . esc($chip['holder_type']) . '</span>'
-                                : '<span class="text-muted">Unassigned</span>' ?>
+                            <?php if ($chip['holder_name']): ?>
+                                <?= esc($chip['holder_name']) ?> <span class="badge bg-secondary"><?= esc($chip['holder_type']) ?></span>
+                            <?php elseif (($chip['last_tx_type'] ?? '') === 'INGEST' && !empty($chip['ingest_session_title'])): ?>
+                                <span class="text-warning"><i class="fa fa-download fa-fw"></i> At Ingest: <?= esc($chip['ingest_session_title']) ?></span>
+                            <?php else: ?>
+                                <span class="text-muted">Unassigned</span>
+                            <?php endif; ?>
                         </dd>
 
                         <?php if (!empty($chip['notes'])): ?>

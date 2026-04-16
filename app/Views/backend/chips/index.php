@@ -45,8 +45,16 @@
                                             ?>
                                             <span class="badge <?= $typeClass ?>"><?= esc($chip['chip_type']) ?></span>
                                         </td>
-                                        <td><?= $chip['holder_name'] ? esc($chip['holder_name']) : '<span class="text-muted">—</span>' ?></td>
-                                        <td><?= $chip['holder_type'] ? '<span class="badge bg-secondary">' . esc($chip['holder_type']) . '</span>' : '—' ?></td>
+                                        <td>
+                                            <?php if ($chip['holder_name']): ?>
+                                                <?= esc($chip['holder_name']) ?>
+                                            <?php elseif ($chip['last_tx_type'] === 'INGEST' && $chip['ingest_session_title']): ?>
+                                                <span class="text-warning"><i class="fa fa-download fa-fw"></i> At Ingest: <?= esc($chip['ingest_session_title']) ?></span>
+                                            <?php else: ?>
+                                                <span class="text-muted">—</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= $chip['holder_type'] ? '<span class="badge bg-secondary">' . esc($chip['holder_type']) . '</span>' : ($chip['last_tx_type'] === 'INGEST' ? '<span class="badge bg-warning text-dark">ingest</span>' : '—') ?></td>
                                         <td class="text-muted small"><?= esc($chip['notes'] ?? '—') ?></td>
                                         <td class="text-center">
                                             <div class="btn-group">

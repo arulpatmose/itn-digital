@@ -25,7 +25,9 @@ class ChipModel extends Model
                 p.name AS holder_name,
                 p.type AS holder_type,
                 ct.transaction_type AS last_tx_type,
-                ct.created_at       AS last_tx_at
+                ct.created_at       AS last_tx_at,
+                s.id    AS ingest_session_id,
+                s.title AS ingest_session_title
             FROM chips c
             LEFT JOIN (
                 SELECT ti.chip_id, MAX(ct2.id) AS max_tx_id
@@ -35,6 +37,7 @@ class ChipModel extends Model
             ) latest ON latest.chip_id = c.id
             LEFT JOIN chip_transactions ct ON ct.id = latest.max_tx_id
             LEFT JOIN participants p ON p.id = ct.to_participant_id
+            LEFT JOIN ingest_sessions s ON s.id = ct.ingest_session_id
             ORDER BY c.chip_type, c.chip_code
         ")->getResultArray();
     }
@@ -51,7 +54,9 @@ class ChipModel extends Model
                 p.name AS holder_name,
                 p.type AS holder_type,
                 ct.transaction_type AS last_tx_type,
-                ct.created_at       AS last_tx_at
+                ct.created_at       AS last_tx_at,
+                s.id    AS ingest_session_id,
+                s.title AS ingest_session_title
             FROM chips c
             LEFT JOIN (
                 SELECT ti.chip_id, MAX(ct2.id) AS max_tx_id
@@ -62,6 +67,7 @@ class ChipModel extends Model
             ) latest ON latest.chip_id = c.id
             LEFT JOIN chip_transactions ct ON ct.id = latest.max_tx_id
             LEFT JOIN participants p ON p.id = ct.to_participant_id
+            LEFT JOIN ingest_sessions s ON s.id = ct.ingest_session_id
             WHERE c.id = ?
         ", [$chipId, $chipId])->getRowArray() ?: null;
     }
