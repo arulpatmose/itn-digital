@@ -1,8 +1,9 @@
-<?php /** @var array $session, $chips, $participants */ ?>
+<?php /** @var array $session, $chips, $producers, $progress */ ?>
 
 <?= $this->extend('default') ?>
 
 <?= $this->section('content') ?>
+<?php $isActive = in_array($session['status'], ['open', 'partial']); ?>
 <div class="content">
     <div class="row">
         <!-- Session Info -->
@@ -35,8 +36,8 @@
                         </dd>
 
                         <?php if (!empty($session['ingest_location'])): ?>
-                        <dt class="col-sm-4">Location</dt>
-                        <dd class="col-sm-8"><?= esc($session['ingest_location']) ?></dd>
+                        <dt class="col-sm-4">Ingest Path</dt>
+                        <dd class="col-sm-8 text-break"><?= esc($session['ingest_location']) ?></dd>
                         <?php endif; ?>
 
                         <dt class="col-sm-4">Created By</dt>
@@ -51,12 +52,31 @@
                         <?php endif; ?>
                     </dl>
 
-                    <?php if ($session['status'] === 'open' && auth()->user()->can('ingest_sessions.close')): ?>
+                    <?php if ($progress['total'] > 0): ?>
                     <hr>
-                    <div class="d-flex gap-2">
+                    <div class="mb-1 d-flex justify-content-between">
+                        <small class="text-muted">Copy progress</small>
+                        <small id="progress-label"><strong><?= $progress['done'] ?></strong> / <?= $progress['total'] ?> done</small>
+                    </div>
+                    <div class="progress" style="height:8px;">
+                        <?php $pct = $progress['total'] ? round($progress['done'] / $progress['total'] * 100) : 0; ?>
+                        <div class="progress-bar bg-success" id="progress-bar" role="progressbar"
+                             style="width:<?= $pct ?>%"></div>
+                    </div>
+                    <?php endif; ?>
+
+                    <?php if (auth()->user()->can('ingest_sessions.close')): ?>
+                    <hr>
+                    <?php if ($isActive): ?>
+                    <div class="d-flex gap-2 flex-wrap" id="close-buttons">
                         <button class="btn btn-sm btn-secondary btn-close-session" data-status="closed">Mark Closed</button>
                         <button class="btn btn-sm btn-warning btn-close-session" data-status="partial">Mark Partial</button>
                     </div>
+                    <?php else: ?>
+                    <button class="btn btn-sm btn-warning" id="btn-resume-session">
+                        <i class="fa fa-rotate-right me-1"></i> Resume Session
+                    </button>
+                    <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -65,23 +85,27 @@
         <!-- Chips in session + quick ingest -->
         <div class="col-12 col-lg-8">
 
-            <?php if ($session['status'] === 'open' && auth()->user()->can('transactions.ingest')): ?>
+            <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
             <div class="block block-rounded">
                 <div class="block-header block-header-default">
-                    <h3 class="block-title">Quick Ingest</h3>
+                    <h3 class="block-title">
+                        Quick Ingest
+                        <?php if ($session['status'] === 'partial'): ?>
+                            <span class="badge bg-warning text-dark ms-2 fs-xs">Resuming</span>
+                        <?php endif; ?>
+                    </h3>
                 </div>
                 <div class="block-content pb-3">
                     <div class="row g-3 align-items-end">
                         <div class="col-12 col-md-5">
                             <label class="form-label mb-1">Chips</label>
-                            <select class="form-select select2-chips" id="quick-chip-ids" name="chip_ids[]" multiple>
-                            </select>
+                            <select class="form-select select2-chips" id="quick-chip-ids" name="chip_ids[]" multiple></select>
                         </div>
                         <div class="col-12 col-md-4">
-                            <label class="form-label mb-1">From <small class="text-muted">(optional)</small></label>
-                            <select class="form-select" id="quick-from-participant">
+                            <label class="form-label mb-1">Producer <small class="text-muted">(optional)</small></label>
+                            <select class="form-select select2-producer" id="quick-from-participant">
                                 <option value="">— Unknown —</option>
-                                <?php foreach ($participants as $p): ?>
+                                <?php foreach ($producers as $p): ?>
                                     <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -118,11 +142,12 @@
                                     <th>From</th>
                                     <th>Ingested At</th>
                                     <th>By</th>
+                                    <th class="text-center">Copy Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($chips as $i => $chip): ?>
-                                    <tr>
+                                    <tr id="chip-row-<?= $chip['item_id'] ?>">
                                         <td class="text-muted"><?= $i + 1 ?></td>
                                         <td>
                                             <a href="<?= base_url('chips/detail/' . $chip['id']) ?>">
@@ -143,6 +168,27 @@
                                         <td><?= $chip['from_name'] ? esc($chip['from_name']) : '<span class="text-muted">—</span>' ?></td>
                                         <td class="text-nowrap"><?= date('d M Y H:i', strtotime($chip['ingested_at'])) ?></td>
                                         <td><?= esc($chip['handler_name'] ?? '—') ?></td>
+                                        <td class="text-center">
+                                            <?php if ($chip['copy_status'] === 'done'): ?>
+                                                <span class="badge bg-success me-1">Copied</span>
+                                                <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
+                                                <button class="btn btn-xs btn-alt-secondary btn-toggle-status"
+                                                        data-item="<?= $chip['item_id'] ?>" data-status="pending"
+                                                        title="Mark as pending">
+                                                    <i class="fa fa-undo"></i>
+                                                </button>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary me-1">Pending</span>
+                                                <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
+                                                <button class="btn btn-xs btn-alt-success btn-toggle-status"
+                                                        data-item="<?= $chip['item_id'] ?>" data-status="done"
+                                                        title="Mark as copied">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -173,10 +219,12 @@ $(function () {
             order: [[4, 'desc']],
             autoWidth: false,
             responsive: true,
+            columnDefs: [{ orderable: false, targets: 6 }],
         });
     }
 
-    // Select2 chip picker
+    $('.select2-producer').select2({ placeholder: 'Search producer…', allowClear: true, width: '100%' });
+
     $('#quick-chip-ids').select2({
         placeholder: 'Search chips…',
         minimumInputLength: 1,
@@ -189,7 +237,59 @@ $(function () {
         },
     });
 
-    // Quick ingest submit
+    // ── Copy status toggle ────────────────────────────────────────────────────
+    var chipStatusUrl = '<?= base_url('ingest-sessions/' . $session['id'] . '/chip-status') ?>';
+
+    $(document).on('click', '.btn-toggle-status', function () {
+        var $btn    = $(this);
+        var itemId  = $btn.data('item');
+        var status  = $btn.data('status');
+
+        $btn.prop('disabled', true);
+
+        $.post(chipStatusUrl, { item_id: itemId, status: status })
+        .done(function (res) {
+            var $row = $('#chip-row-' + itemId);
+            var isDone = res.new_status === 'done';
+
+            // Swap badge + button
+            var badge  = isDone
+                ? '<span class="badge bg-success me-1">Copied</span>'
+                : '<span class="badge bg-secondary me-1">Pending</span>';
+            var btnHtml = isDone
+                ? '<button class="btn btn-xs btn-alt-secondary btn-toggle-status" data-item="' + itemId + '" data-status="pending" title="Mark as pending"><i class="fa fa-undo"></i></button>'
+                : '<button class="btn btn-xs btn-alt-success btn-toggle-status" data-item="' + itemId + '" data-status="done" title="Mark as copied"><i class="fa fa-check"></i></button>';
+            $row.find('td:last').html(badge + btnHtml);
+
+            // Update progress
+            var done  = res.progress.done;
+            var total = res.progress.total;
+            var pct   = total ? Math.round(done / total * 100) : 0;
+            $('#progress-bar').css('width', pct + '%');
+            $('#progress-label').html('<strong>' + done + '</strong> / ' + total + ' done');
+
+            // All done prompt
+            if (res.all_done) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'All chips copied!',
+                    text: 'Every chip in this session has been marked as copied. Close the session now?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, close session',
+                    cancelButtonText: 'Not yet',
+                    confirmButtonColor: '#6c757d',
+                }).then(function (result) {
+                    if (result.isConfirmed) closeSession('closed');
+                });
+            }
+        })
+        .fail(function () {
+            toast.fire({ icon: 'error', title: 'Failed to update status.' });
+            $btn.prop('disabled', false);
+        });
+    });
+
+    // ── Quick ingest ──────────────────────────────────────────────────────────
     $('#btn-quick-ingest').on('click', function () {
         var chipIds = $('#quick-chip-ids').val();
         if (!chipIds || chipIds.length === 0) {
@@ -226,7 +326,52 @@ $(function () {
         });
     });
 
-    // Close session
+    // ── Resume session ────────────────────────────────────────────────────────
+    $('#btn-resume-session').on('click', function () {
+        Swal.fire({
+            icon: 'question',
+            title: 'Resume this session?',
+            text: 'The session will be set back to open and you can continue ingesting.',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, resume',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#e08500',
+        }).then(function (result) {
+            if (!result.isConfirmed) return;
+            $.post('<?= base_url('ingest-sessions/' . $session['id'] . '/resume') ?>')
+            .done(function (res) {
+                if (res.status === 'success') {
+                    toast.fire({ icon: 'success', title: res.message });
+                    setTimeout(function () { location.reload(); }, 1200);
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error', text: res.message });
+                }
+            })
+            .fail(function () {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Could not resume the session.' });
+            });
+        });
+    });
+
+    // ── Close session ─────────────────────────────────────────────────────────
+    function closeSession(status) {
+        $.ajax({
+            url: '<?= base_url('ingest-sessions/' . $session['id'] . '/close') ?>',
+            type: 'POST',
+            data: { status: status },
+            dataType: 'json',
+            success: function (res) {
+                if (res.status === 'success') {
+                    toast.fire({ icon: 'success', title: res.message });
+                    setTimeout(function () { location.reload(); }, 1200);
+                } else {
+                    toast.fire({ icon: 'error', title: res.message });
+                }
+            },
+            error: function () { toast.fire({ icon: 'error', title: 'An error occurred.' }); }
+        });
+    }
+
     $('.btn-close-session').on('click', function () {
         var status = $(this).data('status');
         var label  = status === 'closed' ? 'Close' : 'Mark as Partial';
@@ -237,25 +382,7 @@ $(function () {
             confirmButtonText: 'Yes, ' + label.toLowerCase(),
             confirmButtonColor: status === 'closed' ? '#6c757d' : '#e08500',
         }).then(function (result) {
-            if (!result.isConfirmed) return;
-            $.ajax({
-                url: '<?= base_url('ingest-sessions/' . $session['id'] . '/close') ?>',
-                type: 'POST',
-                data: { status: status },
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status === 'success') {
-                        toast.fire({ icon: 'success', title: res.message });
-                        $('.btn-close-session').hide();
-                        $('#quick-ingest-block').hide();
-                        var badgeClass = status === 'closed' ? 'bg-secondary' : 'bg-warning text-dark';
-                        $('#session-status-badge').removeClass().addClass('badge ' + badgeClass).text(status.charAt(0).toUpperCase() + status.slice(1));
-                    } else {
-                        toast.fire({ icon: 'error', title: res.message });
-                    }
-                },
-                error: function () { toast.fire({ icon: 'error', title: 'An error occurred.' }); }
-            });
+            if (result.isConfirmed) closeSession(status);
         });
     });
 });

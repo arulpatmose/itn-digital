@@ -33,7 +33,7 @@
                                         <option value="">— Select type —</option>
                                         <option value="staff"    <?= old('type') === 'staff'    ? 'selected' : '' ?>>Staff</option>
                                         <option value="producer" <?= old('type') === 'producer' ? 'selected' : '' ?>>Producer</option>
-                                        <option value="library"  <?= old('type') === 'library'  ? 'selected' : '' ?>>Library</option>
+                                        <option value="librarian" <?= old('type') === 'librarian' ? 'selected' : '' ?>>Librarian</option>
                                     </select>
                                 </div>
 

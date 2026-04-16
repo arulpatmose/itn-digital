@@ -46,14 +46,6 @@
                             </a>
                         </div>
                         <?php endif; ?>
-                        <?php if (auth()->user()->can('transactions.return')): ?>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <a href="<?= base_url('transactions/return') ?>" class="btn btn-secondary w-100 py-3">
-                                <i class="fa fa-undo d-block fs-3 mb-1"></i>
-                                Return
-                            </a>
-                        </div>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -104,7 +96,15 @@
                                         <td><?= (int) $tx['chip_count'] ?></td>
                                         <td><?= $tx['from_name'] ? esc($tx['from_name']) : '<span class="text-muted">—</span>' ?></td>
                                         <td><?= $tx['to_name']   ? esc($tx['to_name'])   : '<span class="text-muted">—</span>' ?></td>
-                                        <td><?= $tx['session_title'] ? esc($tx['session_title']) : '<span class="text-muted">—</span>' ?></td>
+                                        <td>
+                                            <?php if ($tx['session_title'] && $tx['ingest_session_id']): ?>
+                                                <a href="<?= base_url('ingest-sessions/' . $tx['ingest_session_id']) ?>">
+                                                    <?= esc($tx['session_title']) ?>
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-muted">—</span>
+                                            <?php endif; ?>
+                                        </td>
                                         <td><?= esc($tx['handler_name'] ?? '—') ?></td>
                                         <td class="text-muted small"><?= esc($tx['remarks'] ?? '—') ?></td>
                                     </tr>

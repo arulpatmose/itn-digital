@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\IngestSessionModel;
 use App\Models\ChipModel;
 use App\Models\ParticipantModel;
+use App\Models\TransactionItemModel;
 use App\Services\IngestSessionService;
 use App\Services\TransactionService;
 
@@ -14,14 +15,19 @@ class IngestSessions extends BaseController
     protected IngestSessionModel   $sessionModel;
     protected ChipModel            $chipModel;
     protected ParticipantModel     $participantModel;
+    protected TransactionItemModel $itemModel;
     protected IngestSessionService $sessionService;
     protected TransactionService   $txService;
 
+    protected $db;
+
     public function __construct()
     {
+        $this->db               = \Config\Database::connect();
         $this->sessionModel     = new IngestSessionModel();
         $this->chipModel        = new ChipModel();
         $this->participantModel = new ParticipantModel();
+        $this->itemModel        = new TransactionItemModel();
         $this->sessionService   = new IngestSessionService();
         $this->txService        = new TransactionService();
     }
@@ -39,36 +45,6 @@ class IngestSessions extends BaseController
         ]);
     }
 
-    public function create()
-    {
-        if (!auth()->user()->can('ingest_sessions.create')) {
-            return redirect()->back()->with('error', 'Permission denied.');
-        }
-
-        return view('backend/ingest_sessions/create', [
-            'page_title'       => 'New Ingest Session',
-            'page_description' => 'Create a new ingest session.',
-        ]);
-    }
-
-    public function store()
-    {
-        if (!auth()->user()->can('ingest_sessions.create')) {
-            return redirect()->back()->with('error', 'Permission denied.');
-        }
-
-        $title    = trim($this->request->getPost('title'));
-        $location = trim($this->request->getPost('ingest_location') ?? '');
-        $desc     = trim($this->request->getPost('description') ?? '');
-
-        if (!$title) {
-            return redirect()->back()->withInput()->with('error', 'Session title is required.');
-        }
-
-        $id = $this->sessionService->create($title, auth()->id(), $location ?: null, $desc ?: null);
-        return redirect()->to("/ingest-sessions/{$id}")->with('success', "Session \"{$title}\" created.");
-    }
-
     public function view(int $id)
     {
         if (!auth()->user()->can('ingest_sessions.view')) {
@@ -83,7 +59,45 @@ class IngestSessions extends BaseController
             'page_description' => 'Ingest session detail and chip log.',
             'session'          => $session,
             'chips'            => $this->chipModel->getBySession($id),
-            'participants'     => $this->participantModel->getActive(),
+            'producers'        => $this->participantModel->getProducers(),
+            'progress'         => $this->itemModel->getSessionProgress($id),
+        ]);
+    }
+
+    /** Toggle copy_status on a single transaction item (AJAX). */
+    public function updateChipStatus(int $sessionId)
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
+        }
+        if (!auth()->user()->can('transactions.ingest')) {
+            return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
+        }
+
+        $itemId    = (int) $this->request->getPost('item_id');
+        $newStatus = $this->request->getPost('status') === 'done' ? 'done' : 'pending';
+
+        // Verify the item belongs to this session
+        $item = $this->db->query("
+            SELECT ti.id FROM transaction_items ti
+            JOIN chip_transactions ct ON ct.id = ti.transaction_id
+            WHERE ti.id = ? AND ct.ingest_session_id = ? AND ct.transaction_type = 'INGEST'
+        ", [$itemId, $sessionId])->getRowArray();
+
+        if (!$item) {
+            return $this->response->setStatusCode(404)->setJSON(['status' => 'error', 'message' => 'Item not found.']);
+        }
+
+        $this->itemModel->setCopyStatus($itemId, $newStatus, auth()->id());
+
+        $progress = $this->itemModel->getSessionProgress($sessionId);
+        $allDone  = $progress['total'] > 0 && $progress['done'] === $progress['total'];
+
+        return $this->response->setJSON([
+            'status'   => 'success',
+            'new_status' => $newStatus,
+            'progress' => $progress,
+            'all_done' => $allDone,
         ]);
     }
 
@@ -120,6 +134,27 @@ class IngestSessions extends BaseController
             'message'  => count($chipIds) . ' chip(s) ingested.',
             'warnings' => $result['warnings'],
         ]);
+    }
+
+    /** Reopen a closed or partial session (AJAX). */
+    public function resume(int $id)
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
+        }
+        if (!auth()->user()->can('ingest_sessions.close')) {
+            return $this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Permission denied.']);
+        }
+
+        $session = $this->sessionModel->find($id);
+        if (!$session || $session['status'] === 'open') {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Session is already open or not found.']);
+        }
+
+        $this->sessionModel->update($id, ['status' => 'open', 'closed_at' => null]);
+        log_activity('ingest_session.resumed', 'ingest_session', $id, 'Session reopened');
+
+        return $this->response->setJSON(['status' => 'success', 'message' => 'Session resumed and set back to open.']);
     }
 
     /** Close or mark partial (AJAX). */

@@ -400,11 +400,6 @@ class Template extends BaseConfig
                     'url'        => 'transactions/handover',
                     'permission' => 'transactions.handover',
                 ),
-                array(
-                    'name'       => 'Return',
-                    'url'        => 'transactions/return',
-                    'permission' => 'transactions.return',
-                ),
             )
         ),
         array(
@@ -419,9 +414,9 @@ class Template extends BaseConfig
                     'permission' => 'ingest_sessions.view',
                 ),
                 array(
-                    'name'       => 'New Session',
-                    'url'        => 'ingest-sessions/create',
-                    'permission' => 'ingest_sessions.create',
+                    'name'       => 'Ingest Chips',
+                    'url'        => 'transactions/ingest',
+                    'permission' => 'transactions.ingest',
                 ),
             )
         ),

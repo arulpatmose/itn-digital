@@ -26,8 +26,9 @@ class ChipModel extends Model
                 p.type AS holder_type,
                 ct.transaction_type AS last_tx_type,
                 ct.created_at       AS last_tx_at,
-                s.id    AS ingest_session_id,
-                s.title AS ingest_session_title
+                s.id     AS ingest_session_id,
+                s.title  AS ingest_session_title,
+                s.status AS ingest_session_status
             FROM chips c
             LEFT JOIN (
                 SELECT ti.chip_id, MAX(ct2.id) AS max_tx_id
@@ -127,7 +128,8 @@ class ChipModel extends Model
     public function getBySession(int $sessionId): array
     {
         return $this->db->query("
-            SELECT DISTINCT c.*, ct.created_at AS ingested_at,
+            SELECT c.*, ti.id AS item_id, ti.copy_status, ti.copied_at,
+                ct.created_at AS ingested_at,
                 CONCAT(u.first_name, ' ', u.last_name) AS handler_name,
                 fp.name AS from_name,
                 fp.type AS from_type
@@ -146,6 +148,52 @@ class ChipModel extends Model
      * Check if a chip is currently active in an open ingest session.
      * Returns session info or null.
      */
+    /**
+     * From a list of chip IDs, return those currently held by a librarian (i.e. in the library).
+     * Returns [['id', 'chip_code', 'holder_name'], ...]
+     */
+    public function getChipsHeldByLibrarian(array $chipIds): array
+    {
+        if (empty($chipIds)) return [];
+
+        $ids = implode(',', array_map('intval', $chipIds));
+        return $this->db->query("
+            SELECT c.id, c.chip_code, p.name AS holder_name
+            FROM chips c
+            LEFT JOIN (
+                SELECT ti.chip_id, MAX(ct2.id) AS max_tx_id
+                FROM transaction_items ti
+                JOIN chip_transactions ct2 ON ct2.id = ti.transaction_id
+                GROUP BY ti.chip_id
+            ) latest ON latest.chip_id = c.id
+            LEFT JOIN chip_transactions ct ON ct.id = latest.max_tx_id
+            LEFT JOIN participants p ON p.id = ct.to_participant_id
+            WHERE c.id IN ({$ids})
+              AND p.type = 'librarian'
+        ")->getResultArray();
+    }
+
+    /**
+     * From a list of chip IDs, return those currently in an open ingest session.
+     * Returns [['id', 'chip_code', 'session_title'], ...]
+     */
+    public function getChipsInOpenSessions(array $chipIds): array
+    {
+        if (empty($chipIds)) return [];
+
+        $ids = implode(',', array_map('intval', $chipIds));
+        return $this->db->query("
+            SELECT DISTINCT c.id, c.chip_code, s.title AS session_title
+            FROM transaction_items ti
+            JOIN chip_transactions ct ON ct.id = ti.transaction_id
+            JOIN ingest_sessions s    ON s.id  = ct.ingest_session_id
+            JOIN chips c              ON c.id  = ti.chip_id
+            WHERE ti.chip_id IN ({$ids})
+              AND ct.transaction_type = 'INGEST'
+              AND s.status = 'open'
+        ")->getResultArray();
+    }
+
     public function getActiveSession(int $chipId): ?array
     {
         return $this->db->query("

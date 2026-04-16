@@ -1,4 +1,6 @@
-<?php /** @var array $participants, $sessions */ ?>
+<?php
+
+/** @var array $currentParticipant, $preloadChips */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -19,39 +21,44 @@
                     <div class="block-content">
                         <div class="row py-sm-3 py-md-4">
                             <div class="col-md-10 col-lg-8">
-                                <p class="text-muted mb-4">Log chips as ingested into an open session.</p>
+                                <p class="text-muted mb-4">A new ingest session will be created for this transaction.</p>
 
-                                <?php if (empty($sessions)): ?>
-                                    <div class="alert alert-warning">
-                                        No open ingest sessions. <a href="<?= base_url('ingest-sessions/create') ?>">Create a session</a> first.
-                                    </div>
-                                <?php else: ?>
+                                <h5 class="mb-3">Session Details</h5>
 
                                 <div class="mb-4">
-                                    <label class="form-label" for="ingest_session_id">Ingest Session <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="ingest_session_id" name="ingest_session_id" required>
-                                        <option value="">— Select session —</option>
-                                        <?php foreach ($sessions as $s): ?>
-                                            <option value="<?= $s['id'] ?>"><?= esc($s['title']) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <label class="form-label" for="session_title">Session Title <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="session_title" name="session_title"
+                                        value="<?= old('session_title') ?>" placeholder="e.g. Programme name, shoot date…" required>
                                 </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label" for="ingest_location">Ingest Path <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="ingest_location" name="ingest_location"
+                                        value="<?= old('ingest_location') ?>" placeholder="e.g. /media/ingest/2026-04-17/…" required>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <h5 class="mb-3">Chips</h5>
 
                                 <div class="mb-4">
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
                                     <select class="form-select select2-chips" id="chip_ids" name="chip_ids[]" multiple required>
+                                        <?php foreach ($preloadChips as $c): ?>
+                                            <option value="<?= $c['id'] ?>" selected><?= esc($c['text']) ?></option>
+                                        <?php endforeach; ?>
                                     </select>
-                                    <div class="form-text">Search by chip code. Select all chips being ingested.</div>
+                                    <div class="form-text">Search by chip code.</div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label" for="from_participant_id">From Participant <small class="text-muted">(optional)</small></label>
-                                    <select class="form-select" id="from_participant_id" name="from_participant_id">
-                                        <option value="">— Unknown / Not applicable —</option>
-                                        <?php foreach ($participants as $p): ?>
-                                            <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?> (<?= esc($p['type']) ?>)</option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <label class="form-label">Ingested By</label>
+                                    <?php if ($currentParticipant): ?>
+                                        <input type="hidden" name="from_participant_id" value="<?= $currentParticipant['id'] ?>">
+                                        <div class="form-control bg-success-light text-success"><?= esc($currentParticipant['name']) ?> <span class="text-muted">(<?= esc($currentParticipant['type']) ?>)</span></div>
+                                    <?php else: ?>
+                                        <div class="alert alert-warning mb-0">Your account is not linked to a participant. The submitter will not be recorded.</div>
+                                    <?php endif; ?>
                                 </div>
 
                                 <div class="mb-4">
@@ -59,8 +66,6 @@
                                     <textarea class="form-control" id="remarks" name="remarks" rows="2"
                                         placeholder="Any notes…"><?= old('remarks') ?></textarea>
                                 </div>
-
-                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -73,22 +78,45 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
-$(function () {
-    <?php if ($flash = session()->getFlashdata('error')): ?>
-    Swal.fire({ icon: 'error', title: 'Error', text: <?= json_encode($flash) ?>, confirmButtonColor: '#dc3545' });
-    <?php endif; ?>
+    $(function() {
+        <?php if ($flash = session()->getFlashdata('error')): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#dc3545'
+            });
+        <?php endif; ?>
+        <?php if ($flash = session()->getFlashdata('success')): ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Received!',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#0d6efd',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        <?php endif; ?>
 
-    $('.select2-chips').select2({
-        placeholder: 'Search by chip code…',
-        minimumInputLength: 1,
-        ajax: {
-            url: '<?= base_url('chips/api-list') ?>',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) { return { q: params.term }; },
-            processResults: function (data) { return { results: data }; },
-        },
+        $('.select2-chips').select2({
+            placeholder: 'Search by chip code…',
+            minimumInputLength: 1,
+            ajax: {
+                url: '<?= base_url('chips/api-list') ?>',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                },
+            },
+        });
     });
-});
 </script>
 <?= $this->endSection() ?>

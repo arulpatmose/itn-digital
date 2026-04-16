@@ -1,4 +1,6 @@
-<?php /** @var array $participants */ ?>
+<?php
+
+/** @var array $sources, $currentParticipant */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -19,23 +21,40 @@
                     <div class="block-content">
                         <div class="row py-sm-3 py-md-4">
                             <div class="col-md-10 col-lg-8">
-                                <p class="text-muted mb-4">Record chips coming in from an external source (e.g. a producer returning from the field).</p>
+                                <p class="text-muted mb-4">Record chips coming in from a librarian or producer.</p>
 
                                 <div class="mb-4">
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
                                     <select class="form-select select2-chips" id="chip_ids" name="chip_ids[]" multiple required>
+                                        <?php foreach ((array) old('chip_ids') as $oldId): ?>
+                                            <?php if ($oldId = (int) $oldId): ?>
+                                                <option value="<?= $oldId ?>" selected><?= $oldId ?></option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
                                     </select>
                                     <div class="form-text">Search by chip code. Select all chips being received.</div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label" for="to_participant_id">Receiving Participant <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="to_participant_id" name="to_participant_id" required>
-                                        <option value="">— Select participant —</option>
-                                        <?php foreach ($participants as $p): ?>
-                                            <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?> (<?= esc($p['type']) ?>)</option>
+                                    <label class="form-label" for="from_participant_id">Received From <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="from_participant_id" name="from_participant_id" required>
+                                        <option value="">— Select source —</option>
+                                        <?php foreach ($sources as $p): ?>
+                                            <option value="<?= $p['id'] ?>" <?= old('from_participant_id') == $p['id'] ? 'selected' : '' ?>>
+                                                <?= esc($p['name']) ?> (<?= esc($p['type']) ?>)
+                                            </option>
                                         <?php endforeach; ?>
                                     </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">Receiver (You)</label>
+                                    <?php if ($currentParticipant): ?>
+                                        <input type="hidden" name="to_participant_id" value="<?= $currentParticipant['id'] ?>">
+                                        <div class="form-control bg-success-light text-success"><?= esc($currentParticipant['name']) ?> <span class="text-muted">(<?= esc($currentParticipant['type']) ?>)</span></div>
+                                    <?php else: ?>
+                                        <div class="alert alert-warning mb-0">Your account is not linked to a participant. The receiver will not be recorded.</div>
+                                    <?php endif; ?>
                                 </div>
 
                                 <div class="mb-4">
@@ -55,22 +74,35 @@
 
 <?= $this->section('other-scripts') ?>
 <script>
-$(function () {
-    <?php if ($flash = session()->getFlashdata('error')): ?>
-    Swal.fire({ icon: 'error', title: 'Error', text: <?= json_encode($flash) ?>, confirmButtonColor: '#dc3545' });
-    <?php endif; ?>
+    $(function() {
+        <?php if ($flash = session()->getFlashdata('error')): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: <?= json_encode($flash) ?>,
+                confirmButtonColor: '#dc3545'
+            });
+        <?php endif; ?>
 
-    $('.select2-chips').select2({
-        placeholder: 'Search by chip code…',
-        minimumInputLength: 1,
-        ajax: {
-            url: '<?= base_url('chips/api-list') ?>',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) { return { q: params.term }; },
-            processResults: function (data) { return { results: data }; },
-        },
+        $('.select2-chips').select2({
+            placeholder: 'Search by chip code…',
+            minimumInputLength: 1,
+            ajax: {
+                url: '<?= base_url('chips/api-list') ?>',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                },
+            },
+        });
     });
-});
 </script>
 <?= $this->endSection() ?>

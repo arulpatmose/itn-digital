@@ -22,6 +22,29 @@ class ParticipantModel extends Model
         return $this->where('is_active', 1)->where('type', $type)->orderBy('name')->findAll();
     }
 
+    public function getLibrarians(): array
+    {
+        return $this->getByType('librarian');
+    }
+
+    public function getProducers(): array
+    {
+        return $this->getByType('producer');
+    }
+
+    public function getLibrariansAndProducers(): array
+    {
+        return $this->where('is_active', 1)
+            ->whereIn('type', ['librarian', 'producer'])
+            ->orderBy('type')->orderBy('name')
+            ->findAll();
+    }
+
+    public function getByUserId(int $userId): ?array
+    {
+        return $this->where('user_id', $userId)->where('is_active', 1)->first() ?: null;
+    }
+
     /**
      * Participant with their Shield user details if linked.
      */

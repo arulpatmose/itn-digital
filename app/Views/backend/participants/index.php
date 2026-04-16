@@ -37,10 +37,10 @@
                                         <td>
                                             <?php
                                             $typeClass = match($p['type']) {
-                                                'staff'    => 'bg-primary',
-                                                'producer' => 'bg-info',
-                                                'library'  => 'bg-warning text-dark',
-                                                default    => 'bg-secondary',
+                                                'staff'      => 'bg-primary',
+                                                'producer'   => 'bg-info',
+                                                'librarian'  => 'bg-warning text-dark',
+                                                default      => 'bg-secondary',
                                             };
                                             ?>
                                             <span class="badge <?= $typeClass ?>"><?= ucfirst(esc($p['type'])) ?></span>

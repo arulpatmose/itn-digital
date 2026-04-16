@@ -4,23 +4,29 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ChipTransactionModel;
+use App\Models\ChipModel;
 use App\Models\ParticipantModel;
-use App\Models\IngestSessionModel;
 use App\Services\TransactionService;
+use App\Services\ChipService;
+use App\Services\IngestSessionService;
 
 class Transactions extends BaseController
 {
-    protected ChipTransactionModel $txModel;
-    protected ParticipantModel     $participantModel;
-    protected IngestSessionModel   $sessionModel;
-    protected TransactionService   $txService;
+    protected ChipTransactionModel  $txModel;
+    protected ChipModel             $chipModel;
+    protected ParticipantModel      $participantModel;
+    protected TransactionService    $txService;
+    protected ChipService           $chipService;
+    protected IngestSessionService  $sessionService;
 
     public function __construct()
     {
         $this->txModel          = new ChipTransactionModel();
+        $this->chipModel        = new ChipModel();
         $this->participantModel = new ParticipantModel();
-        $this->sessionModel     = new IngestSessionModel();
         $this->txService        = new TransactionService();
+        $this->chipService      = new ChipService();
+        $this->sessionService   = new IngestSessionService();
     }
 
     /** Transaction log — all transactions. */
@@ -45,14 +51,15 @@ class Transactions extends BaseController
             return redirect()->back()->with('error', 'Permission denied.');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() === 'POST') {
             return $this->processTransaction('receive');
         }
 
         return view('backend/transactions/receive', [
-            'page_title'       => 'Receive Chips',
-            'page_description' => 'Record chips being received from an external source.',
-            'participants'     => $this->participantModel->getActive(),
+            'page_title'          => 'Receive Chips',
+            'page_description'    => 'Record chips coming in from a librarian or producer.',
+            'currentParticipant'  => $this->participantModel->getByUserId(auth()->id()),
+            'sources'             => $this->participantModel->getLibrariansAndProducers(),
         ]);
     }
 
@@ -64,14 +71,15 @@ class Transactions extends BaseController
             return redirect()->back()->with('error', 'Permission denied.');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() === 'POST') {
             return $this->processTransaction('transfer');
         }
 
         return view('backend/transactions/transfer', [
-            'page_title'       => 'Transfer Chips',
-            'page_description' => 'Move chips from one participant to another.',
-            'participants'     => $this->participantModel->getActive(),
+            'page_title'         => 'Transfer Chips',
+            'page_description'   => 'Transfer chips from yourself to another producer.',
+            'currentParticipant' => $this->participantModel->getByUserId(auth()->id()),
+            'producers'          => $this->participantModel->getProducers(),
         ]);
     }
 
@@ -83,14 +91,15 @@ class Transactions extends BaseController
             return redirect()->back()->with('error', 'Permission denied.');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() === 'POST') {
             return $this->processTransaction('handover');
         }
 
         return view('backend/transactions/handover', [
-            'page_title'       => 'Hand Over Chips',
-            'page_description' => 'Hand chips over to a producer or library.',
-            'participants'     => $this->participantModel->getActive(),
+            'page_title'         => 'Hand Over Chips',
+            'page_description'   => 'Return chips to a librarian.',
+            'currentParticipant' => $this->participantModel->getByUserId(auth()->id()),
+            'librarians'         => $this->participantModel->getLibrarians(),
         ]);
     }
 
@@ -102,34 +111,20 @@ class Transactions extends BaseController
             return redirect()->back()->with('error', 'Permission denied.');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() === 'POST') {
             return $this->processTransaction('ingest');
         }
 
+        $preloadIds       = (array) session()->getFlashdata('ingest_chip_ids');
+        $preloadChips     = !empty($preloadIds)
+            ? array_filter($this->chipService->getSelect2Data(), fn($c) => in_array($c['id'], $preloadIds))
+            : [];
+
         return view('backend/transactions/ingest', [
-            'page_title'       => 'Ingest Chips',
-            'page_description' => 'Log chips as ingested into a session.',
-            'participants'     => $this->participantModel->getActive(),
-            'sessions'         => $this->sessionModel->where('status', 'open')->findAll(),
-        ]);
-    }
-
-    // ── RETURN ────────────────────────────────────────────────────────────────
-
-    public function returnChips()
-    {
-        if (!auth()->user()->can('transactions.return')) {
-            return redirect()->back()->with('error', 'Permission denied.');
-        }
-
-        if ($this->request->getMethod() === 'post') {
-            return $this->processTransaction('return');
-        }
-
-        return view('backend/transactions/return', [
-            'page_title'       => 'Return Chips',
-            'page_description' => 'Record chips being returned.',
-            'participants'     => $this->participantModel->getActive(),
+            'page_title'         => 'Ingest Chips',
+            'page_description'   => 'Log chips as ingested into a new session.',
+            'currentParticipant' => $this->participantModel->getByUserId(auth()->id()),
+            'preloadChips'       => array_values($preloadChips),
         ]);
     }
 
@@ -145,37 +140,70 @@ class Transactions extends BaseController
             return redirect()->back()->withInput()->with('error', 'Please select at least one chip.');
         }
 
+        $currentParticipant = $this->participantModel->getByUserId(auth()->id());
+
+        $ingestSessionId = null;
         switch ($type) {
             case 'receive':
-                $toId   = (int) $this->request->getPost('to_participant_id');
-                $result = $this->txService->receive($chipIds, $toId, $handledBy, $remarks);
+                $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
+                $toId   = (int) $this->request->getPost('to_participant_id')   ?: null;
+                if (!$fromId) {
+                    return redirect()->back()->withInput()->with('error', 'Please select who is handing over the chips.');
+                }
+                $result = $this->txService->receive($chipIds, $fromId, $toId, $handledBy, $remarks);
                 break;
 
             case 'transfer':
+                $inLibrary = $this->chipModel->getChipsHeldByLibrarian($chipIds);
+                if (!empty($inLibrary)) {
+                    $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (held by {$c['holder_name']})", $inLibrary));
+                    return redirect()->back()->withInput()->with('error', "Cannot transfer — these chips are in the library. Please receive them first: {$list}.");
+                }
+                $blocked = $this->chipModel->getChipsInOpenSessions($chipIds);
+                if (!empty($blocked)) {
+                    $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (in \"{$c['session_title']}\")", $blocked));
+                    return redirect()->back()->withInput()->with('error', "Cannot transfer — these chips are in an open ingest session: {$list}.");
+                }
                 $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
                 $toId   = (int) $this->request->getPost('to_participant_id');
                 $result = $this->txService->transfer($chipIds, $fromId, $toId, $handledBy, $remarks);
                 break;
 
             case 'handover':
+                $inLibrary = $this->chipModel->getChipsHeldByLibrarian($chipIds);
+                if (!empty($inLibrary)) {
+                    $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (held by {$c['holder_name']})", $inLibrary));
+                    return redirect()->back()->withInput()->with('error', "Cannot hand over — these chips are in the library. Please receive them first: {$list}.");
+                }
+                $blocked = $this->chipModel->getChipsInOpenSessions($chipIds);
+                if (!empty($blocked)) {
+                    $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (in \"{$c['session_title']}\")", $blocked));
+                    return redirect()->back()->withInput()->with('error', "Cannot hand over — these chips are in an open ingest session: {$list}.");
+                }
                 $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
                 $toId   = (int) $this->request->getPost('to_participant_id');
+                if (!$toId) {
+                    return redirect()->back()->withInput()->with('error', 'A librarian must be selected to receive the chips.');
+                }
+                $librarian = $this->participantModel->find($toId);
+                if (!$librarian || $librarian['type'] !== 'librarian') {
+                    return redirect()->back()->withInput()->with('error', 'Chips can only be handed over to a librarian.');
+                }
                 $result = $this->txService->handover($chipIds, $fromId, $toId, $handledBy, $remarks);
                 break;
 
             case 'ingest':
-                $fromId    = (int) $this->request->getPost('from_participant_id') ?: null;
-                $sessionId = (int) $this->request->getPost('ingest_session_id');
-                if (!$sessionId) {
-                    return redirect()->back()->withInput()->with('error', 'An ingest session is required.');
+                $sessionTitle = trim($this->request->getPost('session_title') ?? '');
+                if (!$sessionTitle) {
+                    return redirect()->back()->withInput()->with('error', 'A session title is required for ingest.');
                 }
-                $result = $this->txService->ingest($chipIds, $fromId, $handledBy, $sessionId, $remarks);
-                break;
-
-            case 'return':
-                $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
-                $toId   = (int) $this->request->getPost('to_participant_id');
-                $result = $this->txService->returnChips($chipIds, $fromId, $toId, $handledBy, $remarks);
+                $location = trim($this->request->getPost('ingest_location') ?? '');
+                if (!$location) {
+                    return redirect()->back()->withInput()->with('error', 'Ingest path is required.');
+                }
+                $fromId          = (int) $this->request->getPost('from_participant_id') ?: null;
+                $ingestSessionId = $this->sessionService->create($sessionTitle, $handledBy, $location, $remarks ?: null);
+                $result          = $this->txService->ingest($chipIds, $fromId, $handledBy, $ingestSessionId, null);
                 break;
 
             default:
@@ -189,6 +217,16 @@ class Transactions extends BaseController
         $msg = ucfirst($type) . ' recorded for ' . count($chipIds) . ' chip(s).';
         if (!empty($result['warnings'])) {
             $msg .= ' Warning: ' . implode(' ', $result['warnings']);
+        }
+
+        if ($type === 'receive') {
+            return redirect()->to('/transactions/ingest')
+                ->with('success', $msg)
+                ->with('ingest_chip_ids', $chipIds);
+        }
+
+        if ($type === 'ingest' && $ingestSessionId) {
+            return redirect()->to("/ingest-sessions/{$ingestSessionId}")->with('success', $msg);
         }
 
         return redirect()->to('/transactions')->with('success', $msg);

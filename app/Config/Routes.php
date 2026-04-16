@@ -308,17 +308,15 @@ $routes->group('transactions', ['filter' => 'permission:transactions.view'], fun
     $routes->post('handover', 'Transactions::handover', ['filter' => 'permission:transactions.handover']);
     $routes->get('ingest', 'Transactions::ingest', ['filter' => 'permission:transactions.ingest']);
     $routes->post('ingest', 'Transactions::ingest', ['filter' => 'permission:transactions.ingest']);
-    $routes->get('return', 'Transactions::returnChips', ['filter' => 'permission:transactions.return']);
-    $routes->post('return', 'Transactions::returnChips', ['filter' => 'permission:transactions.return']);
 });
 
 $routes->group('ingest-sessions', ['filter' => 'permission:ingest_sessions.view'], function ($routes) {
     $routes->get('/', 'IngestSessions::index', ['as' => 'ingest_sessions']);
-    $routes->get('create', 'IngestSessions::create', ['filter' => 'permission:ingest_sessions.create']);
-    $routes->post('store', 'IngestSessions::store', ['filter' => 'permission:ingest_sessions.create']);
     $routes->get('(:num)', 'IngestSessions::view/$1');
     $routes->post('(:num)/ingest-chips', 'IngestSessions::ingestChips/$1', ['filter' => 'permission:transactions.ingest']);
-    $routes->post('(:num)/close', 'IngestSessions::close/$1', ['filter' => 'permission:ingest_sessions.close']);
+    $routes->post('(:num)/chip-status',  'IngestSessions::updateChipStatus/$1', ['filter' => 'permission:transactions.ingest']);
+    $routes->post('(:num)/close',        'IngestSessions::close/$1',            ['filter' => 'permission:ingest_sessions.close']);
+    $routes->post('(:num)/resume',       'IngestSessions::resume/$1',           ['filter' => 'permission:ingest_sessions.close']);
 });
 
 $routes->group('reports', ['filter' => 'permission:ingest.reports'], function ($routes) {

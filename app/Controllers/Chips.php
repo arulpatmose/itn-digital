@@ -154,7 +154,9 @@ class Chips extends BaseController
         if (!auth()->user()->can('chips.view')) {
             return $this->response->setStatusCode(403)->setJSON([]);
         }
-        $search = $this->request->getGet('q');
-        return $this->response->setJSON($this->chipService->getSelect2Data($search));
+        $search             = $this->request->getGet('q');
+        $excludeOpenSession = (bool) $this->request->getGet('exclude_open_session');
+        $excludeHolderType  = $this->request->getGet('exclude_holder_type') ?: null;
+        return $this->response->setJSON($this->chipService->getSelect2Data($search, $excludeOpenSession, $excludeHolderType));
     }
 }

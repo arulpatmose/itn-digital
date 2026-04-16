@@ -45,9 +45,17 @@ class ChipService
     /**
      * Get chip Select2 data: chip_code + type + current holder.
      */
-    public function getSelect2Data(?string $search = null): array
+    public function getSelect2Data(?string $search = null, bool $excludeOpenSession = false, ?string $excludeHolderType = null): array
     {
         $all = $this->chipModel->getAllWithCurrentHolder();
+
+        if ($excludeOpenSession) {
+            $all = array_filter($all, fn($c) => ($c['ingest_session_status'] ?? null) !== 'open');
+        }
+
+        if ($excludeHolderType !== null) {
+            $all = array_filter($all, fn($c) => ($c['holder_type'] ?? null) !== $excludeHolderType);
+        }
 
         if ($search) {
             $search = strtolower($search);
@@ -60,7 +68,11 @@ class ChipService
         return array_values(array_map(fn($c) => [
             'id'   => $c['id'],
             'text' => "[{$c['chip_type']}] {$c['chip_code']}" .
-                      ($c['holder_name'] ? " — {$c['holder_name']}" : ' — Unassigned'),
+                      ($c['holder_type'] === 'staff'
+                          ? ' — ITN Digital'
+                          : ($c['holder_type'] === 'librarian'
+                              ? ' — Library'
+                              : ($c['holder_name'] ? " — {$c['holder_name']}" : ' — Unassigned'))),
         ], $all));
     }
 }

@@ -50,6 +50,11 @@ class TransactionService
             'remarks'             => $remarks ?: null,
         ], true);
 
+        if (!$txId) {
+            $db->transRollback();
+            return ['success' => false, 'transaction_id' => null, 'warnings' => ['Failed to create the transaction record. Check for database errors.']];
+        }
+
         $this->itemModel->insertForTransaction($txId, $chipIds);
 
         $db->transComplete();
@@ -64,9 +69,9 @@ class TransactionService
         return ['success' => true, 'transaction_id' => $txId, 'warnings' => $warnings];
     }
 
-    public function receive(array $chipIds, int $toParticipantId, int $handledBy, ?string $remarks = null): array
+    public function receive(array $chipIds, ?int $fromParticipantId, int $toParticipantId, int $handledBy, ?string $remarks = null): array
     {
-        return $this->createTransaction('RECEIVE', null, $toParticipantId, $chipIds, $handledBy, null, $remarks);
+        return $this->createTransaction('RECEIVE', $fromParticipantId, $toParticipantId, $chipIds, $handledBy, null, $remarks);
     }
 
     public function transfer(array $chipIds, ?int $fromParticipantId, int $toParticipantId, int $handledBy, ?string $remarks = null): array
@@ -82,11 +87,6 @@ class TransactionService
     public function ingest(array $chipIds, ?int $fromParticipantId, int $handledBy, int $sessionId, ?string $remarks = null): array
     {
         return $this->createTransaction('INGEST', $fromParticipantId, null, $chipIds, $handledBy, $sessionId, $remarks);
-    }
-
-    public function returnChips(array $chipIds, ?int $fromParticipantId, int $toParticipantId, int $handledBy, ?string $remarks = null): array
-    {
-        return $this->createTransaction('RETURN', $fromParticipantId, $toParticipantId, $chipIds, $handledBy, null, $remarks);
     }
 
     /**
