@@ -85,7 +85,7 @@
                                             <span class="badge <?= $typeClass ?>"><?= esc($chip['chip_type']) ?></span>
                                         </td>
                                         <td>
-                                            <?php if ($chip['holder_type'] === 'staff'): ?>
+                                            <?php if ($chip['holder_type'] === 'ingestor'): ?>
                                                 <i class="fa fa-building fa-fw text-muted"></i> ITN Digital
                                             <?php elseif ($chip['holder_type'] === 'librarian'): ?>
                                                 <i class="fa fa-book fa-fw text-muted"></i> Library

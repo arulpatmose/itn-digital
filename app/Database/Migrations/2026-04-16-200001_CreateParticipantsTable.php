@@ -21,7 +21,7 @@ class CreateParticipantsTable extends Migration
             ],
             'type' => [
                 'type'       => 'ENUM',
-                'constraint' => ['staff', 'producer', 'librarian'],
+                'constraint' => ['ingestor', 'producer', 'librarian'],
             ],
             'user_id' => [
                 'type'     => 'INT',

@@ -33,7 +33,7 @@
                                     <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                                     <select class="form-select" id="type" name="type" required>
                                         <option value="">— Select type —</option>
-                                        <option value="staff" <?= old('type') === 'staff'    ? 'selected' : '' ?>>Staff</option>
+                                        <option value="ingestor" <?= old('type') === 'ingestor' ? 'selected' : '' ?>>Ingestor</option>
                                         <option value="producer" <?= old('type') === 'producer' ? 'selected' : '' ?>>Producer</option>
                                         <option value="librarian" <?= old('type') === 'librarian' ? 'selected' : '' ?>>Librarian</option>
                                     </select>

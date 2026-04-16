@@ -210,7 +210,7 @@ class AuthGroups extends ShieldAuthGroups
         'chips.create'              => 'Can register new chips',
         'chips.edit'                => 'Can edit chip details',
         'chips.delete'              => 'Can delete chips',
-        'participants.view'         => 'Can view participants (staff, producers, librarians)',
+        'participants.view'         => 'Can view participants (ingestors, producers, librarians)',
         'participants.create'       => 'Can create participants',
         'participants.edit'         => 'Can edit participants',
         'participants.delete'       => 'Can delete participants',

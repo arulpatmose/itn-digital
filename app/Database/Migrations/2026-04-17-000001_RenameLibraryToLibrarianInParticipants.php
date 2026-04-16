@@ -14,7 +14,7 @@ class RenameLibraryToLibrarianInParticipants extends Migration
         // 2. Alter the ENUM column to replace 'library' with 'librarian'
         $this->db->query("
             ALTER TABLE participants
-            MODIFY COLUMN `type` ENUM('staff', 'producer', 'librarian') NOT NULL
+            MODIFY COLUMN `type` ENUM('ingestor', 'producer', 'librarian') NOT NULL
         ");
     }
 

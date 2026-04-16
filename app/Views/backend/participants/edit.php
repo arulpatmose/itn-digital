@@ -31,7 +31,7 @@
                                 <div class="mb-4">
                                     <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                                     <select class="form-select" id="type" name="type" required>
-                                        <?php foreach (['staff', 'producer', 'librarian'] as $t): ?>
+                                        <?php foreach (['ingestor', 'producer', 'librarian'] as $t): ?>
                                             <option value="<?= $t ?>" <?= (old('type', $participant['type']) === $t) ? 'selected' : '' ?>>
                                                 <?= ucfirst($t) ?>
                                             </option>

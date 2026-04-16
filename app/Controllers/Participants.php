@@ -54,7 +54,7 @@ class Participants extends BaseController
         $name   = trim($this->request->getPost('name'));
         $userId = (int) ($this->request->getPost('user_id') ?: 0);
 
-        if (!in_array($type, ['staff', 'producer', 'librarian'], true) || !$name) {
+        if (!in_array($type, ['ingestor', 'producer', 'librarian'], true) || !$name) {
             return redirect()->back()->withInput()->with('error', 'Name and type are required.');
         }
 

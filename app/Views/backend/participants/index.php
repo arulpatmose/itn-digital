@@ -37,7 +37,7 @@
                                         <td>
                                             <?php
                                             $typeClass = match($p['type']) {
-                                                'staff'      => 'bg-primary',
+                                                'ingestor'   => 'bg-primary',
                                                 'producer'   => 'bg-info',
                                                 'librarian'  => 'bg-warning text-dark',
                                                 default      => 'bg-secondary',

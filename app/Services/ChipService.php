@@ -68,7 +68,7 @@ class ChipService
         return array_values(array_map(fn($c) => [
             'id'   => $c['id'],
             'text' => "[{$c['chip_type']}] {$c['chip_code']}" .
-                      ($c['holder_type'] === 'staff'
+                      ($c['holder_type'] === 'ingestor'
                           ? ' — ITN Digital'
                           : ($c['holder_type'] === 'librarian'
                               ? ' — Library'
