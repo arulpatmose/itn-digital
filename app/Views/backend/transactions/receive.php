@@ -92,7 +92,8 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        q: params.term
+                        q: params.term,
+                        only_location: 'library',
                     };
                 },
                 processResults: function(data) {

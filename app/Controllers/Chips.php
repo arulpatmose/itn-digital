@@ -158,6 +158,7 @@ class Chips extends BaseController
         $excludeOpenSession = (bool) $this->request->getGet('exclude_open_session');
         $excludeLocation    = $this->request->getGet('exclude_location') ?: null;
         $excludeSessionId   = ($v = $this->request->getGet('exclude_session_id')) ? (int) $v : null;
-        return $this->response->setJSON($this->chipService->getSelect2Data($search, $excludeOpenSession, $excludeLocation, $excludeSessionId));
+        $onlyLocation       = $this->request->getGet('only_location') ?: null;
+        return $this->response->setJSON($this->chipService->getSelect2Data($search, $excludeOpenSession, $excludeLocation, $excludeSessionId, $onlyLocation));
     }
 }
