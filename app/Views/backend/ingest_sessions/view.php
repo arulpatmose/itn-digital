@@ -164,9 +164,9 @@
                                             <td><?= esc($chip['handler_name'] ?? '—') ?></td>
                                             <td class="text-center">
                                                 <?php if ($chip['copy_status'] === 'done'): ?>
-                                                    <span class="badge bg-success me-1">Copied</span>
+                                                    <span class="badge bg-success">Copied</span>
                                                 <?php else: ?>
-                                                    <span class="badge bg-secondary me-1">Pending</span>
+                                                    <span class="badge bg-secondary">Pending</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-center">
@@ -278,12 +278,13 @@
 
                     // Swap badge + button
                     var badge = isDone ?
-                        '<span class="badge bg-success me-1">Copied</span>' :
-                        '<span class="badge bg-secondary me-1">Pending</span>';
+                        '<span class="badge bg-success">Copied</span>' :
+                        '<span class="badge bg-secondary">Pending</span>';
                     var btnHtml = isDone ?
                         '<button class="btn btn-xs btn-alt-secondary btn-toggle-status" data-item="' + itemId + '" data-status="pending" title="Mark as pending"><i class="fa fa-undo"></i></button>' :
                         '<button class="btn btn-xs btn-alt-success btn-toggle-status" data-item="' + itemId + '" data-status="done" title="Mark as copied"><i class="fa fa-check"></i></button>';
-                    $row.find('td:last').html(badge + btnHtml);
+                    $row.find('td').eq(-2).html(badge);
+                    $row.find('td:last').html(btnHtml);
 
                     // Update progress
                     var done = res.progress.done;
