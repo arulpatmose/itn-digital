@@ -120,7 +120,6 @@ class Transactions extends BaseController
         return view('backend/transactions/ingest', [
             'page_title'       => 'Ingest Chips',
             'page_description' => 'Log chips as ingested into a new session.',
-            'producers'        => $this->participantModel->getProducers(),
             'preloadChips'     => array_values($preloadChips),
         ]);
     }
@@ -185,9 +184,8 @@ class Transactions extends BaseController
                 if (!$location) {
                     return redirect()->back()->withInput()->with('error', 'Ingest path is required.');
                 }
-                $fromProducerId  = (int) $this->request->getPost('from_producer_id') ?: null;
                 $ingestSessionId = $this->sessionService->create($sessionTitle, $handledBy, $location, $remarks ?: null);
-                $result          = $this->txService->ingest($chipIds, $fromProducerId, $handledBy, $ingestSessionId, null);
+                $result          = $this->txService->ingest($chipIds, null, $handledBy, $ingestSessionId, null);
                 break;
 
             default:

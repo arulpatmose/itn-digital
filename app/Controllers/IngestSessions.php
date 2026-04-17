@@ -59,7 +59,6 @@ class IngestSessions extends BaseController
             'page_description' => 'Ingest session detail and chip log.',
             'session'          => $session,
             'chips'            => $this->chipModel->getBySession($id),
-            'producers'        => $this->participantModel->getProducers(),
             'progress'         => $this->itemModel->getSessionProgress($id),
         ]);
     }
@@ -121,9 +120,8 @@ class IngestSessions extends BaseController
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'No chips selected.']);
         }
 
-        $fromId  = (int) $this->request->getPost('from_participant_id') ?: null;
         $remarks = trim($this->request->getPost('remarks') ?? '');
-        $result  = $this->txService->ingest($chipIds, $fromId, auth()->id(), $id, $remarks);
+        $result  = $this->txService->ingest($chipIds, null, auth()->id(), $id, $remarks);
 
         if (!$result['success']) {
             return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => implode(' ', $result['warnings'])]);

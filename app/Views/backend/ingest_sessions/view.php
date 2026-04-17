@@ -1,6 +1,6 @@
 <?php
 
-/** @var array $session, $chips, $producers, $progress */ ?>
+/** @var array $session, $chips, $progress */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -99,20 +99,11 @@
                     </div>
                     <div class="block-content pb-3">
                         <div class="row g-3 align-items-end">
-                            <div class="col-12 col-md-5">
+                            <div class="col-12 col-md-8">
                                 <label class="form-label mb-1">Chips</label>
                                 <select class="form-select select2-chips" id="quick-chip-ids" name="chip_ids[]" multiple></select>
                             </div>
                             <div class="col-12 col-md-4">
-                                <label class="form-label mb-1">Producer <small class="text-muted">(optional)</small></label>
-                                <select class="form-select select2-producer" id="quick-from-participant">
-                                    <option value="">— Unknown —</option>
-                                    <?php foreach ($producers as $p): ?>
-                                        <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-3">
                                 <label class="form-label mb-1">Remarks</label>
                                 <input type="text" class="form-control" id="quick-remarks" placeholder="Optional">
                             </div>
@@ -238,12 +229,6 @@
             });
         }
 
-        $('.select2-producer').select2({
-            placeholder: 'Search producer…',
-            allowClear: true,
-            width: '100%'
-        });
-
         $('#quick-chip-ids').select2({
             placeholder: 'Search chips…',
             minimumInputLength: 1,
@@ -339,7 +324,6 @@
                 type: 'POST',
                 data: {
                     chip_ids: chipIds,
-                    from_participant_id: $('#quick-from-participant').val(),
                     remarks: $('#quick-remarks').val(),
                 },
                 dataType: 'json',

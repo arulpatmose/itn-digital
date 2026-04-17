@@ -1,6 +1,6 @@
 <?php
 
-/** @var array $producers, $preloadChips */ ?>
+/** @var array $preloadChips */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -51,18 +51,6 @@
                                     <div class="form-text">Search by chip code.</div>
                                 </div>
 
-                                <div class="mb-4">
-                                    <label class="form-label" for="from_producer_id">Producer <small class="text-muted">(optional)</small></label>
-                                    <select class="form-select" id="from_producer_id" name="from_producer_id">
-                                        <option value="">— Unknown —</option>
-                                        <?php foreach ($producers as $p): ?>
-                                            <option value="<?= $p['id'] ?>" <?= old('from_producer_id') == $p['id'] ? 'selected' : '' ?>>
-                                                <?= esc($p['name']) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <div class="form-text">Select the producer whose chips are being ingested, if known.</div>
-                                </div>
 
                                 <div class="mb-4">
                                     <label class="form-label" for="remarks">Remarks <small class="text-muted">(optional)</small></label>
