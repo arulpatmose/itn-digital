@@ -32,7 +32,10 @@
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                     </select>
-                                    <div class="form-text">Search by chip code. Select all chips being received. <span class="text-muted">Only chips currently in the library are shown.</span></div>
+                                    <div class="form-text">
+                                        Search by chip code. Select all chips being received. <span class="text-muted">Only chips currently in the library are shown.</span>
+                                        <div class="alert alert-warning py-1 px-2 mb-0 mt-2 small"><i class="fa fa-triangle-exclamation me-1"></i>Can't find a chip? It may still be in an open ingest session — close that session first.</div>
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">

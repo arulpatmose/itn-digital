@@ -27,7 +27,10 @@
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
                                     <select class="form-select select2-chips" id="chip_ids" name="chip_ids[]" multiple required>
                                     </select>
-                                    <div class="form-text">Search by chip code. <span class="text-muted">Chips currently in the library or in an active ingest session are excluded.</span></div>
+                                    <div class="form-text">
+                                        Search by chip code. <span class="text-muted">Chips currently in the library or in an active ingest session are excluded.</span>
+                                        <div class="alert alert-warning py-1 px-2 mb-0 mt-2 small"><i class="fa fa-triangle-exclamation me-1"></i>Can't find a chip? Close any open ingest sessions first, or hand it over from the library if it has already been returned.</div>
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">

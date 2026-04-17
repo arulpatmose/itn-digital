@@ -23,6 +23,14 @@
                             <div class="col-md-12">
                                 <p class="text-muted mb-4">A new ingest session will be created for this transaction.</p>
 
+                                <div class="alert alert-info d-flex gap-2 align-items-start py-2 px-3 mb-4">
+                                    <i class="fa fa-circle-info mt-1"></i>
+                                    <div>
+                                        Before starting, ensure all previous ingest sessions are <strong>closed</strong> and copy statuses are marked <strong>done</strong>.
+                                        Chips still in an open session will not appear in the session chip picker.
+                                    </div>
+                                </div>
+
                                 <h5 class="mb-3">Session Details</h5>
 
                                 <div class="mb-4">
