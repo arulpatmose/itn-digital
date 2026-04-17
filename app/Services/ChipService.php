@@ -66,8 +66,8 @@ class ChipService
         }
 
         if ($onlyLocation !== null) {
-            // null to_location = no transactions yet; treat as library-held
-            $all = array_filter($all, fn($c) => ($c['to_location'] ?? null) === $onlyLocation || ($c['to_location'] ?? null) === null);
+            // null to_location = no transactions yet; treat as library-held when filtering for library
+            $all = array_filter($all, fn($c) => ($c['to_location'] ?? null) === $onlyLocation || ($onlyLocation === 'library' && ($c['to_location'] ?? null) === null));
         }
 
         if ($search) {

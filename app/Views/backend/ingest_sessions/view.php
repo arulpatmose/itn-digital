@@ -282,8 +282,8 @@
                         '<span class="badge bg-success">Copied</span>' :
                         '<span class="badge bg-secondary">Pending</span>';
                     var btnHtml = isDone ?
-                        '<button class="btn btn-xs btn-alt-secondary btn-toggle-status" data-item="' + itemId + '" data-status="pending" title="Mark as pending"><i class="fa fa-undo"></i></button>' :
-                        '<button class="btn btn-xs btn-alt-success btn-toggle-status" data-item="' + itemId + '" data-status="done" title="Mark as copied"><i class="fa fa-check"></i></button>';
+                        '<button class="btn btn-sm btn-secondary btn-toggle-status" data-item="' + itemId + '" data-status="pending" title="Mark as pending"><i class="fa fa-undo"></i></button>' :
+                        '<button class="btn btn-sm btn-success btn-toggle-status" data-item="' + itemId + '" data-status="done" title="Mark as copied"><i class="fa fa-check"></i></button>';
                     $row.find('td').eq(-2).html(badge);
                     $row.find('td:last').html(btnHtml);
 
