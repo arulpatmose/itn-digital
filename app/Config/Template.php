@@ -443,7 +443,7 @@ class Template extends BaseConfig
             'name'       => 'Activity Log',
             'icon'       => 'fa fa-history',
             'url'        => 'activity-log',
-            'permission' => 'admin.settings',
+            'permission' => 'activity_log.access',
         ),
         array(
             'type'       => 'nav-item',
