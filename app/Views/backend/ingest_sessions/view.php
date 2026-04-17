@@ -99,15 +99,15 @@
                     </div>
                     <div class="block-content pb-3">
                         <div class="row g-3 align-items-end">
-                            <div class="col-12 col-md-8">
+                            <div class="col-md-12">
                                 <label class="form-label mb-1">Chips</label>
                                 <select class="form-select select2-chips" id="quick-chip-ids" name="chip_ids[]" multiple></select>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-10">
                                 <label class="form-label mb-1">Remarks</label>
                                 <input type="text" class="form-control" id="quick-remarks" placeholder="Optional">
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 col-md-2">
                                 <button class="btn btn-primary" id="btn-quick-ingest">
                                     <i class="fa fa-layer-group me-1"></i> Ingest Selected
                                 </button>
@@ -136,6 +136,7 @@
                                         <th>Ingested At</th>
                                         <th>By</th>
                                         <th class="text-center">Copy Status</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -164,6 +165,12 @@
                                             <td class="text-center">
                                                 <?php if ($chip['copy_status'] === 'done'): ?>
                                                     <span class="badge bg-success me-1">Copied</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-secondary me-1">Pending</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="text-center">
+                                                <?php if ($chip['copy_status'] === 'done'): ?>
                                                     <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
                                                         <button class="btn btn-xs btn-alt-secondary btn-toggle-status"
                                                             data-item="<?= $chip['item_id'] ?>" data-status="pending"
@@ -172,7 +179,6 @@
                                                         </button>
                                                     <?php endif; ?>
                                                 <?php else: ?>
-                                                    <span class="badge bg-secondary me-1">Pending</span>
                                                     <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
                                                         <button class="btn btn-xs btn-alt-success btn-toggle-status"
                                                             data-item="<?= $chip['item_id'] ?>" data-status="done"
@@ -224,7 +230,7 @@
                 responsive: true,
                 columnDefs: [{
                     orderable: false,
-                    targets: 6
+                    targets: 7
                 }],
             });
         }
