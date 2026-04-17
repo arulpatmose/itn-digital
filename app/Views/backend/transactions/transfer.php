@@ -21,7 +21,7 @@
                     <div class="block-content">
                         <div class="row">
                             <div class="col-md-12">
-                                <p class="text-muted mb-4">Transfer chips from yourself to another producer.</p>
+                                <p class="text-muted mb-4">Transfer chips between producers.</p>
 
                                 <div class="mb-4">
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
@@ -34,13 +34,13 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label">From (Current Holder)</label>
-                                    <?php if ($currentParticipant): ?>
-                                        <input type="hidden" name="from_participant_id" value="<?= $currentParticipant['id'] ?>">
-                                        <div class="form-control bg-success-light text-success"><?= esc($currentParticipant['name']) ?> <span class="text-muted">(<?= esc($currentParticipant['type']) ?>)</span></div>
-                                    <?php else: ?>
-                                        <div class="alert alert-warning mb-0">Your account is not linked to a participant. The sender will not be recorded.</div>
-                                    <?php endif; ?>
+                                    <label class="form-label" for="from_participant_id">From Producer <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="from_participant_id" name="from_participant_id" required>
+                                        <option value="">— Select producer —</option>
+                                        <?php foreach ($producers as $p): ?>
+                                            <option value="<?= $p['id'] ?>" <?= old('from_participant_id') == $p['id'] ? 'selected' : '' ?>><?= esc($p['name']) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
 
                                 <div class="mb-4">
@@ -48,7 +48,7 @@
                                     <select class="form-select" id="to_participant_id" name="to_participant_id" required>
                                         <option value="">— Select producer —</option>
                                         <?php foreach ($producers as $p): ?>
-                                            <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
+                                            <option value="<?= $p['id'] ?>" <?= old('to_participant_id') == $p['id'] ? 'selected' : '' ?>><?= esc($p['name']) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -79,6 +79,23 @@
                 confirmButtonColor: '#dc3545'
             });
         <?php endif; ?>
+
+        function syncProducerDropdowns() {
+            var fromVal = $('#from_participant_id').val();
+            var toVal   = $('#to_participant_id').val();
+
+            $('#to_participant_id option').prop('disabled', false);
+            $('#from_participant_id option').prop('disabled', false);
+
+            if (fromVal) $('#to_participant_id option[value="' + fromVal + '"]').prop('disabled', true);
+            if (toVal)   $('#from_participant_id option[value="' + toVal + '"]').prop('disabled', true);
+
+            if ($('#to_participant_id').val() === fromVal) $('#to_participant_id').val('');
+            if ($('#from_participant_id').val() === toVal) $('#from_participant_id').val('');
+        }
+
+        $('#from_participant_id, #to_participant_id').on('change', syncProducerDropdowns);
+        syncProducerDropdowns();
 
         $('.select2-chips').select2({
             placeholder: 'Search by chip code…',

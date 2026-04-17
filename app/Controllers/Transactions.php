@@ -75,10 +75,9 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/transfer', [
-            'page_title'         => 'Transfer Chips',
-            'page_description'   => 'Transfer chips from yourself to another producer.',
-            'currentParticipant' => $this->participantModel->getByUserId(auth()->id()),
-            'producers'          => $this->participantModel->getProducers(),
+            'page_title'       => 'Transfer Chips',
+            'page_description' => 'Transfer chips between producers.',
+            'producers'        => $this->participantModel->getProducers(),
         ]);
     }
 
@@ -162,6 +161,12 @@ class Transactions extends BaseController
                 }
                 $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
                 $toId   = (int) $this->request->getPost('to_participant_id');
+                if (!$fromId || !$toId) {
+                    return redirect()->back()->withInput()->with('error', 'Both From and To producers are required.');
+                }
+                if ($fromId === $toId) {
+                    return redirect()->back()->withInput()->with('error', 'From and To producers must be different.');
+                }
                 $result = $this->txService->transfer($chipIds, $fromId, $toId, $handledBy, $remarks);
                 break;
 
