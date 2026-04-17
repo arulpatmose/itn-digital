@@ -27,7 +27,7 @@
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
                                     <select class="form-select select2-chips" id="chip_ids" name="chip_ids[]" multiple required>
                                     </select>
-                                    <div class="form-text">Search by chip code.</div>
+                                    <div class="form-text">Search by chip code. <span class="text-muted">Chips currently in the library or in an active ingest session are excluded.</span></div>
                                 </div>
 
                                 <div class="mb-4">

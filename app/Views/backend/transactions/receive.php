@@ -32,7 +32,7 @@
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                     </select>
-                                    <div class="form-text">Search by chip code. Select all chips being received.</div>
+                                    <div class="form-text">Search by chip code. Select all chips being received. <span class="text-muted">Only chips currently in the library are shown.</span></div>
                                 </div>
 
                                 <div class="mb-4">

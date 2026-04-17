@@ -102,6 +102,7 @@
                             <div class="col-md-12">
                                 <label class="form-label mb-1">Chips</label>
                                 <select class="form-select select2-chips" id="quick-chip-ids" name="chip_ids[]" multiple></select>
+                                <div class="form-text"><span class="text-muted">Chips already in this session or another active session are excluded.</span></div>
                             </div>
                             <div class="col-12 col-md-10">
                                 <label class="form-label mb-1">Remarks</label>

@@ -48,7 +48,7 @@
                                             <option value="<?= $c['id'] ?>" selected><?= esc($c['text']) ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <div class="form-text">Search by chip code.</div>
+                                    <div class="form-text">Search by chip code. <span class="text-muted">All registered chips are shown.</span></div>
                                 </div>
 
 
