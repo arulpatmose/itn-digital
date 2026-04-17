@@ -39,16 +39,16 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label" for="from_participant_id">Received From <small class="text-muted">(optional)</small></label>
-                                    <select class="form-select" id="from_participant_id" name="from_participant_id">
-                                        <option value="">— Unknown / Direct —</option>
+                                    <label class="form-label" for="from_participant_id">Received From <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="from_participant_id" name="from_participant_id" required>
+                                        <option value="">— Select producer —</option>
                                         <?php foreach ($producers as $p): ?>
                                             <option value="<?= $p['id'] ?>" <?= old('from_participant_id') == $p['id'] ? 'selected' : '' ?>>
                                                 <?= esc($p['name']) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <div class="form-text">Select the producer who handed over the chips, if known.</div>
+                                    <div class="form-text">Select the producer handing over the chips.</div>
                                 </div>
 
                                 <div class="mb-4">

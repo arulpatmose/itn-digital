@@ -143,6 +143,9 @@ class Transactions extends BaseController
         switch ($type) {
             case 'receive':
                 $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
+                if (!$fromId) {
+                    return redirect()->back()->withInput()->with('error', 'Please select the producer handing over the chips.');
+                }
                 $result = $this->txService->receive($chipIds, $fromId, $handledBy, $remarks);
                 break;
 
