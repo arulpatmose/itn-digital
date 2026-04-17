@@ -238,13 +238,16 @@
         $('#quick-chip-ids').select2({
             placeholder: 'Search chips…',
             minimumInputLength: 1,
+            dropdownParent: document.querySelector('#page-container'),
             ajax: {
                 url: '<?= base_url('chips/api-list') ?>',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
                     return {
-                        q: params.term
+                        q: params.term,
+                        exclude_open_session: 1,
+                        exclude_session_id: <?= $session['id'] ?>,
                     };
                 },
                 processResults: function(data) {

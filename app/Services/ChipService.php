@@ -46,9 +46,10 @@ class ChipService
 
     /**
      * Get chip Select2 data: chip_code + type + current location.
-     * $excludeLocation: skip chips whose to_location matches (e.g. 'library').
+     * $excludeLocation:  skip chips whose to_location matches (e.g. 'library').
+     * $excludeSessionId: skip chips already in this ingest session.
      */
-    public function getSelect2Data(?string $search = null, bool $excludeOpenSession = false, ?string $excludeLocation = null): array
+    public function getSelect2Data(?string $search = null, bool $excludeOpenSession = false, ?string $excludeLocation = null, ?int $excludeSessionId = null): array
     {
         $all = $this->chipModel->getAllWithCurrentHolder();
 
@@ -58,6 +59,10 @@ class ChipService
 
         if ($excludeLocation !== null) {
             $all = array_filter($all, fn($c) => ($c['to_location'] ?? null) !== $excludeLocation);
+        }
+
+        if ($excludeSessionId !== null) {
+            $all = array_filter($all, fn($c) => ($c['ingest_session_id'] ?? null) != $excludeSessionId);
         }
 
         if ($search) {
