@@ -56,10 +56,9 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/receive', [
-            'page_title'          => 'Receive Chips',
-            'page_description'    => 'Record chips coming in from a librarian or producer.',
-            'currentParticipant'  => $this->participantModel->getByUserId(auth()->id()),
-            'sources'             => $this->participantModel->getLibrariansAndProducers(),
+            'page_title'       => 'Receive Chips',
+            'page_description' => 'Record chips arriving at ITN Digital from a producer.',
+            'producers'        => $this->participantModel->getProducers(),
         ]);
     }
 
@@ -96,10 +95,8 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/handover', [
-            'page_title'         => 'Hand Over Chips',
-            'page_description'   => 'Return chips to a librarian.',
-            'currentParticipant' => $this->participantModel->getByUserId(auth()->id()),
-            'librarians'         => $this->participantModel->getLibrarians(),
+            'page_title'       => 'Hand Over Chips',
+            'page_description' => 'Return chips to the library — this closes the chip cycle.',
         ]);
     }
 
@@ -121,10 +118,10 @@ class Transactions extends BaseController
             : [];
 
         return view('backend/transactions/ingest', [
-            'page_title'         => 'Ingest Chips',
-            'page_description'   => 'Log chips as ingested into a new session.',
-            'currentParticipant' => $this->participantModel->getByUserId(auth()->id()),
-            'preloadChips'       => array_values($preloadChips),
+            'page_title'       => 'Ingest Chips',
+            'page_description' => 'Log chips as ingested into a new session.',
+            'producers'        => $this->participantModel->getProducers(),
+            'preloadChips'     => array_values($preloadChips),
         ]);
     }
 
@@ -146,11 +143,7 @@ class Transactions extends BaseController
         switch ($type) {
             case 'receive':
                 $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
-                $toId   = (int) $this->request->getPost('to_participant_id')   ?: null;
-                if (!$fromId) {
-                    return redirect()->back()->withInput()->with('error', 'Please select who is handing over the chips.');
-                }
-                $result = $this->txService->receive($chipIds, $fromId, $toId, $handledBy, $remarks);
+                $result = $this->txService->receive($chipIds, $fromId, $handledBy, $remarks);
                 break;
 
             case 'transfer':
@@ -172,24 +165,15 @@ class Transactions extends BaseController
             case 'handover':
                 $inLibrary = $this->chipModel->getChipsHeldByLibrarian($chipIds);
                 if (!empty($inLibrary)) {
-                    $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (held by {$c['holder_name']})", $inLibrary));
-                    return redirect()->back()->withInput()->with('error', "Cannot hand over — these chips are in the library. Please receive them first: {$list}.");
+                    $list = implode(', ', array_map(fn($c) => "{$c['chip_code']}", $inLibrary));
+                    return redirect()->back()->withInput()->with('error', "Cannot hand over — these chips are already in the library: {$list}.");
                 }
                 $blocked = $this->chipModel->getChipsInOpenSessions($chipIds);
                 if (!empty($blocked)) {
                     $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (in \"{$c['session_title']}\")", $blocked));
                     return redirect()->back()->withInput()->with('error', "Cannot hand over — these chips are in an open ingest session: {$list}.");
                 }
-                $fromId = (int) $this->request->getPost('from_participant_id') ?: null;
-                $toId   = (int) $this->request->getPost('to_participant_id');
-                if (!$toId) {
-                    return redirect()->back()->withInput()->with('error', 'A librarian must be selected to receive the chips.');
-                }
-                $librarian = $this->participantModel->find($toId);
-                if (!$librarian || $librarian['type'] !== 'librarian') {
-                    return redirect()->back()->withInput()->with('error', 'Chips can only be handed over to a librarian.');
-                }
-                $result = $this->txService->handover($chipIds, $fromId, $toId, $handledBy, $remarks);
+                $result = $this->txService->handover($chipIds, $handledBy, $remarks);
                 break;
 
             case 'ingest':
@@ -201,9 +185,9 @@ class Transactions extends BaseController
                 if (!$location) {
                     return redirect()->back()->withInput()->with('error', 'Ingest path is required.');
                 }
-                $fromId          = (int) $this->request->getPost('from_participant_id') ?: null;
+                $fromProducerId  = (int) $this->request->getPost('from_producer_id') ?: null;
                 $ingestSessionId = $this->sessionService->create($sessionTitle, $handledBy, $location, $remarks ?: null);
-                $result          = $this->txService->ingest($chipIds, $fromId, $handledBy, $ingestSessionId, null);
+                $result          = $this->txService->ingest($chipIds, $fromProducerId, $handledBy, $ingestSessionId, null);
                 break;
 
             default:

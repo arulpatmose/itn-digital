@@ -1,6 +1,4 @@
-<?php
-
-/** @var array $librarians, $currentParticipant */ ?>
+<?php ?>
 
 <?= $this->extend('default') ?>
 
@@ -21,7 +19,7 @@
                     <div class="block-content">
                         <div class="row">
                             <div class="col-md-12">
-                                <p class="text-muted mb-4">Return chips to a librarian.</p>
+                                <p class="text-muted mb-4">Hand over chips from <strong>ITN Digital</strong> to the <strong>Library</strong>. This closes the chip cycle.</p>
 
                                 <div class="mb-4">
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
@@ -30,24 +28,17 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label">Handing Over From</label>
-                                    <?php if ($currentParticipant): ?>
-                                        <input type="hidden" name="from_participant_id" value="<?= $currentParticipant['id'] ?>">
-                                        <div class="form-control bg-success-light text-success"><?= esc($currentParticipant['name']) ?> <span class="text-muted">(<?= esc($currentParticipant['type']) ?>)</span></div>
-                                    <?php else: ?>
-                                        <div class="alert alert-warning mb-0">Your account is not linked to a participant. The sender will not be recorded.</div>
-                                    <?php endif; ?>
+                                    <label class="form-label">From</label>
+                                    <div class="form-control bg-light text-muted">
+                                        <i class="fa fa-building fa-fw me-1"></i> ITN Digital
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label" for="to_participant_id">Received By Librarian <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="to_participant_id" name="to_participant_id" required>
-                                        <option value="">— Select librarian —</option>
-                                        <?php foreach ($librarians as $p): ?>
-                                            <option value="<?= $p['id'] ?>"><?= esc($p['name']) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <div class="form-text">Only librarians can receive a chip handover.</div>
+                                    <label class="form-label">To</label>
+                                    <div class="form-control bg-light text-muted">
+                                        <i class="fa fa-book fa-fw me-1"></i> Library
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">
@@ -88,7 +79,7 @@
                     return {
                         q: params.term,
                         exclude_open_session: 1,
-                        exclude_holder_type: 'librarian',
+                        exclude_location: 'library',
                     };
                 },
                 processResults: function(data) {

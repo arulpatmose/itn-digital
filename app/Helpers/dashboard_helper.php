@@ -98,10 +98,10 @@ if (!function_exists('get_greeting')) {
 
             // Chips
             $chips = (new ChipModel())->getAllWithCurrentHolder();
-            $counts['chips_total']     = count($chips);
-            $counts['chips_producers'] = count(array_filter($chips, fn($c) => $c['holder_type'] === 'producer'));
-            $counts['chips_library']   = count(array_filter($chips, fn($c) => $c['holder_type'] === 'librarian'));
-            $counts['chips_ingestors'] = count(array_filter($chips, fn($c) => $c['holder_type'] === 'ingestor'));
+            $counts['chips_total']    = count($chips);
+            $counts['chips_producers'] = count(array_filter($chips, fn($c) => ($c['to_location'] ?? null) === 'producer'));
+            $counts['chips_library']   = count(array_filter($chips, fn($c) => ($c['to_location'] ?? null) === 'library'));
+            $counts['chips_digital_unit']  = count(array_filter($chips, fn($c) => ($c['to_location'] ?? null) === 'digital_unit'));
 
             // Ingest sessions
             $counts['sessions_open']    = $db->table('ingest_sessions')->where('status', 'open')->countAllResults();

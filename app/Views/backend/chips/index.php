@@ -48,19 +48,32 @@
                                             <span class="badge <?= $typeClass ?>"><?= esc($chip['chip_type']) ?></span>
                                         </td>
                                         <td>
-                                            <?php if ($chip['holder_type'] === 'ingestor'): ?>
+                                            <?php if ($chip['to_location'] === 'digital_unit'): ?>
                                                 <i class="fa fa-building fa-fw text-muted"></i> ITN Digital
-                                            <?php elseif ($chip['holder_type'] === 'librarian'): ?>
+                                            <?php elseif ($chip['to_location'] === 'library'): ?>
                                                 <i class="fa fa-book fa-fw text-muted"></i> Library
-                                            <?php elseif ($chip['holder_name']): ?>
+                                            <?php elseif ($chip['to_location'] === 'producer' && $chip['holder_name']): ?>
                                                 <?= esc($chip['holder_name']) ?>
-                                            <?php elseif ($chip['last_tx_type'] === 'INGEST' && $chip['ingest_session_title']): ?>
+                                            <?php elseif ($chip['to_location'] === 'ingest' && $chip['ingest_session_title']): ?>
                                                 <span class="text-warning"><i class="fa fa-download fa-fw"></i> At Ingest: <?= esc($chip['ingest_session_title']) ?></span>
                                             <?php else: ?>
                                                 <span class="text-muted">—</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?= $chip['holder_type'] ? '<span class="badge bg-secondary">' . esc($chip['holder_type'] === 'librarian' ? 'library' : $chip['holder_type']) . '</span>' : ($chip['last_tx_type'] === 'INGEST' ? '<span class="badge bg-warning">ingest</span>' : '—') ?></td>
+                                        <td>
+                                            <?php
+                                            $locBadge = match($chip['to_location'] ?? null) {
+                                                'digital_unit' => ['ITN Digital', 'bg-info'],
+                                                'library'  => ['Library',     'bg-warning'],
+                                                'producer' => ['Producer',    'bg-secondary'],
+                                                'ingest'   => ['Ingest',      'bg-primary'],
+                                                default    => null,
+                                            };
+                                            echo $locBadge
+                                                ? '<span class="badge ' . $locBadge[1] . '">' . $locBadge[0] . '</span>'
+                                                : '—';
+                                            ?>
+                                        </td>
                                         <td class="text-muted small"><?= esc($chip['notes'] ?? '—') ?></td>
                                         <td class="text-center">
                                             <div class="btn-group">

@@ -1,6 +1,6 @@
 <?php
 
-/** @var array $sources, $currentParticipant */ ?>
+/** @var array $producers */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -21,7 +21,7 @@
                     <div class="block-content">
                         <div class="row">
                             <div class="col-md-12">
-                                <p class="text-muted mb-4">Record chips coming in from a librarian or producer.</p>
+                                <p class="text-muted mb-4">Record chips arriving at <strong>ITN Digital</strong> from a producer.</p>
 
                                 <div class="mb-4">
                                     <label class="form-label" for="chip_ids">Chips <span class="text-danger">*</span></label>
@@ -36,25 +36,23 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label" for="from_participant_id">Received From <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="from_participant_id" name="from_participant_id" required>
-                                        <option value="">— Select source —</option>
-                                        <?php foreach ($sources as $p): ?>
+                                    <label class="form-label" for="from_participant_id">Received From <small class="text-muted">(optional)</small></label>
+                                    <select class="form-select" id="from_participant_id" name="from_participant_id">
+                                        <option value="">— Unknown / Direct —</option>
+                                        <?php foreach ($producers as $p): ?>
                                             <option value="<?= $p['id'] ?>" <?= old('from_participant_id') == $p['id'] ? 'selected' : '' ?>>
-                                                <?= esc($p['name']) ?> (<?= esc($p['type']) ?>)
+                                                <?= esc($p['name']) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
+                                    <div class="form-text">Select the producer who handed over the chips, if known.</div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label">Receiver (You)</label>
-                                    <?php if ($currentParticipant): ?>
-                                        <input type="hidden" name="to_participant_id" value="<?= $currentParticipant['id'] ?>">
-                                        <div class="form-control bg-success-light text-success"><?= esc($currentParticipant['name']) ?> <span class="text-muted">(<?= esc($currentParticipant['type']) ?>)</span></div>
-                                    <?php else: ?>
-                                        <div class="alert alert-warning mb-0">Your account is not linked to a participant. The receiver will not be recorded.</div>
-                                    <?php endif; ?>
+                                    <label class="form-label">Destination</label>
+                                    <div class="form-control bg-light text-muted">
+                                        <i class="fa fa-building fa-fw me-1"></i> ITN Digital
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">

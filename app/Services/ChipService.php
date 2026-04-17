@@ -14,18 +14,20 @@ class ChipService
     }
 
     /**
-     * Get the current holder of a chip.
+     * Get the current location/holder of a chip.
      */
     public function getCurrentHolder(int $chipId): ?array
     {
         $chip = $this->chipModel->getWithCurrentHolder($chipId);
-        if (!$chip || !$chip['holder_id']) return null;
+        if (!$chip) return null;
 
-        return [
-            'id'   => $chip['holder_id'],
-            'name' => $chip['holder_name'],
-            'type' => $chip['holder_type'],
-        ];
+        return match($chip['to_location'] ?? null) {
+            'producer' => $chip['holder_id'] ? ['id' => $chip['holder_id'], 'name' => $chip['holder_name'], 'type' => 'producer'] : null,
+            'digital_unit' => ['id' => null, 'name' => 'ITN Digital', 'type' => 'digital_unit'],
+            'library'  => ['id' => null, 'name' => 'Library',     'type' => 'library'],
+            'ingest'   => ['id' => null, 'name' => 'At Ingest',   'type' => 'ingest'],
+            default    => null,
+        };
     }
 
     /**
@@ -43,9 +45,10 @@ class ChipService
     }
 
     /**
-     * Get chip Select2 data: chip_code + type + current holder.
+     * Get chip Select2 data: chip_code + type + current location.
+     * $excludeLocation: skip chips whose to_location matches (e.g. 'library').
      */
-    public function getSelect2Data(?string $search = null, bool $excludeOpenSession = false, ?string $excludeHolderType = null): array
+    public function getSelect2Data(?string $search = null, bool $excludeOpenSession = false, ?string $excludeLocation = null): array
     {
         $all = $this->chipModel->getAllWithCurrentHolder();
 
@@ -53,8 +56,8 @@ class ChipService
             $all = array_filter($all, fn($c) => ($c['ingest_session_status'] ?? null) !== 'open');
         }
 
-        if ($excludeHolderType !== null) {
-            $all = array_filter($all, fn($c) => ($c['holder_type'] ?? null) !== $excludeHolderType);
+        if ($excludeLocation !== null) {
+            $all = array_filter($all, fn($c) => ($c['to_location'] ?? null) !== $excludeLocation);
         }
 
         if ($search) {
@@ -67,12 +70,13 @@ class ChipService
 
         return array_values(array_map(fn($c) => [
             'id'   => $c['id'],
-            'text' => "[{$c['chip_type']}] {$c['chip_code']}" .
-                      ($c['holder_type'] === 'ingestor'
-                          ? ' — ITN Digital'
-                          : ($c['holder_type'] === 'librarian'
-                              ? ' — Library'
-                              : ($c['holder_name'] ? " — {$c['holder_name']}" : ' — Unassigned'))),
+            'text' => "[{$c['chip_type']}] {$c['chip_code']}" . match($c['to_location'] ?? null) {
+                'digital_unit' => ' — ITN Digital',
+                'library'  => ' — Library',
+                'ingest'   => ' — At Ingest',
+                'producer' => $c['holder_name'] ? " — {$c['holder_name']}" : ' — Unassigned',
+                default    => ' — Unassigned',
+            },
         ], $all));
     }
 }

@@ -268,8 +268,8 @@
                     <div class="block-content block-content-full ratio ratio-16x9">
                         <div class="d-flex justify-content-center align-items-center">
                             <div>
-                                <div class="fs-2 fw-bold text-info"><?= number_format($totals['chips_ingestors']) ?></div>
-                                <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">With Ingestors</div>
+                                <div class="fs-2 fw-bold text-info"><?= number_format($totals['chips_digital_unit']) ?></div>
+                                <div class="fs-sm fw-semibold mt-1 text-uppercase text-muted">At ITN Digital</div>
                             </div>
                         </div>
                     </div>

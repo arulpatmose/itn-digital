@@ -97,7 +97,15 @@
                                         </td>
                                         <td><?= (int) $tx['chip_count'] ?></td>
                                         <td><?= $tx['from_name'] ? esc($tx['from_name']) : '<span class="text-muted">—</span>' ?></td>
-                                        <td><?= $tx['to_name']   ? esc($tx['to_name'])   : '<span class="text-muted">—</span>' ?></td>
+                                        <td><?php
+                                            echo match($tx['to_location'] ?? null) {
+                                                'digital_unit' => '<i class="fa fa-building fa-fw text-muted"></i> ITN Digital',
+                                                'library'  => '<i class="fa fa-book fa-fw text-muted"></i> Library',
+                                                'ingest'   => '<span class="text-primary"><i class="fa fa-layer-group fa-fw"></i> Ingest</span>',
+                                                'producer' => $tx['to_name'] ? esc($tx['to_name']) : '<span class="text-muted">—</span>',
+                                                default    => '<span class="text-muted">—</span>',
+                                            };
+                                        ?></td>
                                         <td>
                                             <?php if ($tx['session_title'] && $tx['ingest_session_id']): ?>
                                                 <a href="<?= base_url('ingest-sessions/' . $tx['ingest_session_id']) ?>">

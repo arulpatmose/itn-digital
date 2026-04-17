@@ -37,11 +37,15 @@
                             <span class="badge <?= $typeClass ?>"><?= esc($chip['chip_type']) ?></span>
                         </dd>
 
-                        <dt class="col-sm-4">Holder</dt>
+                        <dt class="col-sm-4">Location</dt>
                         <dd class="col-sm-8">
-                            <?php if ($chip['holder_name']): ?>
-                                <?= esc($chip['holder_name']) ?> <span class="badge bg-secondary"><?= esc($chip['holder_type']) ?></span>
-                            <?php elseif (($chip['last_tx_type'] ?? '') === 'INGEST' && !empty($chip['ingest_session_title'])): ?>
+                            <?php if ($chip['to_location'] === 'digital_unit'): ?>
+                                <i class="fa fa-building fa-fw text-muted"></i> ITN Digital
+                            <?php elseif ($chip['to_location'] === 'library'): ?>
+                                <i class="fa fa-book fa-fw text-muted"></i> Library
+                            <?php elseif ($chip['to_location'] === 'producer' && $chip['holder_name']): ?>
+                                <?= esc($chip['holder_name']) ?> <span class="badge bg-secondary">Producer</span>
+                            <?php elseif ($chip['to_location'] === 'ingest' && !empty($chip['ingest_session_title'])): ?>
                                 <span class="text-warning"><i class="fa fa-download fa-fw"></i> At Ingest: <?= esc($chip['ingest_session_title']) ?></span>
                             <?php else: ?>
                                 <span class="text-muted">Unassigned</span>
@@ -100,7 +104,15 @@
                                                 <span class="badge <?= $txClass ?>"><?= esc($tx['transaction_type']) ?></span>
                                             </td>
                                             <td><?= $tx['from_name'] ? esc($tx['from_name']) : '<span class="text-muted">—</span>' ?></td>
-                                            <td><?= $tx['to_name']   ? esc($tx['to_name'])   : '<span class="text-muted">—</span>' ?></td>
+                                            <td><?php
+                                                echo match($tx['to_location'] ?? null) {
+                                                    'digital_unit' => '<i class="fa fa-building fa-fw text-muted"></i> ITN Digital',
+                                                    'library'  => '<i class="fa fa-book fa-fw text-muted"></i> Library',
+                                                    'ingest'   => '<span class="text-primary"><i class="fa fa-layer-group fa-fw"></i> Ingest</span>',
+                                                    'producer' => $tx['to_name'] ? esc($tx['to_name']) : '<span class="text-muted">—</span>',
+                                                    default    => '<span class="text-muted">—</span>',
+                                                };
+                                            ?></td>
                                             <td><?= $tx['session_title'] ? esc($tx['session_title']) : '<span class="text-muted">—</span>' ?></td>
                                             <td><?= esc($tx['handler_name'] ?? '—') ?></td>
                                             <td class="text-muted small"><?= esc($tx['remarks'] ?? '—') ?></td>

@@ -88,7 +88,7 @@
                     return {
                         q: params.term,
                         exclude_open_session: 1,
-                        exclude_holder_type: 'librarian',
+                        exclude_location: 'library',
                     };
                 },
                 processResults: function(data) {

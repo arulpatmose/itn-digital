@@ -12,7 +12,7 @@ class ChipTransactionModel extends Model
     protected $useTimestamps = true;
     protected $allowedFields = [
         'transaction_type', 'from_participant_id', 'to_participant_id',
-        'ingest_session_id', 'handled_by', 'remarks',
+        'to_location', 'ingest_session_id', 'handled_by', 'remarks',
     ];
 
     /**
@@ -23,8 +23,8 @@ class ChipTransactionModel extends Model
         $builder = $this->db->table('chip_transactions ct')
             ->select("
                 ct.*,
-                fp.name AS from_name, fp.type AS from_type,
-                tp.name AS to_name,   tp.type AS to_type,
+                fp.name AS from_name,
+                tp.name AS to_name,
                 CONCAT(u.first_name, ' ', u.last_name) AS handler_name,
                 s.title AS session_title,
                 COUNT(ti.id) AS chip_count
@@ -52,8 +52,8 @@ class ChipTransactionModel extends Model
         $tx = $this->db->table('chip_transactions ct')
             ->select("
                 ct.*,
-                fp.name AS from_name, fp.type AS from_type,
-                tp.name AS to_name,   tp.type AS to_type,
+                fp.name AS from_name,
+                tp.name AS to_name,
                 CONCAT(u.first_name, ' ', u.last_name) AS handler_name,
                 s.title AS session_title
             ")

@@ -156,7 +156,7 @@ class Chips extends BaseController
         }
         $search             = $this->request->getGet('q');
         $excludeOpenSession = (bool) $this->request->getGet('exclude_open_session');
-        $excludeHolderType  = $this->request->getGet('exclude_holder_type') ?: null;
-        return $this->response->setJSON($this->chipService->getSelect2Data($search, $excludeOpenSession, $excludeHolderType));
+        $excludeLocation    = $this->request->getGet('exclude_location') ?: null;
+        return $this->response->setJSON($this->chipService->getSelect2Data($search, $excludeOpenSession, $excludeLocation));
     }
 }

@@ -21,9 +21,9 @@ class ChipModel extends Model
         return $this->db->query("
             SELECT
                 c.*,
+                ct.to_location,
                 p.id   AS holder_id,
                 p.name AS holder_name,
-                p.type AS holder_type,
                 ct.transaction_type AS last_tx_type,
                 ct.created_at       AS last_tx_at,
                 s.id     AS ingest_session_id,
@@ -51,9 +51,9 @@ class ChipModel extends Model
         return $this->db->query("
             SELECT
                 c.*,
+                ct.to_location,
                 p.id   AS holder_id,
                 p.name AS holder_name,
-                p.type AS holder_type,
                 ct.transaction_type AS last_tx_type,
                 ct.created_at       AS last_tx_at,
                 s.id    AS ingest_session_id,
@@ -82,12 +82,11 @@ class ChipModel extends Model
             SELECT
                 ct.id,
                 ct.transaction_type,
+                ct.to_location,
                 ct.remarks,
                 ct.created_at,
                 fp.name AS from_name,
-                fp.type AS from_type,
                 tp.name AS to_name,
-                tp.type AS to_type,
                 CONCAT(u.first_name, ' ', u.last_name) AS handler_name,
                 s.title AS session_title,
                 s.id    AS session_id
@@ -158,7 +157,7 @@ class ChipModel extends Model
 
         $ids = implode(',', array_map('intval', $chipIds));
         return $this->db->query("
-            SELECT c.id, c.chip_code, p.name AS holder_name
+            SELECT c.id, c.chip_code, 'Library' AS holder_name
             FROM chips c
             LEFT JOIN (
                 SELECT ti.chip_id, MAX(ct2.id) AS max_tx_id
@@ -167,9 +166,8 @@ class ChipModel extends Model
                 GROUP BY ti.chip_id
             ) latest ON latest.chip_id = c.id
             LEFT JOIN chip_transactions ct ON ct.id = latest.max_tx_id
-            LEFT JOIN participants p ON p.id = ct.to_participant_id
             WHERE c.id IN ({$ids})
-              AND p.type = 'librarian'
+              AND ct.to_location = 'library'
         ")->getResultArray();
     }
 

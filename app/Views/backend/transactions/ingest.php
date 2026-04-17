@@ -1,6 +1,6 @@
 <?php
 
-/** @var array $currentParticipant, $preloadChips */ ?>
+/** @var array $producers, $preloadChips */ ?>
 
 <?= $this->extend('default') ?>
 
@@ -52,13 +52,16 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label">Ingested By</label>
-                                    <?php if ($currentParticipant): ?>
-                                        <input type="hidden" name="from_participant_id" value="<?= $currentParticipant['id'] ?>">
-                                        <div class="form-control bg-success-light text-success"><?= esc($currentParticipant['name']) ?> <span class="text-muted">(<?= esc($currentParticipant['type']) ?>)</span></div>
-                                    <?php else: ?>
-                                        <div class="alert alert-warning mb-0">Your account is not linked to a participant. The submitter will not be recorded.</div>
-                                    <?php endif; ?>
+                                    <label class="form-label" for="from_producer_id">Producer <small class="text-muted">(optional)</small></label>
+                                    <select class="form-select" id="from_producer_id" name="from_producer_id">
+                                        <option value="">— Unknown —</option>
+                                        <?php foreach ($producers as $p): ?>
+                                            <option value="<?= $p['id'] ?>" <?= old('from_producer_id') == $p['id'] ? 'selected' : '' ?>>
+                                                <?= esc($p['name']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="form-text">Select the producer whose chips are being ingested, if known.</div>
                                 </div>
 
                                 <div class="mb-4">

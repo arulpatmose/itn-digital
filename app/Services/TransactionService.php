@@ -29,8 +29,9 @@ class TransactionService
         ?int    $toParticipantId,
         array   $chipIds,
         int     $handledBy,
-        ?int    $sessionId = null,
-        ?string $remarks   = null
+        ?int    $sessionId   = null,
+        ?string $remarks     = null,
+        ?string $toLocation  = null
     ): array {
         if (empty($chipIds)) {
             return ['success' => false, 'transaction_id' => null, 'warnings' => ['No chips selected.']];
@@ -45,6 +46,7 @@ class TransactionService
             'transaction_type'    => $type,
             'from_participant_id' => $fromParticipantId,
             'to_participant_id'   => $toParticipantId,
+            'to_location'         => $toLocation,
             'ingest_session_id'   => $sessionId,
             'handled_by'          => $handledBy,
             'remarks'             => $remarks ?: null,
@@ -69,24 +71,28 @@ class TransactionService
         return ['success' => true, 'transaction_id' => $txId, 'warnings' => $warnings];
     }
 
-    public function receive(array $chipIds, ?int $fromParticipantId, int $toParticipantId, int $handledBy, ?string $remarks = null): array
+    /** Chips arriving at ITN Digital digital_unit from a producer (optional). */
+    public function receive(array $chipIds, ?int $fromParticipantId, int $handledBy, ?string $remarks = null): array
     {
-        return $this->createTransaction('RECEIVE', $fromParticipantId, $toParticipantId, $chipIds, $handledBy, null, $remarks);
+        return $this->createTransaction('RECEIVE', $fromParticipantId, null, $chipIds, $handledBy, null, $remarks, 'digital_unit');
     }
 
+    /** Chips moving between two producers. */
     public function transfer(array $chipIds, ?int $fromParticipantId, int $toParticipantId, int $handledBy, ?string $remarks = null): array
     {
-        return $this->createTransaction('TRANSFER', $fromParticipantId, $toParticipantId, $chipIds, $handledBy, null, $remarks);
+        return $this->createTransaction('TRANSFER', $fromParticipantId, $toParticipantId, $chipIds, $handledBy, null, $remarks, 'producer');
     }
 
-    public function handover(array $chipIds, ?int $fromParticipantId, int $toParticipantId, int $handledBy, ?string $remarks = null): array
+    /** Chips leaving the digital_unit and going to the library — cycle closes. */
+    public function handover(array $chipIds, int $handledBy, ?string $remarks = null): array
     {
-        return $this->createTransaction('HANDOVER', $fromParticipantId, $toParticipantId, $chipIds, $handledBy, null, $remarks);
+        return $this->createTransaction('HANDOVER', null, null, $chipIds, $handledBy, null, $remarks, 'library');
     }
 
+    /** Chips being ingested into a session at ITN Digital. */
     public function ingest(array $chipIds, ?int $fromParticipantId, int $handledBy, int $sessionId, ?string $remarks = null): array
     {
-        return $this->createTransaction('INGEST', $fromParticipantId, null, $chipIds, $handledBy, $sessionId, $remarks);
+        return $this->createTransaction('INGEST', $fromParticipantId, null, $chipIds, $handledBy, $sessionId, $remarks, 'ingest');
     }
 
     /**
