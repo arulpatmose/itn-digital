@@ -172,17 +172,17 @@
                                             <td class="text-center">
                                                 <?php if ($chip['copy_status'] === 'done'): ?>
                                                     <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
-                                                        <button class="btn btn-xs btn-alt-secondary btn-toggle-status"
+                                                        <button class="btn btn-sm btn-secondary btn-toggle-status"
                                                             data-item="<?= $chip['item_id'] ?>" data-status="pending"
-                                                            title="Mark as pending">
+                                                            title="Mark as pending" data-bs-toggle="tooltip">
                                                             <i class="fa fa-undo"></i>
                                                         </button>
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
-                                                        <button class="btn btn-xs btn-alt-success btn-toggle-status"
+                                                        <button class="btn btn-sm btn-success btn-toggle-status"
                                                             data-item="<?= $chip['item_id'] ?>" data-status="done"
-                                                            title="Mark as copied">
+                                                            title="Mark as copied" data-bs-toggle="tooltip">
                                                             <i class="fa fa-check"></i>
                                                         </button>
                                                     <?php endif; ?>

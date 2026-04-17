@@ -55,28 +55,37 @@
                                         <td><?= esc($s['creator_name'] ?? '—') ?></td>
                                         <td class="text-nowrap"><?= date('d M Y H:i', strtotime($s['created_at'])) ?></td>
                                         <td class="text-center">
-                                            <a href="<?= base_url('ingest-sessions/' . $s['id']) ?>"
-                                                class="btn btn-sm btn-alt-secondary" title="View"
-                                                data-bs-toggle="tooltip">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                            <?php if ($s['status'] === 'open' && auth()->user()->can('ingest_sessions.close')): ?>
-                                                <button class="btn btn-sm btn-alt-secondary btn-close-session-row"
-                                                    data-id="<?= $s['id'] ?>"
-                                                    data-title="<?= esc($s['title']) ?>"
-                                                    title="Close session" data-bs-toggle="tooltip">
-                                                    <i class="fa fa-lock"></i>
-                                                </button>
-                                            <?php endif; ?>
-                                            <?php if (in_array($s['status'], ['closed', 'partial']) && auth()->user()->can('ingest_sessions.close')): ?>
-                                                <button class="btn btn-sm btn-alt-warning btn-resume-session"
-                                                    data-id="<?= $s['id'] ?>"
-                                                    data-title="<?= esc($s['title']) ?>"
-                                                    data-status="<?= $s['status'] ?>"
-                                                    title="Resume session" data-bs-toggle="tooltip">
-                                                    <i class="fa fa-rotate-right"></i>
-                                                </button>
-                                            <?php endif; ?>
+                                            <div class="btn-group btn-group-sm" role="group">
+
+                                                <!-- View -->
+                                                <a href="<?= base_url('ingest-sessions/' . $s['id']) ?>"
+                                                    class="btn btn-secondary" title="View"
+                                                    data-bs-toggle="tooltip">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+
+                                                <!-- Close -->
+                                                <?php if ($s['status'] === 'open' && auth()->user()->can('ingest_sessions.close')): ?>
+                                                    <button class="btn btn-danger btn-close-session-row"
+                                                        data-id="<?= $s['id'] ?>"
+                                                        data-title="<?= esc($s['title']) ?>"
+                                                        title="Close session" data-bs-toggle="tooltip">
+                                                        <i class="fa fa-lock"></i>
+                                                    </button>
+                                                <?php endif; ?>
+
+                                                <!-- Resume -->
+                                                <?php if (in_array($s['status'], ['closed', 'partial']) && auth()->user()->can('ingest_sessions.close')): ?>
+                                                    <button class="btn btn-success btn-resume-session"
+                                                        data-id="<?= $s['id'] ?>"
+                                                        data-title="<?= esc($s['title']) ?>"
+                                                        data-status="<?= $s['status'] ?>"
+                                                        title="Resume session" data-bs-toggle="tooltip">
+                                                        <i class="fa fa-rotate-right"></i>
+                                                    </button>
+                                                <?php endif; ?>
+
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

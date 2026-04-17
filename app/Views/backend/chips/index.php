@@ -62,7 +62,7 @@
                                         </td>
                                         <td>
                                             <?php
-                                            $locBadge = match($chip['to_location'] ?? null) {
+                                            $locBadge = match ($chip['to_location'] ?? null) {
                                                 'digital_unit' => ['ITN Digital', 'bg-info'],
                                                 'library'  => ['Library',     'bg-warning'],
                                                 'producer' => ['Producer',    'bg-secondary'],
@@ -78,7 +78,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <a href="<?= base_url('chips/detail/' . $chip['id']) ?>"
-                                                    class="btn btn-sm btn-alt-secondary" title="View History"
+                                                    class="btn btn-sm btn-primary" title="View History"
                                                     data-bs-toggle="tooltip">
                                                     <i class="fa fa-history"></i>
                                                 </a>
