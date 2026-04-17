@@ -80,6 +80,7 @@
         $('.select2-chips').select2({
             placeholder: 'Search by chip code…',
             minimumInputLength: 1,
+            dropdownParent: document.querySelector('#page-container'),
             ajax: {
                 url: '<?= base_url('chips/api-list') ?>',
                 dataType: 'json',
