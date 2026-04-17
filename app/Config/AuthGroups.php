@@ -88,7 +88,11 @@ class AuthGroups extends ShieldAuthGroups
         'secretary' => [
             'title'       => 'Secretary',
             'description' => 'Requests bookings on behalf of users or departments.',
-        ]
+        ],
+        'accountant' => [
+            'title'       => 'Accountant',
+            'description' => 'Access to accounts and financial data.',
+        ],
     ];
 
     /**
@@ -187,12 +191,6 @@ class AuthGroups extends ShieldAuthGroups
         'booking_purpose.edit'   => 'Can edit booking purposes',
         'booking_purpose.delete' => 'Can delete booking purposes',
 
-        // 📅 Schedule & Booking Management
-        'schedule.access'       => 'Can access schedule data',
-        'schedule.create'       => 'Can create new schedule',
-        'schedule.edit'         => 'Can edit existing schedule',
-        'schedule.delete'       => 'Can delete existing schedule',
-
         // 🏢 Resource Management
         'resource.access'       => 'Can view all resources',
         'resource.create'       => 'Can create new resources',
@@ -210,7 +208,7 @@ class AuthGroups extends ShieldAuthGroups
         'chips.create'              => 'Can register new chips',
         'chips.edit'                => 'Can edit chip details',
         'chips.delete'              => 'Can delete chips',
-        'participants.view'         => 'Can view participants (ingestors, producers, librarians)',
+        'participants.view'         => 'Can view participants (producers, librarians)',
         'participants.create'       => 'Can create participants',
         'participants.edit'         => 'Can edit participants',
         'participants.delete'       => 'Can delete participants',
@@ -218,7 +216,7 @@ class AuthGroups extends ShieldAuthGroups
         'transactions.create'       => 'Can create chip transactions',
         'transactions.receive'      => 'Can record chip receipts',
         'transactions.transfer'     => 'Can transfer chips between participants',
-        'transactions.handover'     => 'Can hand over chips to producers or librarians',
+        'transactions.handover'     => 'Can hand over chips to the library',
         'transactions.ingest'       => 'Can ingest chips into a session',
         'ingest_sessions.view'      => 'Can view ingest sessions',
         'ingest_sessions.create'    => 'Can create ingest sessions',
@@ -372,7 +370,7 @@ class AuthGroups extends ShieldAuthGroups
             'activity_log.access',
             'activity_log.own',
         ],
-        'marketingex' => [
+        'marketing_executive' => [
             'dashboard.*',
             'commercials.access',
             'clients.access',
