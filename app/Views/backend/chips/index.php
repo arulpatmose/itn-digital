@@ -42,6 +42,7 @@
                                                 'SXS'     => 'bg-primary',
                                                 'SD'      => 'bg-info',
                                                 'MicroSD' => 'bg-warning',
+                                                'Other'   => 'bg-success',
                                                 default   => 'bg-secondary',
                                             };
                                             ?>

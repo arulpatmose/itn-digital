@@ -79,6 +79,7 @@
                                                 'SXS'     => 'bg-primary',
                                                 'SD'      => 'bg-info',
                                                 'MicroSD' => 'bg-warning',
+                                                'Other'   => 'bg-success',
                                                 default   => 'bg-secondary',
                                             };
                                             ?>
@@ -99,7 +100,7 @@
                                         </td>
                                         <td>
                                             <?php
-                                            $locBadge = match($chip['to_location'] ?? null) {
+                                            $locBadge = match ($chip['to_location'] ?? null) {
                                                 'digital_unit' => ['ITN Digital', 'bg-info'],
                                                 'library'  => ['Library',     'bg-warning'],
                                                 'producer' => ['Producer',    'bg-secondary'],

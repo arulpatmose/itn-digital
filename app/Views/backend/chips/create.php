@@ -25,6 +25,7 @@
                                         <option value="SXS" <?= old('chip_type') === 'SXS'     ? 'selected' : '' ?>>SXS</option>
                                         <option value="SD" <?= old('chip_type') === 'SD'      ? 'selected' : '' ?>>SD</option>
                                         <option value="MicroSD" <?= old('chip_type') === 'MicroSD' ? 'selected' : '' ?>>MicroSD</option>
+                                        <option value="Other" <?= old('chip_type') === 'Other' ? 'selected' : '' ?>>Other</option>
                                     </select>
                                 </div>
 

@@ -27,6 +27,7 @@
                                 'SXS'     => 'bg-primary',
                                 'SD'      => 'bg-info',
                                 'MicroSD' => 'bg-warning',
+                                'Other'   => 'bg-success',
                                 default   => 'bg-secondary',
                             };
                             ?>
@@ -98,14 +99,14 @@
                                             </td>
                                             <td><?= $tx['from_name'] ? esc($tx['from_name']) : '<span class="text-muted">—</span>' ?></td>
                                             <td><?php
-                                                echo match($tx['to_location'] ?? null) {
+                                                echo match ($tx['to_location'] ?? null) {
                                                     'digital_unit' => '<i class="fa fa-building fa-fw text-muted"></i> ITN Digital',
                                                     'library'  => '<i class="fa fa-book fa-fw text-muted"></i> Library',
                                                     'ingest'   => '<span class="text-primary"><i class="fa fa-layer-group fa-fw"></i> Ingest</span>',
                                                     'producer' => $tx['to_name'] ? esc($tx['to_name']) : '<span class="text-muted">—</span>',
                                                     default    => '<span class="text-muted">—</span>',
                                                 };
-                                            ?></td>
+                                                ?></td>
                                             <td><?= $tx['session_title'] ? esc($tx['session_title']) : '<span class="text-muted">—</span>' ?></td>
                                             <td><?= esc($tx['handler_name'] ?? '—') ?></td>
                                             <td class="text-muted small"><?= esc($tx['remarks'] ?? '—') ?></td>

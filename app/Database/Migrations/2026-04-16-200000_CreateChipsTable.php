@@ -17,7 +17,7 @@ class CreateChipsTable extends Migration
             ],
             'chip_type' => [
                 'type'       => 'ENUM',
-                'constraint' => ['SXS', 'SD', 'MicroSD'],
+                'constraint' => ['SXS', 'SD', 'MicroSD', 'Other'],
             ],
             'chip_code' => [
                 'type'       => 'VARCHAR',

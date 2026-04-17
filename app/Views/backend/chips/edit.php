@@ -26,7 +26,7 @@
                                     <label class="form-label" for="chip_type">Chip Type <span class="text-danger">*</span></label>
                                     <select class="form-select" id="chip_type" name="chip_type" required>
                                         <option value="">— Select type —</option>
-                                        <?php foreach (['SXS', 'SD', 'MicroSD'] as $t): ?>
+                                        <?php foreach (['SXS', 'SD', 'MicroSD', 'Other'] as $t): ?>
                                             <option value="<?= $t ?>" <?= (old('chip_type', $chip['chip_type']) === $t) ? 'selected' : '' ?>><?= $t ?></option>
                                         <?php endforeach; ?>
                                     </select>

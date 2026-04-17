@@ -54,7 +54,7 @@ class Chips extends BaseController
             'notes'     => trim($this->request->getPost('notes') ?? ''),
         ];
 
-        if (!in_array($data['chip_type'], ['SXS', 'SD', 'MicroSD'], true)) {
+        if (!in_array($data['chip_type'], ['SXS', 'SD', 'MicroSD', 'Other'], true)) {
             return redirect()->back()->withInput()->with('error', 'Invalid chip type.');
         }
         if (empty($data['chip_code'])) {
