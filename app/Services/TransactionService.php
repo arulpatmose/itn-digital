@@ -84,9 +84,9 @@ class TransactionService
     }
 
     /** Chips leaving the digital_unit and going to the library — cycle closes. */
-    public function handover(array $chipIds, int $handledBy, ?string $remarks = null): array
+    public function handover(array $chipIds, int $handledBy, ?int $toParticipantId = null, ?string $remarks = null): array
     {
-        return $this->createTransaction('HANDOVER', null, null, $chipIds, $handledBy, null, $remarks, 'library');
+        return $this->createTransaction('HANDOVER', null, $toParticipantId, $chipIds, $handledBy, null, $remarks, 'library');
     }
 
     /** Chips being ingested into a session at ITN Digital. */

@@ -43,6 +43,18 @@
                                 </div>
 
                                 <div class="mb-4">
+                                    <label class="form-label" for="to_librarian_id">Received by <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="to_librarian_id" name="to_librarian_id" required>
+                                        <option value="">— Select librarian —</option>
+                                        <?php foreach ($librarians as $lib): ?>
+                                            <option value="<?= $lib['id'] ?>" <?= old('to_librarian_id') == $lib['id'] ? 'selected' : '' ?>>
+                                                <?= esc($lib['name']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
                                     <label class="form-label" for="remarks">Remarks <small class="text-muted">(optional)</small></label>
                                     <textarea class="form-control" id="remarks" name="remarks" rows="2"
                                         placeholder="Any notes…"><?= old('remarks') ?></textarea>

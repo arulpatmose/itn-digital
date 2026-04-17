@@ -97,6 +97,7 @@ class Transactions extends BaseController
         return view('backend/transactions/handover', [
             'page_title'       => 'Hand Over Chips',
             'page_description' => 'Return chips to the library — this closes the chip cycle.',
+            'librarians'       => $this->participantModel->getLibrarians(),
         ]);
     }
 
@@ -162,6 +163,10 @@ class Transactions extends BaseController
                 break;
 
             case 'handover':
+                $toLibrarianId = (int) $this->request->getPost('to_librarian_id') ?: null;
+                if (!$toLibrarianId) {
+                    return redirect()->back()->withInput()->with('error', 'Please select which librarian is receiving the chips.');
+                }
                 $inLibrary = $this->chipModel->getChipsHeldByLibrarian($chipIds);
                 if (!empty($inLibrary)) {
                     $list = implode(', ', array_map(fn($c) => "{$c['chip_code']}", $inLibrary));
@@ -172,7 +177,7 @@ class Transactions extends BaseController
                     $list = implode(', ', array_map(fn($c) => "{$c['chip_code']} (in \"{$c['session_title']}\")", $blocked));
                     return redirect()->back()->withInput()->with('error', "Cannot hand over — these chips are in an open ingest session: {$list}.");
                 }
-                $result = $this->txService->handover($chipIds, $handledBy, $remarks);
+                $result = $this->txService->handover($chipIds, $handledBy, $toLibrarianId, $remarks);
                 break;
 
             case 'ingest':
