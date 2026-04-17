@@ -173,7 +173,7 @@
                                             <td class="text-center">
                                                 <?php if ($chip['copy_status'] === 'done'): ?>
                                                     <?php if ($isActive && auth()->user()->can('transactions.ingest')): ?>
-                                                        <button class="btn btn-sm btn-secondary btn-toggle-status"
+                                                        <button class="btn btn-sm btn-warning btn-toggle-status"
                                                             data-item="<?= $chip['item_id'] ?>" data-status="pending"
                                                             title="Mark as pending" data-bs-toggle="tooltip">
                                                             <i class="fa fa-undo"></i>
@@ -282,7 +282,7 @@
                         '<span class="badge bg-success">Copied</span>' :
                         '<span class="badge bg-secondary">Pending</span>';
                     var btnHtml = isDone ?
-                        '<button class="btn btn-sm btn-secondary btn-toggle-status" data-item="' + itemId + '" data-status="pending" title="Mark as pending"><i class="fa fa-undo"></i></button>' :
+                        '<button class="btn btn-sm btn-warning btn-toggle-status" data-item="' + itemId + '" data-status="pending" title="Mark as pending"><i class="fa fa-undo"></i></button>' :
                         '<button class="btn btn-sm btn-success btn-toggle-status" data-item="' + itemId + '" data-status="done" title="Mark as copied"><i class="fa fa-check"></i></button>';
                     $row.find('td').eq(-2).html(badge);
                     $row.find('td:last').html(btnHtml);

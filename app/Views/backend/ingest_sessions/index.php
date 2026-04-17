@@ -104,7 +104,7 @@
 
                                                 <!-- View -->
                                                 <a href="<?= base_url('ingest-sessions/' . $s['id']) ?>"
-                                                    class="btn btn-secondary" title="View"
+                                                    class="btn btn-primary" title="View"
                                                     data-bs-toggle="tooltip">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
