@@ -69,7 +69,7 @@
                                 <tr>
                                     <th class="text-center col-si-index">#</th>
                                     <th class="col-si-title">Title</th>
-                                    <th class="col-si-path">Ingest Path</th>
+                                    <th class="col-si-path text-start">Ingest Path</th>
                                     <th class="col-si-status">Status</th>
                                     <th class="col-si-creator">Ingested By</th>
                                     <th class="col-si-date">Created At</th>
@@ -85,7 +85,7 @@
                                                 <br><small class="text-muted"><?= esc($s['description']) ?></small>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?= esc($s['ingest_location'] ?? '—') ?></td>
+                                        <td class="text-start"><?= esc($s['ingest_location'] ?? '—') ?></td>
                                         <td>
                                             <?php
                                             $statusClass = match ($s['status']) {
@@ -261,7 +261,10 @@
         });
 
         ['#filter-session-status', '#filter-session-creator'].forEach(function(sel) {
-            $(sel).select2({ placeholder: $(sel).data('placeholder') || 'All', dropdownParent: document.querySelector('#page-container') });
+            $(sel).select2({
+                placeholder: $(sel).data('placeholder') || 'All',
+                dropdownParent: document.querySelector('#page-container')
+            });
         });
 
         function clearSessionFilter(id) {
@@ -270,10 +273,10 @@
 
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             if (settings.nTable.id !== 'table-sessions') return true;
-            var row     = $(settings.aoData[dataIndex].nTr);
-            var status  = $('#filter-session-status').val();
+            var row = $(settings.aoData[dataIndex].nTr);
+            var status = $('#filter-session-status').val();
             var creator = $('#filter-session-creator').val();
-            if (status  && row.data('status')  !== status)  return false;
+            if (status && row.data('status') !== status) return false;
             if (creator && row.data('creator') !== creator) return false;
             return true;
         });
@@ -286,19 +289,48 @@
             dom: 'lrtip',
             pagingType: 'full_numbers',
             pageLength: 25,
-            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            lengthMenu: [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
             autoWidth: true,
             scrollX: true,
             stateSave: true,
-            order: [[5, 'desc']],
-            columnDefs: [
-                { targets: 'col-si-index',   width: '4%',  orderable: false, className: 'text-center' },
-                { targets: 'col-si-title',   width: '25%' },
-                { targets: 'col-si-path',    width: '22%' },
-                { targets: 'col-si-status',  width: '8%' },
-                { targets: 'col-si-creator', width: '15%' },
-                { targets: 'col-si-date',    width: '13%' },
-                { targets: 'col-si-actions', width: '13%', orderable: false, className: 'text-center' },
+            order: [
+                [5, 'desc']
+            ],
+            columnDefs: [{
+                    targets: 'col-si-index',
+                    width: '4%',
+                    orderable: false,
+                    className: 'text-center'
+                },
+                {
+                    targets: 'col-si-title',
+                    width: '25%'
+                },
+                {
+                    targets: 'col-si-path',
+                    width: '22%'
+                },
+                {
+                    targets: 'col-si-status',
+                    width: '8%'
+                },
+                {
+                    targets: 'col-si-creator',
+                    width: '15%'
+                },
+                {
+                    targets: 'col-si-date',
+                    width: '13%'
+                },
+                {
+                    targets: 'col-si-actions',
+                    width: '13%',
+                    orderable: false,
+                    className: 'text-center'
+                },
             ],
             drawCallback: function() {
                 var api = this.api();
