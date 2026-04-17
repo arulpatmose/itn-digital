@@ -18,22 +18,67 @@
                     </div>
                 </div>
                 <div class="block-content block-content-full">
+
+                    <!-- Filters -->
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-session-status">
+                                    Status
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearSessionFilter('filter-session-status')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-session-status" style="width:100%;" data-placeholder="All Statuses">
+                                    <option></option>
+                                    <option value="open">Open</option>
+                                    <option value="partial">Partial</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-session-creator">
+                                    Created By
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearSessionFilter('filter-session-creator')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-session-creator" style="width:100%;" data-placeholder="All Users">
+                                    <option></option>
+                                    <?php
+                                    $creators = array_unique(array_filter(array_column($sessions, 'creator_name')));
+                                    sort($creators);
+                                    foreach ($creators as $c): ?>
+                                        <option value="<?= esc($c) ?>"><?= esc($c) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center">
+                                    Search
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="$('#filter-session-search').val(''); sessionTable.search('').draw();">Reset</button>
+                                </label>
+                                <input type="text" class="form-control" id="filter-session-search" placeholder="Search title, path, user…">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped table-vcenter w-100 nowrap" id="table-sessions">
                             <thead>
                                 <tr>
-                                    <th class="text-center noOrder">#</th>
-                                    <th>Title</th>
-                                    <th>Ingest Path</th>
-                                    <th>Status</th>
-                                    <th>Ingested By</th>
-                                    <th>Created At</th>
-                                    <th class="text-center noOrder">Actions</th>
+                                    <th class="text-center col-si-index">#</th>
+                                    <th class="col-si-title">Title</th>
+                                    <th class="col-si-path">Ingest Path</th>
+                                    <th class="col-si-status">Status</th>
+                                    <th class="col-si-creator">Ingested By</th>
+                                    <th class="col-si-date">Created At</th>
+                                    <th class="text-center col-si-actions">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($sessions as $i => $s): ?>
-                                    <tr>
+                                    <tr data-status="<?= esc($s['status']) ?>" data-creator="<?= esc($s['creator_name'] ?? '') ?>">
                                         <td class="text-muted text-center"><?= $i + 1 ?></td>
                                         <td><strong><?= esc($s['title']) ?></strong>
                                             <?php if (!empty($s['description'])): ?>
@@ -215,19 +260,46 @@
             });
         });
 
-        $('#table-sessions').DataTable({
+        ['#filter-session-status', '#filter-session-creator'].forEach(function(sel) {
+            $(sel).select2({ placeholder: $(sel).data('placeholder') || 'All', dropdownParent: document.querySelector('#page-container') });
+        });
+
+        function clearSessionFilter(id) {
+            $('#' + id).val(null).trigger('change');
+        }
+
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            if (settings.nTable.id !== 'table-sessions') return true;
+            var row     = $(settings.aoData[dataIndex].nTr);
+            var status  = $('#filter-session-status').val();
+            var creator = $('#filter-session-creator').val();
+            if (status  && row.data('status')  !== status)  return false;
+            if (creator && row.data('creator') !== creator) return false;
+            return true;
+        });
+
+        $('#filter-session-search').on('input', function() {
+            sessionTable.search(this.value).draw();
+        });
+
+        var sessionTable = $('#table-sessions').DataTable({
+            dom: 'lrtip',
             pagingType: 'full_numbers',
             pageLength: 25,
-            autoWidth: false,
-            responsive: true,
+            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            autoWidth: true,
+            scrollX: true,
             stateSave: true,
-            order: [
-                [5, 'desc']
+            order: [[5, 'desc']],
+            columnDefs: [
+                { targets: 'col-si-index',   width: '4%',  orderable: false, className: 'text-center' },
+                { targets: 'col-si-title',   width: '25%' },
+                { targets: 'col-si-path',    width: '22%' },
+                { targets: 'col-si-status',  width: '8%' },
+                { targets: 'col-si-creator', width: '15%' },
+                { targets: 'col-si-date',    width: '13%' },
+                { targets: 'col-si-actions', width: '13%', orderable: false, className: 'text-center' },
             ],
-            columnDefs: [{
-                targets: 'noOrder',
-                orderable: false
-            }],
             drawCallback: function() {
                 var api = this.api();
                 var start = api.page.info().start;
@@ -237,6 +309,10 @@
                     cell.innerHTML = start + i + 1;
                 });
             }
+        });
+
+        $('#filter-session-status, #filter-session-creator').on('select2:select select2:unselect', function() {
+            sessionTable.draw();
         });
     });
 </script>

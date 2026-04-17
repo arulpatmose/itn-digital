@@ -62,24 +62,70 @@
                     <h3 class="block-title">Transaction Log</h3>
                 </div>
                 <div class="block-content block-content-full">
+
+                    <!-- Filters -->
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-tx-type">
+                                    Type
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearTxFilter('filter-tx-type')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-tx-type" style="width:100%;" data-placeholder="All Types">
+                                    <option></option>
+                                    <option value="RECEIVE">Receive</option>
+                                    <option value="TRANSFER">Transfer</option>
+                                    <option value="HANDOVER">Handover</option>
+                                    <option value="INGEST">Ingest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center" for="filter-tx-handler">
+                                    Handled By
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="clearTxFilter('filter-tx-handler')">Reset</button>
+                                </label>
+                                <select class="js-select2 form-control" id="filter-tx-handler" style="width:100%;" data-placeholder="All Users">
+                                    <option></option>
+                                    <?php
+                                    $handlers = array_unique(array_filter(array_column($transactions, 'handler_name')));
+                                    sort($handlers);
+                                    foreach ($handlers as $h): ?>
+                                        <option value="<?= esc($h) ?>"><?= esc($h) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="mb-4">
+                                <label class="form-label d-flex justify-content-between align-items-center">
+                                    Search
+                                    <button type="button" class="btn bg-transparent border-0 btn-alt-secondary btn-sm" onclick="$('#filter-tx-search').val(''); txTable.search('').draw();">Reset</button>
+                                </label>
+                                <input type="text" class="form-control" id="filter-tx-search" placeholder="Search chip count, participant, session…">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped table-vcenter w-100 nowrap" id="table-transactions">
                             <thead>
                                 <tr>
-                                    <th class="text-center noOrder">#</th>
-                                    <th>Date</th>
-                                    <th>Type</th>
-                                    <th>Chips</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Session</th>
-                                    <th>Handled By</th>
-                                    <th>Remarks</th>
+                                    <th class="text-center col-tx-index">#</th>
+                                    <th class="col-tx-date">Date</th>
+                                    <th class="col-tx-type">Type</th>
+                                    <th class="col-tx-chips">Chips</th>
+                                    <th class="col-tx-from">From</th>
+                                    <th class="col-tx-to">To</th>
+                                    <th class="col-tx-session">Session</th>
+                                    <th class="col-tx-handler">Handled By</th>
+                                    <th class="col-tx-remarks">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($transactions as $i => $tx): ?>
-                                    <tr>
+                                    <tr data-type="<?= esc($tx['transaction_type']) ?>" data-handler="<?= esc($tx['handler_name'] ?? '') ?>">
                                         <td class="text-muted text-center"><?= $i + 1 ?></td>
                                         <td class="text-nowrap"><?= date('d M Y H:i', strtotime($tx['created_at'])) ?></td>
                                         <td>
@@ -149,19 +195,48 @@
             });
         <?php endif; ?>
 
-        $('#table-transactions').DataTable({
+        ['#filter-tx-type', '#filter-tx-handler'].forEach(function(sel) {
+            $(sel).select2({ placeholder: $(sel).data('placeholder') || 'All', dropdownParent: document.querySelector('#page-container') });
+        });
+
+        function clearTxFilter(id) {
+            $('#' + id).val(null).trigger('change');
+        }
+
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            if (settings.nTable.id !== 'table-transactions') return true;
+            var row     = $(settings.aoData[dataIndex].nTr);
+            var type    = $('#filter-tx-type').val();
+            var handler = $('#filter-tx-handler').val();
+            if (type    && row.data('type')    !== type)    return false;
+            if (handler && row.data('handler') !== handler) return false;
+            return true;
+        });
+
+        $('#filter-tx-search').on('input', function() {
+            txTable.search(this.value).draw();
+        });
+
+        var txTable = $('#table-transactions').DataTable({
+            dom: 'lrtip',
             pagingType: 'full_numbers',
             pageLength: 25,
-            autoWidth: false,
-            responsive: true,
+            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            autoWidth: true,
+            scrollX: true,
             stateSave: true,
-            order: [
-                [1, 'desc']
+            order: [[1, 'desc']],
+            columnDefs: [
+                { targets: 'col-tx-index',   width: '3%',  orderable: false, className: 'text-center' },
+                { targets: 'col-tx-date',    width: '10%' },
+                { targets: 'col-tx-type',    width: '8%' },
+                { targets: 'col-tx-chips',   width: '5%' },
+                { targets: 'col-tx-from',    width: '12%' },
+                { targets: 'col-tx-to',      width: '12%' },
+                { targets: 'col-tx-session', width: '15%' },
+                { targets: 'col-tx-handler', width: '12%' },
+                { targets: 'col-tx-remarks', width: '23%' },
             ],
-            columnDefs: [{
-                targets: 'noOrder',
-                orderable: false
-            }],
             drawCallback: function() {
                 var api = this.api();
                 var start = api.page.info().start;
@@ -171,6 +246,10 @@
                     cell.innerHTML = start + i + 1;
                 });
             }
+        });
+
+        $('#filter-tx-type, #filter-tx-handler').on('select2:select select2:unselect', function() {
+            txTable.draw();
         });
     });
 </script>
