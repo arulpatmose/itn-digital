@@ -39,3 +39,13 @@
     --scroll-track: rgb(255 255 255 / 10%);
     --scroll-thumb: linear-gradient(45deg, #00aeff, #0c91cf);
 }
+
+/* Select2 dark mode — inline search input inside multiple selects */
+html.dark .select2-container--default .select2-search--inline .select2-search__field {
+    color: #bec8d5;
+    background-color: transparent;
+}
+
+html.dark .select2-container--default .select2-search--inline .select2-search__field::placeholder {
+    color: #637998;
+}
