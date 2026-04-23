@@ -1,7 +1,7 @@
 /*!
- * oneui - v5.10.0
+ * oneui - v5.12.0
  * @author pixelcave - https://pixelcave.com
- * Copyright (c) 2024
+ * Copyright (c) 2025
  */
 body {
   color: #323a47;
@@ -686,11 +686,11 @@ html.dark #sidebar .btn-alt-secondary {
 }
 
 .form-control::-moz-placeholder {
-  color: #999da3;
+  color: #656b75;
 }
 
 .form-control::placeholder {
-  color: #999da3;
+  color: #656b75;
 }
 
 .form-select:focus::-ms-value {
@@ -912,7 +912,7 @@ html.dark #sidebar .btn-alt-secondary {
   color: transparent;
 }
 
-.form-floating > .form-control:not(:-moz-placeholder-shown) ~ label::after {
+.form-floating > .form-control:not(:-moz-placeholder) ~ label::after {
   background-color: #fff;
 }
 
@@ -2335,7 +2335,7 @@ html.dark .form-floating > .form-control::-moz-placeholder {
 html.dark .form-floating > .form-control::placeholder {
   color: transparent;
 }
-html.dark .form-floating > .form-control:not(:-moz-placeholder-shown) ~ label {
+html.dark .form-floating > .form-control:not(:-moz-placeholder) ~ label {
   color: #999da3;
 }
 html.dark .form-floating > .form-control:focus ~ label,
@@ -2344,7 +2344,7 @@ html.dark .form-floating > .form-control-plaintext ~ label,
 html.dark .form-floating > .form-select ~ label {
   color: #999da3;
 }
-html.dark .form-floating > .form-control:not(:-moz-placeholder-shown) ~ label::after {
+html.dark .form-floating > .form-control:not(:-moz-placeholder) ~ label::after {
   background-color: #1d222d;
 }
 html.dark .form-floating > .form-control:focus ~ label::after,
