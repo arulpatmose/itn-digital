@@ -55,61 +55,75 @@ class Users extends BaseController
 
     public function store()
     {
+        // Permission check
         if (!auth()->user()->can('users.create')) {
-            $status = 'error';
-            $message = 'You are not allowed to view this page!';
-            return redirect()->back()->with($status, $message);
+            return redirect()->back()
+                ->with('error', 'You do not have permission to create users.');
         }
 
-        $usersModel = auth()->getProvider();
-        $validation =  \Config\Services::validation();
+        $usersModel      = auth()->getProvider();
+        $validation      = \Config\Services::validation();
         $availableGroups = array_keys(setting('AuthGroups.groups'));
-        $selectedGroups = $this->request->getPost('user-groups');
-        $selectedGroups = is_array($selectedGroups) ? array_values(array_unique($selectedGroups)) : [];
 
-        // Prepare data to insert            
+        $selectedGroups = $this->request->getPost('user-groups');
+        $selectedGroups = is_array($selectedGroups)
+            ? array_values(array_unique($selectedGroups))
+            : [];
+
+        // Prepare data
         $data = $this->request->getPost();
         $data['username'] = null;
+
         $rules = $validation->getRuleGroup('registration');
 
-        if ($this->validate($rules)) {
-            if (empty($selectedGroups)) {
-                return redirect()->back()->withInput()->with('error', ['User Role' => 'At least one user role must be selected.']);
-            }
-
-            $invalidGroups = array_diff($selectedGroups, $availableGroups);
-
-            if (!empty($invalidGroups)) {
-                return redirect()->back()->withInput()->with('error', ['User Role' => 'One or more selected user roles are invalid.']);
-            }
-
-            $user = new User();
-            $user->fill($data);
-            if ($usersModel->save($user)) {
-                // To get the complete user object with ID, we need to get from the database
-                $user = $usersModel->findById($usersModel->getInsertID());
-
-                $user->syncGroups(...$selectedGroups);
-
-                log_activity('user.created', 'user', $user->id, "Created user '{$user->email}'", [
-                    'first_name' => $user->first_name,
-                    'last_name'  => $user->last_name,
-                    'email'      => $user->email,
-                    'groups'     => $selectedGroups,
-                ]);
-
-                $status = 'success';
-                $message = 'The user was addded successfully!';
-            } else {
-                $status = 'error';
-                $message = 'There was an error while adding the user!';
-            }
-        } else {
-            $status = 'error';
-            $message = $this->validator->getErrors();
+        // Validate form
+        if (!$this->validate($rules)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', array_values($this->validator->getErrors()));
         }
 
-        return redirect()->back()->withInput()->with($status, $message);
+        // Validate groups
+        if (empty($selectedGroups)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', ['Please select at least one user role.']);
+        }
+
+        $invalidGroups = array_diff($selectedGroups, $availableGroups);
+
+        if (!empty($invalidGroups)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', ['One or more selected roles are invalid.']);
+        }
+
+        // Save user
+        $user = new User();
+        $user->fill($data);
+
+        if (!$usersModel->save($user)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', ['Failed to create the user. Please try again.']);
+        }
+
+        // Get inserted user
+        $user = $usersModel->findById($usersModel->getInsertID());
+
+        // Assign roles
+        $user->syncGroups(...$selectedGroups);
+
+        // Log activity
+        log_activity('user.created', 'user', $user->id, "Created user '{$user->email}'", [
+            'first_name' => $user->first_name,
+            'last_name'  => $user->last_name,
+            'email'      => $user->email,
+            'groups'     => $selectedGroups,
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'User created successfully.');
     }
 
     public function edit($id)
