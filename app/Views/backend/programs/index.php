@@ -107,16 +107,13 @@
                         width: "10%",
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            var thumbnail;
-                            var uri = URI().origin();
+                            var thumbnailBaseUrl = '<?= writable_upload_route_url('thumbnails', '__FILE__') ?>';
+                            var placeholderUrl = '<?= image_placeholder_url() ?>';
+                            var thumbnailUrl = data == null || data == 'NULL'
+                                ? placeholderUrl
+                                : thumbnailBaseUrl.replace('__FILE__', encodeURIComponent(data));
 
-                            if (data == null || data == 'NULL') {
-                                thumbnail = 'No-Image-Placeholder.svg';
-                            } else {
-                                thumbnail = data;
-                            }
-
-                            return '<img class="w-50 mx-auto d-block rounded" src="' + uri + '/uploads/thumbnails/' + thumbnail + '">';
+                            return '<img class="w-50 mx-auto d-block rounded" src="' + thumbnailUrl + '">';
                         },
                     },
                     {

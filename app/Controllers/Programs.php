@@ -4,7 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProgramModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use InvalidArgumentException;
 
 class Programs extends BaseController
 {
@@ -54,7 +55,11 @@ class Programs extends BaseController
 
         // Get Thumbnail File
         $thumbFile = $this->request->getFile('program-thumbnail');
-        $thumbName = handleThumbnailUpload($thumbFile);
+        try {
+            $thumbName = handleThumbnailUpload($thumbFile);
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
 
         // Prepare data to insert
         $data = [
@@ -88,14 +93,14 @@ class Programs extends BaseController
 
             $itemName = $program['name'];
 
-            $data['thumbImage'] = $data['program']['thumbnail'] ?? 'No-Image-Placeholder.svg';
+            $data['thumbImage'] = $data['program']['thumbnail'] ?? null;
 
             $data['page_title'] = "Edit Program - " . $itemName;
             $data['page_description'] = "Teledramas and TV Shows broadcast by ITN.";
 
             return view('backend/programs/edit_program', $data);
         } else {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            throw PageNotFoundException::forPageNotFound();
         }
     }
 
@@ -114,7 +119,11 @@ class Programs extends BaseController
 
         $thumbFile = $this->request->getFile('program-thumbnail');
         $removeThumb = $this->request->getVar('remove-thumbnail');
-        $thumbName = handleThumbnailUpload($thumbFile, $program['thumbnail'], $removeThumb);
+        try {
+            $thumbName = handleThumbnailUpload($thumbFile, $program['thumbnail'], $removeThumb);
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
 
         $data = [
             "name" => trim(ucwords($this->request->getVar('program-name'))),

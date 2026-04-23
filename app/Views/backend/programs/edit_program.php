@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-2 col-md-4">
-                                <img class="w-100 rounded animated bounceIn" alt="Program Thumbnail" src="<?php echo base_url('uploads/thumbnails/' . $thumbImage); ?>">
+                                <img class="w-100 rounded animated bounceIn" alt="Program Thumbnail" src="<?php echo program_thumbnail_url($thumbImage); ?>">
                                 <?php if (isset($program['thumbnail'])) { ?>
                                     <div class="mt-4">
                                         <div class="form-check">

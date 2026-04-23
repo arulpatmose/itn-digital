@@ -63,10 +63,8 @@
                                             <div class="position-sticky pb-3" style="top: 5rem;">
                                                 <img
                                                     class="w-100 rounded animated bounceIn"
-                                                    alt="Program Thumbnail"
-                                                    src="<?= isset($schedule['program']['thumbnail']) && !empty($schedule['program']['thumbnail'])
-                                                                ? base_url('uploads/thumbnails/' . $schedule['program']['thumbnail'])
-                                                                : base_url('uploads/thumbnails/No-Image-Placeholder.svg') ?>">
+                                                    alt="<?= $schedule['program']['program_name'] ?? 'Program Thumbnail' ?>"
+                                                    src="<?= program_thumbnail_url($schedule['program']['thumbnail'] ?? null) ?>">
                                             </div>
                                         </div>
 
