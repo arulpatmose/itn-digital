@@ -22,9 +22,6 @@ $data['config']['site_title']       = $_siteName;
 $data['config']['theme']            = $config->theme;
 $data['config']['page_loader']      = $config->page_loader;
 
-$data['config']['controller'] = $controller ?? null;
-$data['config']['method'] = $controller ?? null;
-
 if (isset($config->inc_header) && $config->inc_header) {
     $data['config']['inc_header'] = $config->inc_header;
 }
