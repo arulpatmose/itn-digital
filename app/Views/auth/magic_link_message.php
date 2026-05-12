@@ -25,10 +25,14 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <?= lang('Auth.checkYourEmail') ?>
+                            <p class="fw-medium text-muted">
+                                <?= lang('Auth.checkYourEmail') ?>
+                            </p>
                         </div>
                         <div class="card-footer fs-sm border-top-0">
-                            <?= lang('Auth.magicLinkDetails', [setting('Auth.magicLinkLifetime') / 60]) ?>
+                            <p class="text-muted">
+                                <?= lang('Auth.magicLinkDetails', [setting('Auth.magicLinkLifetime') / 60]) ?>
+                            </p>
                         </div>
                     </div>
                 </div>
