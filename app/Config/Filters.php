@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\MagicLogin;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'magicLogin'    => MagicLogin::class,
     ];
 
     /**
@@ -70,6 +72,7 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             'session' => ['except' => ['login*', 'register', 'logout', 'auth/a/*']],
+            'magicLogin' => ['except' => ['login*', 'register', 'logout', 'auth/a/*']],
         ],
         'after' => [
             // 'honeypot',

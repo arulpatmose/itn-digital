@@ -26,6 +26,10 @@ $routes->group('users', ['filter' => 'session'], function ($routes) {
     $routes->post('update-password', 'Users::changePassword');
 });
 
+// Set-password flow for users who logged in via a magic link
+$routes->get('set-password', 'Users::setPassword', ['filter' => 'session']);
+$routes->post('set-password', 'Users::updatePassword', ['filter' => 'session']);
+
 // User management routes — require users.manage-admins
 $routes->group('users', ['filter' => 'permission:users.manage-admins'], function ($routes) {
     $routes->get('/', 'Users::index', ['as' => 'users']);

@@ -302,6 +302,55 @@ class Users extends BaseController
         return redirect()->to('/users/profile')->with($status, $message);
     }
 
+    public function setPassword()
+    {
+        if (! session('magicLogin')) {
+            return redirect()->to('/');
+        }
+
+        $data['page_title']       = 'Set a New Password';
+        $data['page_description'] = 'Please set a password to secure your account.';
+
+        return view('auth/set_password', $data);
+    }
+
+    public function updatePassword()
+    {
+        if (! session('magicLogin')) {
+            return redirect()->to('/');
+        }
+
+        $rules = [
+            'password'         => 'required|min_length[8]',
+            'password_confirm' => 'required|matches[password]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $users = auth()->getProvider();
+        $user  = auth()->user();
+
+        $user->fill([
+            'password' => $this->request->getPost('password'),
+        ]);
+
+        if (! $users->save($user)) {
+            return redirect()->back()
+                ->with('error', 'There was an error while updating the password!');
+        }
+
+        log_activity('user.password_set', 'user', $user->id, 'Set password after magic link login');
+
+        // Clear the magic-link gate so the user can browse normally.
+        session()->removeTempdata('magicLogin');
+
+        return redirect()->to('/')->with('message', 'Password set successfully.');
+    }
+
     public function changeUserPassword()
     {
         if (!auth()->user()->can('users.edit')) {
