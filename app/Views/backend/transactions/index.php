@@ -18,33 +18,33 @@
                     <div class="row g-3 pb-3">
                         <?php if (auth()->user()->can('transactions.receive')): ?>
                             <div class="col-6 col-md-3">
-                                <a href="<?= base_url('transactions/receive') ?>" class="btn btn-success w-100 py-3">
-                                    <i class="fa fa-arrow-circle-down d-block fs-3 mb-1"></i>
-                                    Receive
+                                <a href="<?= base_url('transactions/receive') ?>" class="btn btn-success w-100 py-3 d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-arrow-circle-down fs-4 me-2"></i>
+                                    <span>Receive</span>
                                 </a>
                             </div>
                         <?php endif; ?>
                         <?php if (auth()->user()->can('transactions.transfer')): ?>
                             <div class="col-6 col-md-3">
-                                <a href="<?= base_url('transactions/transfer') ?>" class="btn btn-info w-100 py-3">
-                                    <i class="fa fa-exchange-alt d-block fs-3 mb-1"></i>
-                                    Transfer
+                                <a href="<?= base_url('transactions/transfer') ?>" class="btn btn-info w-100 py-3 d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-exchange-alt fs-4 me-2"></i>
+                                    <span>Transfer</span>
                                 </a>
                             </div>
                         <?php endif; ?>
                         <?php if (auth()->user()->can('transactions.handover')): ?>
                             <div class="col-6 col-md-3">
-                                <a href="<?= base_url('transactions/handover') ?>" class="btn btn-warning w-100 py-3">
-                                    <i class="fa fa-hand-holding d-block fs-3 mb-1"></i>
-                                    Handover
+                                <a href="<?= base_url('transactions/handover') ?>" class="btn btn-warning w-100 py-3 d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-hand-holding fs-4 me-2"></i>
+                                    <span>Handover</span>
                                 </a>
                             </div>
                         <?php endif; ?>
                         <?php if (auth()->user()->can('transactions.ingest')): ?>
                             <div class="col-6 col-md-3">
-                                <a href="<?= base_url('transactions/ingest') ?>" class="btn btn-primary w-100 py-3">
-                                    <i class="fa fa-layer-group d-block fs-3 mb-1"></i>
-                                    Ingest
+                                <a href="<?= base_url('transactions/ingest') ?>" class="btn btn-primary w-100 py-3 d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-layer-group fs-4 me-2"></i>
+                                    <span>Ingest</span>
                                 </a>
                             </div>
                         <?php endif; ?>
