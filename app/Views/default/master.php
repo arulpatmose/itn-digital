@@ -114,8 +114,8 @@
                                     <?php echo $_title; ?>
                                 </h1>
                                 <h2 class="fs-base lh-base fw-medium text-muted mb-0">
-                                    <?php if (isset($config['page_description'])) {
-                                        echo $config['page_description'];
+                                    <?php if (isset($config['pageDescription'])) {
+                                        echo $config['pageDescription'];
                                     } ?>
                                 </h2>
                             </div>

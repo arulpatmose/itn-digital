@@ -30,8 +30,8 @@ class ChipReports extends BaseController
         if (!$chip) throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
         return view('backend/reports/chip_history', [
-            'page_title'       => "Chip History — {$chip['chip_code']}",
-            'page_description' => 'Complete transaction timeline for this chip.',
+            'pageTitle'       => "Chip History — {$chip['chip_code']}",
+            'pageDescription' => 'Complete transaction timeline for this chip.',
             'chip'             => $chip,
             'timeline'         => $this->chipModel->getTimeline($chipId),
         ]);
@@ -47,8 +47,8 @@ class ChipReports extends BaseController
         }
 
         return view('backend/reports/overview', [
-            'page_title'       => 'Chip Report',
-            'page_description' => 'Overview of all chips and their current locations.',
+            'pageTitle'       => 'Chip Report',
+            'pageDescription' => 'Overview of all chips and their current locations.',
             'chips'            => $this->chipModel->getAllWithCurrentHolder(),
             'participants'     => $this->participantModel->getActive(),
         ]);

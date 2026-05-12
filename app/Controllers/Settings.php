@@ -31,8 +31,8 @@ class Settings extends BaseController
         // If no category is specified, show the tiled index view
         if ($category === null) {
             $data = [
-                'page_title' => 'Website Settings',
-                'page_description' => 'Manage Website Settings',
+                'pageTitle' => 'Website Settings',
+                'pageDescription' => 'Manage Website Settings',
                 'categories' => [
                     'general' => [
                         'title'       => 'General Settings',
@@ -134,8 +134,8 @@ class Settings extends BaseController
         }
 
         $data = [
-            'page_title' => "Settings",
-            'page_description' => "Manage Settings",
+            'pageTitle' => "Settings",
+            'pageDescription' => "Manage Settings",
             'settings' => $settings,
             'settingGroup' => $category,
             'categories' => ['general', 'email', 'system'],

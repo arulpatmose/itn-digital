@@ -4,8 +4,8 @@ $config = config('Template');
 
 $main_nav_active = uri_string();
 
-$data['config']['title'] = ($page_title ?? $config->site_title) . " | ITN Digital";
-$data['config']['page_description'] = $page_description ?? $config->description;
+$data['config']['title'] = ($pageTitle ?? $config->site_title) . " | ITN Digital";
+$data['config']['pageDescription'] = $pageDescription ?? $config->description;
 $data['config']['og_url_site'] = base_url();
 $data['config']['author'] = $config->author;
 $data['config']['robots'] = $config->robots;

@@ -13,8 +13,8 @@ class ActivityLog extends BaseController
         }
 
         return view('backend/activity_log/index', [
-            'page_title'       => 'Activity Log',
-            'page_description' => 'Audit trail of all actions performed in the system.',
+            'pageTitle'       => 'Activity Log',
+            'pageDescription' => 'Audit trail of all actions performed in the system.',
             'scope'            => $this->getLogScope(),
         ]);
     }

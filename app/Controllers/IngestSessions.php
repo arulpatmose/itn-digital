@@ -39,8 +39,8 @@ class IngestSessions extends BaseController
         }
 
         return view('backend/ingest_sessions/index', [
-            'page_title'       => 'Ingest Sessions',
-            'page_description' => 'Manage ingest sessions and associated chips.',
+            'pageTitle'       => 'Ingest Sessions',
+            'pageDescription' => 'Manage ingest sessions and associated chips.',
             'sessions'         => $this->sessionModel->getAllWithCreator(),
         ]);
     }
@@ -55,8 +55,8 @@ class IngestSessions extends BaseController
         if (!$session) throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
         return view('backend/ingest_sessions/view', [
-            'page_title'       => "Session — {$session['title']}",
-            'page_description' => 'Ingest session detail and chip log.',
+            'pageTitle'       => "Session — {$session['title']}",
+            'pageDescription' => 'Ingest session detail and chip log.',
             'session'          => $session,
             'chips'            => $this->chipModel->getBySession($id),
             'progress'         => $this->itemModel->getSessionProgress($id),

@@ -47,8 +47,8 @@ class Schedules extends BaseController
         $data = [
             'platforms'        => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
             'formats'          => $this->formatModel->select('format_id as id, name')->findAll(),
-            'page_title'       => "Schedules",
-            'page_description' => "Optimize ads. Maximize impact. Perfect timing, every time."
+            'pageTitle'       => "Schedules",
+            'pageDescription' => "Optimize ads. Maximize impact. Perfect timing, every time."
         ];
 
         return view('backend/schedules/index', $data);
@@ -65,8 +65,8 @@ class Schedules extends BaseController
         $data = [
             'spots'             => $this->spotModel->select('spot_id as id, name')->findAll(),
             'platforms'         => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
-            'page_title'        => "Create Schedule",
-            'page_description'  => "Optimize ads. Maximize impact. Perfect timing, every time."
+            'pageTitle'        => "Create Schedule",
+            'pageDescription'  => "Optimize ads. Maximize impact. Perfect timing, every time."
         ];
 
         return view('backend/schedules/add_schedule', $data);
@@ -170,8 +170,8 @@ class Schedules extends BaseController
             $itemName = $data['commercial']['name'] ?? 'Commercial';
 
             $data = array_merge($data, [
-                'page_title'       => "Edit Schedule for " . $itemName,
-                'page_description' => "Optimize ads. Maximize impact. Perfect timing, every time.",
+                'pageTitle'       => "Edit Schedule for " . $itemName,
+                'pageDescription' => "Optimize ads. Maximize impact. Perfect timing, every time.",
             ]);
 
             return view('backend/schedules/edit_schedule', $data);

@@ -24,8 +24,8 @@ class Users extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title']       = 'Users';
-        $data['page_description'] = 'Individuals accessing content and services via ITN Digital Portal.';
+        $data['pageTitle']       = 'Users';
+        $data['pageDescription'] = 'Individuals accessing content and services via ITN Digital Portal.';
         $data['can_edit']         = auth()->user()->can('users.edit');
         $data['can_delete']       = auth()->user()->can('users.delete');
         $data['can_restore']      = auth()->user()->can('users.restore');
@@ -46,8 +46,8 @@ class Users extends BaseController
         $groups = setting('AuthGroups.groups');
         asort($groups);
 
-        $data['page_title']       = "Create a User";
-        $data['page_description'] = "Individuals accessing content and services via ITN Digital Portal.";
+        $data['pageTitle']       = "Create a User";
+        $data['pageDescription'] = "Individuals accessing content and services via ITN Digital Portal.";
         $data['groups']           = $groups;
 
         return view('backend/users/add_user', $data);
@@ -148,8 +148,8 @@ class Users extends BaseController
             $data['user_groups'] = $user->getGroups();
             $userName = $user->first_name;
 
-            $data['page_title'] = "Edit User - " . $userName;
-            $data['page_description'] = "Individuals accessing content and services via ITN Digital Portal.";
+            $data['pageTitle'] = "Edit User - " . $userName;
+            $data['pageDescription'] = "Individuals accessing content and services via ITN Digital Portal.";
 
             return view('backend/users/edit_user', $data);
         } else {
@@ -308,8 +308,8 @@ class Users extends BaseController
             return redirect()->to('/');
         }
 
-        $data['page_title']       = 'Set a New Password';
-        $data['page_description'] = 'Please set a password to secure your account.';
+        $data['pageTitle']       = 'Set a New Password';
+        $data['pageDescription'] = 'Please set a password to secure your account.';
 
         return view('auth/set_password', $data);
     }
@@ -432,8 +432,8 @@ class Users extends BaseController
 
         if (isset($user)) {
             $data['user'] = $user;
-            $data['page_title'] = "Profile";
-            $data['page_description'] = "Details about your personal information.";
+            $data['pageTitle'] = "Profile";
+            $data['pageDescription'] = "Details about your personal information.";
 
             return view('backend/users/profile', $data);
         }

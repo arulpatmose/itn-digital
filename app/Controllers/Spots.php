@@ -23,8 +23,8 @@ class Spots extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Ad Spots";
-        $data['page_description'] = "Commercial spots which are seamlessly placed within the streaming content.";
+        $data['pageTitle'] = "Ad Spots";
+        $data['pageDescription'] = "Commercial spots which are seamlessly placed within the streaming content.";
 
         return view('backend/spots/index', $data);
     }
@@ -37,8 +37,8 @@ class Spots extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Create an Ad Spot";
-        $data['page_description'] = "Commercial spots which are seamlessly placed within the streaming content.";
+        $data['pageTitle'] = "Create an Ad Spot";
+        $data['pageDescription'] = "Commercial spots which are seamlessly placed within the streaming content.";
 
         return view('backend/spots/add_spot', $data);
     }
@@ -86,8 +86,8 @@ class Spots extends BaseController
 
             $itemName = $spot['name'];
 
-            $data['page_title'] = "Edit Ad Spot - " . $itemName;
-            $data['page_description'] = "Commercial spots which are seamlessly placed within the streaming content.";
+            $data['pageTitle'] = "Edit Ad Spot - " . $itemName;
+            $data['pageDescription'] = "Commercial spots which are seamlessly placed within the streaming content.";
 
             return view('backend/spots/edit_spot', $data);
         } else {

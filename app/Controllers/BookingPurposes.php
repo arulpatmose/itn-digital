@@ -24,8 +24,8 @@ class BookingPurposes extends BaseController
         }
 
         $data = [
-            'page_title'       => 'Booking Purposes',
-            'page_description' => 'Manage the allowed purposes for booking requests.',
+            'pageTitle'       => 'Booking Purposes',
+            'pageDescription' => 'Manage the allowed purposes for booking requests.',
             'booking_purposes' => $this->bookingPurposeModel->getWithGroup(),
             'purpose_groups'   => $this->bookingPurposeGroupModel
                 ->where('is_active', 1)

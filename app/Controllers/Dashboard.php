@@ -11,8 +11,8 @@ class Dashboard extends BaseController
     {
         helper('dashboard');
 
-        $data['page_title'] = "Dashboard";
-        $data['page_description'] = get_greeting('<strong>' . esc(auth()->user()?->first_name ?? 'Guest') . '</strong>');
+        $data['pageTitle'] = "Dashboard";
+        $data['pageDescription'] = get_greeting('<strong>' . esc(auth()->user()?->first_name ?? 'Guest') . '</strong>');
         $data['totals'] = get_total_counts();
 
         return view('backend/dashboard', $data);

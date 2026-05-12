@@ -21,8 +21,8 @@ class ResourceTypes extends BaseController
         }
 
         $data = [
-            'page_title'       => 'Resource Types',
-            'page_description' => 'Manage categories for bookable resources.',
+            'pageTitle'       => 'Resource Types',
+            'pageDescription' => 'Manage categories for bookable resources.',
             'resource_types'   => $this->resourceTypeModel->findAll(),
         ];
 

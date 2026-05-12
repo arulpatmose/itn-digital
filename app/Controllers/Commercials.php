@@ -29,8 +29,8 @@ class Commercials extends BaseController
         }
 
         $data = [
-            'page_title' => 'Commercials',
-            'page_description' => 'Commercials that convey messages visually to captivate broad audiences.',
+            'pageTitle' => 'Commercials',
+            'pageDescription' => 'Commercials that convey messages visually to captivate broad audiences.',
         ];
 
         return view('backend/commercials/index', $data);
@@ -45,8 +45,8 @@ class Commercials extends BaseController
         }
 
         $data = [
-            'page_title' => 'Create a Commercial',
-            'page_description' => 'Commercials that convey messages visually to captivate broad audiences.',
+            'pageTitle' => 'Create a Commercial',
+            'pageDescription' => 'Commercials that convey messages visually to captivate broad audiences.',
             'formats' => $this->formatModel->select('format_id as id, name')->findAll(),
             'clients' => $this->clientModel->select('client_id as id, name')->findAll()
         ];
@@ -107,8 +107,8 @@ class Commercials extends BaseController
             $itemName = $commercial['name'];
 
             $data = [
-                'page_title' => "Edit Commercial - " . $itemName,
-                'page_description' => 'Commercials that convey messages visually to captivate broad audiences.',
+                'pageTitle' => "Edit Commercial - " . $itemName,
+                'pageDescription' => 'Commercials that convey messages visually to captivate broad audiences.',
                 'formats' => $this->formatModel->select('format_id as id, name')->findAll(),
                 'clients' => $this->clientModel->select('client_id as id, name')->findAll(),
                 'commercial' => $commercial

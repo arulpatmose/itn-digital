@@ -74,8 +74,8 @@ class MigrationRunner extends BaseController
         $maxBatch      = $this->db->table('migrations')->selectMax('batch')->get()->getRow()->batch ?? 0;
 
         $data = [
-            'page_title'       => 'Migration Runner',
-            'page_description' => 'Manage and sync database migrations.',
+            'pageTitle'       => 'Migration Runner',
+            'pageDescription' => 'Manage and sync database migrations.',
             'migrations'       => $migrations,
             'pending_count'    => $pendingCount,
             'recorded_count'   => $recordedCount,

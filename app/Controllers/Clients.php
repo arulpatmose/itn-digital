@@ -23,8 +23,8 @@ class Clients extends BaseController
         }
 
         $data = [
-            'page_title' => 'Clients',
-            'page_description' => 'Advertisers or brands supply TV commercials for broadcasting.',
+            'pageTitle' => 'Clients',
+            'pageDescription' => 'Advertisers or brands supply TV commercials for broadcasting.',
         ];
 
         return view('backend/clients/index', $data);
@@ -39,8 +39,8 @@ class Clients extends BaseController
         }
 
         $data = [
-            'page_title' => 'Create a Client',
-            'page_description' => 'Advertisers or brands supply TV commercials for broadcasting.',
+            'pageTitle' => 'Create a Client',
+            'pageDescription' => 'Advertisers or brands supply TV commercials for broadcasting.',
         ];
 
         return view('backend/clients/add_client', $data);
@@ -88,8 +88,8 @@ class Clients extends BaseController
             $itemName = $client['name'];
 
             $data = [
-                'page_title' => "Edit Client - " . $itemName,
-                'page_description' => "Advertisers or brands supply TV commercials for broadcasting.",
+                'pageTitle' => "Edit Client - " . $itemName,
+                'pageDescription' => "Advertisers or brands supply TV commercials for broadcasting.",
                 'client' => $client
             ];
 

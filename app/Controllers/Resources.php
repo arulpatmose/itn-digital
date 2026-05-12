@@ -24,8 +24,8 @@ class Resources extends BaseController
         }
 
         $data = [
-            'page_title'       => 'Resources',
-            'page_description' => 'Manage bookable resources such as studios, conference rooms, and equipment.',
+            'pageTitle'       => 'Resources',
+            'pageDescription' => 'Manage bookable resources such as studios, conference rooms, and equipment.',
             'resources'        => $this->resourceModel->getWithType(),
         ];
 
@@ -39,8 +39,8 @@ class Resources extends BaseController
         }
 
         $data = [
-            'page_title'       => 'Add Resource',
-            'page_description' => 'Add a new bookable resource.',
+            'pageTitle'       => 'Add Resource',
+            'pageDescription' => 'Add a new bookable resource.',
             'resource_types'   => $this->resourceTypeModel->findAll(),
         ];
 
@@ -83,8 +83,8 @@ class Resources extends BaseController
         }
 
         $data = [
-            'page_title'       => "Edit Resource — {$resource['name']}",
-            'page_description' => 'Update resource details.',
+            'pageTitle'       => "Edit Resource — {$resource['name']}",
+            'pageDescription' => 'Update resource details.',
             'resource'         => $resource,
             'resource_types'   => $this->resourceTypeModel->findAll(),
         ];

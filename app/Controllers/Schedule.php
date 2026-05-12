@@ -49,8 +49,8 @@ class Schedule extends BaseController
 
             $data['system_settings'] = get_settings('system', true);
 
-            $data['page_title'] = "Scheduled Items";
-            $data['page_description'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
+            $data['pageTitle'] = "Scheduled Items";
+            $data['pageDescription'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
 
             return view('backend/schedule/index', $data);
         } else {
@@ -86,8 +86,8 @@ class Schedule extends BaseController
 
             $data['disabledDates'] = implode(', ', $disabledDates);
 
-            $data['page_title'] = "Add Schedule";
-            $data['page_description'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
+            $data['pageTitle'] = "Add Schedule";
+            $data['pageDescription'] = "Optimize ads. Maximize impact. Perfect timing, every time.";
 
             return view('backend/schedule/add_schedule', $data);
         } else {

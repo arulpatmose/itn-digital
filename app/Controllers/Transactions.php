@@ -37,8 +37,8 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/index', [
-            'page_title'       => 'Transaction Log',
-            'page_description' => 'All chip transactions.',
+            'pageTitle'       => 'Transaction Log',
+            'pageDescription' => 'All chip transactions.',
             'transactions'     => $this->txModel->getAllWithDetails(),
         ]);
     }
@@ -56,8 +56,8 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/receive', [
-            'page_title'       => 'Receive Chips',
-            'page_description' => 'Record chips arriving at ITN Digital from a producer.',
+            'pageTitle'       => 'Receive Chips',
+            'pageDescription' => 'Record chips arriving at ITN Digital from a producer.',
             'producers'        => $this->participantModel->getProducers(),
         ]);
     }
@@ -75,8 +75,8 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/transfer', [
-            'page_title'       => 'Transfer Chips',
-            'page_description' => 'Transfer chips between producers.',
+            'pageTitle'       => 'Transfer Chips',
+            'pageDescription' => 'Transfer chips between producers.',
             'producers'        => $this->participantModel->getProducers(),
         ]);
     }
@@ -94,8 +94,8 @@ class Transactions extends BaseController
         }
 
         return view('backend/transactions/handover', [
-            'page_title'       => 'Hand Over Chips',
-            'page_description' => 'Return chips to the library — this closes the chip cycle.',
+            'pageTitle'       => 'Hand Over Chips',
+            'pageDescription' => 'Return chips to the library — this closes the chip cycle.',
             'librarians'       => $this->participantModel->getLibrarians(),
         ]);
     }
@@ -118,8 +118,8 @@ class Transactions extends BaseController
             : [];
 
         return view('backend/transactions/ingest', [
-            'page_title'       => 'Ingest Chips',
-            'page_description' => 'Log chips as ingested into a new session.',
+            'pageTitle'       => 'Ingest Chips',
+            'pageDescription' => 'Log chips as ingested into a new session.',
             'preloadChips'     => array_values($preloadChips),
         ]);
     }

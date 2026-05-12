@@ -54,8 +54,8 @@ class DailySchedule extends BaseController
             'schedule_date'     => date("l jS \of F Y", strtotime($filterData['date'])),
             'schedules'         => $this->scheduleModel->getDailySchedule($filterData),
             'platforms'         => $this->platformModel->select('pfm_id as id, name, channel')->findAll(),
-            'page_title'        => "Daily Commercial Schedule",
-            'page_description'  => "Timed placements for diverse viewer engagement."
+            'pageTitle'        => "Daily Commercial Schedule",
+            'pageDescription'  => "Timed placements for diverse viewer engagement."
         ];
 
         $data = array_merge($data ?? [], $pageData);

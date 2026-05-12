@@ -30,8 +30,8 @@ class Bookings extends BaseController
         }
 
         $data = [
-            'page_title'       => 'All Bookings',
-            'page_description' => 'Manage and review resource booking requests.',
+            'pageTitle'       => 'All Bookings',
+            'pageDescription' => 'Manage and review resource booking requests.',
             'bookings'         => $this->bookingModel->getFullDetails(),
             'resources'        => $this->resourceModel
                 ->select('resources.id, resources.name, resource_types.name as type_name')
@@ -55,8 +55,8 @@ class Bookings extends BaseController
         }
 
         $data = [
-            'page_title'       => 'My Bookings',
-            'page_description' => 'View and manage your resource booking requests.',
+            'pageTitle'       => 'My Bookings',
+            'pageDescription' => 'View and manage your resource booking requests.',
             'bookings'         => $this->bookingModel->getFullDetails(['bookings.user_id' => auth()->id()]),
         ];
 
@@ -73,8 +73,8 @@ class Bookings extends BaseController
         }
 
         $data = [
-            'page_title'       => 'New Booking',
-            'page_description' => 'Submit a new resource booking request.',
+            'pageTitle'       => 'New Booking',
+            'pageDescription' => 'Submit a new resource booking request.',
             'resources'        => $this->resourceModel
                 ->select('resources.*, resource_types.name as type_name')
                 ->join('resource_types', 'resource_types.id = resources.type_id')
@@ -334,8 +334,8 @@ class Bookings extends BaseController
             ->findAll();
 
         $data = [
-            'page_title'       => 'Booking Calendar',
-            'page_description' => 'Visual calendar of all resource bookings.',
+            'pageTitle'       => 'Booking Calendar',
+            'pageDescription' => 'Visual calendar of all resource bookings.',
             'resources'        => $resources,
             'purposes'         => $purposes,
         ];

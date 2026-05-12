@@ -25,8 +25,8 @@ class Programs extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Programs";
-        $data['page_description'] = "Teledramas and TV Shows broadcast by ITN.";
+        $data['pageTitle'] = "Programs";
+        $data['pageDescription'] = "Teledramas and TV Shows broadcast by ITN.";
 
         return view('backend/programs/index', $data);
     }
@@ -39,8 +39,8 @@ class Programs extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Create a Program";
-        $data['page_description'] = "Teledramas and TV Shows broadcast by ITN.";
+        $data['pageTitle'] = "Create a Program";
+        $data['pageDescription'] = "Teledramas and TV Shows broadcast by ITN.";
 
         return view('backend/programs/add_program', $data);
     }
@@ -95,8 +95,8 @@ class Programs extends BaseController
 
             $data['thumbImage'] = $data['program']['thumbnail'] ?? null;
 
-            $data['page_title'] = "Edit Program - " . $itemName;
-            $data['page_description'] = "Teledramas and TV Shows broadcast by ITN.";
+            $data['pageTitle'] = "Edit Program - " . $itemName;
+            $data['pageDescription'] = "Teledramas and TV Shows broadcast by ITN.";
 
             return view('backend/programs/edit_program', $data);
         } else {

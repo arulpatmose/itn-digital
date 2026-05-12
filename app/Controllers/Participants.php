@@ -21,8 +21,8 @@ class Participants extends BaseController
         }
 
         return view('backend/participants/index', [
-            'page_title'       => 'Participants',
-            'page_description' => 'Producers and librarians involved in the chip tracking cycle.',
+            'pageTitle'       => 'Participants',
+            'pageDescription' => 'Producers and librarians involved in the chip tracking cycle.',
             'participants'     => $this->participantModel->getAllWithUser(),
         ]);
     }
@@ -38,8 +38,8 @@ class Participants extends BaseController
             ->getResultArray();
 
         return view('backend/participants/create', [
-            'page_title'       => 'Add Participant',
-            'page_description' => 'Register a new participant in the chip tracking system.',
+            'pageTitle'       => 'Add Participant',
+            'pageDescription' => 'Register a new participant in the chip tracking system.',
             'users'            => $users,
         ]);
     }
@@ -83,7 +83,7 @@ class Participants extends BaseController
             ->getResultArray();
 
         return view('backend/participants/edit', [
-            'page_title'   => "Edit Participant — {$participant['name']}",
+            'pageTitle'   => "Edit Participant — {$participant['name']}",
             'participant'  => $participant,
             'users'        => $users,
         ]);

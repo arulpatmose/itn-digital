@@ -24,8 +24,8 @@ class BookingPurposeGroups extends BaseController
         }
 
         $data = [
-            'page_title'       => 'Booking Purpose Groups',
-            'page_description' => 'Manage the groups used to organise booking purposes.',
+            'pageTitle'       => 'Booking Purpose Groups',
+            'pageDescription' => 'Manage the groups used to organise booking purposes.',
             'purpose_groups'   => $this->groupModel
                 ->orderBy('sort_order', 'ASC')
                 ->orderBy('name', 'ASC')

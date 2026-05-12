@@ -2,7 +2,7 @@
 
 $config = config('Template');
 
-$data['config']['title'] = ($page_title ?? $config->site_title) . " | ITN Digital";
+$data['config']['title'] = ($pageTitle ?? $config->site_title) . " | ITN Digital";
 $data['config']['og_url_site'] = base_url();
 $data['config']['author'] = $config->author;
 $data['config']['robots'] = $config->robots;

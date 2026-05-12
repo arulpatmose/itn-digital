@@ -24,8 +24,8 @@ class Chips extends BaseController
         }
 
         return view('backend/chips/index', [
-            'page_title'       => 'Chips',
-            'page_description' => 'All registered chips and their current holders.',
+            'pageTitle'       => 'Chips',
+            'pageDescription' => 'All registered chips and their current holders.',
             'chips'            => $this->chipModel->getAllWithCurrentHolder(),
         ]);
     }
@@ -37,8 +37,8 @@ class Chips extends BaseController
         }
 
         return view('backend/chips/create', [
-            'page_title'       => 'Register Chip',
-            'page_description' => 'Add a new chip to the tracking system.',
+            'pageTitle'       => 'Register Chip',
+            'pageDescription' => 'Add a new chip to the tracking system.',
         ]);
     }
 
@@ -80,8 +80,8 @@ class Chips extends BaseController
         if (!$chip) throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
         return view('backend/chips/edit', [
-            'page_title'       => "Edit Chip — {$chip['chip_code']}",
-            'page_description' => 'Update chip details.',
+            'pageTitle'       => "Edit Chip — {$chip['chip_code']}",
+            'pageDescription' => 'Update chip details.',
             'chip'             => $chip,
         ]);
     }
@@ -121,8 +121,8 @@ class Chips extends BaseController
         if (!$chip) throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
         return view('backend/chips/detail', [
-            'page_title'       => "Chip — {$chip['chip_code']}",
-            'page_description' => 'Full transaction history for this chip.',
+            'pageTitle'       => "Chip — {$chip['chip_code']}",
+            'pageDescription' => 'Full transaction history for this chip.',
             'chip'             => $chip,
             'timeline'         => $this->chipModel->getTimeline($id),
         ]);

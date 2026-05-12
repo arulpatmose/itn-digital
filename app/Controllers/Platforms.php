@@ -23,8 +23,8 @@ class Platforms extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Platforms";
-        $data['page_description'] = "Platforms like YouTube and Facebook, showcase ads to targeted audiences.";
+        $data['pageTitle'] = "Platforms";
+        $data['pageDescription'] = "Platforms like YouTube and Facebook, showcase ads to targeted audiences.";
 
         return view('backend/platforms/index', $data);
     }
@@ -37,8 +37,8 @@ class Platforms extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Create a Platform";
-        $data['page_description'] = "Platforms like YouTube and Facebook, showcase ads to targeted audiences.";
+        $data['pageTitle'] = "Create a Platform";
+        $data['pageDescription'] = "Platforms like YouTube and Facebook, showcase ads to targeted audiences.";
 
         return view('backend/platforms/add_platform', $data);
     }
@@ -85,8 +85,8 @@ class Platforms extends BaseController
             $data['platform'] = $platform;
             $itemName = $platform['name'];
 
-            $data['page_title'] = "Edit Platform - " . $itemName;
-            $data['page_description'] = "Platforms like YouTube and Facebook, showcase ads to targeted audiences.";
+            $data['pageTitle'] = "Edit Platform - " . $itemName;
+            $data['pageDescription'] = "Platforms like YouTube and Facebook, showcase ads to targeted audiences.";
 
             return view('backend/platforms/edit_platform', $data);
         } else {

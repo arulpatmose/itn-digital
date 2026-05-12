@@ -23,8 +23,8 @@ class Formats extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Ad Formats";
-        $data['page_description'] = "Commercials, sponsorships, product placement, infomercials, overlays, and more.";
+        $data['pageTitle'] = "Ad Formats";
+        $data['pageDescription'] = "Commercials, sponsorships, product placement, infomercials, overlays, and more.";
 
         return view('backend/formats/index', $data);
     }
@@ -37,8 +37,8 @@ class Formats extends BaseController
             return redirect()->back()->with($status, $message);
         }
 
-        $data['page_title'] = "Create an Ad Format";
-        $data['page_description'] = "Commercials, sponsorships, product placement, infomercials, overlays, and more.";
+        $data['pageTitle'] = "Create an Ad Format";
+        $data['pageDescription'] = "Commercials, sponsorships, product placement, infomercials, overlays, and more.";
 
         return view('backend/formats/add_format', $data);
     }
@@ -86,8 +86,8 @@ class Formats extends BaseController
 
             $itemName = $format['name'];
 
-            $data['page_title'] = "Edit Ad Format - " . $itemName;
-            $data['page_description'] = "Commercials, sponsorships, product placement, infomercials, overlays, and more.";
+            $data['pageTitle'] = "Edit Ad Format - " . $itemName;
+            $data['pageDescription'] = "Commercials, sponsorships, product placement, infomercials, overlays, and more.";
 
             return view('backend/formats/edit_format', $data);
         } else {
