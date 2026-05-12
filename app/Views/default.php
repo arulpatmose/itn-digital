@@ -4,15 +4,23 @@ $config = config('Template');
 
 $main_nav_active = uri_string();
 
-$data['config']['title'] = ($pageTitle ?? $config->site_title) . " | ITN Digital";
-$data['config']['pageDescription'] = $pageDescription ?? $config->description;
-$data['config']['og_url_site'] = base_url();
-$data['config']['author'] = $config->author;
-$data['config']['robots'] = $config->robots;
-$data['config']['description'] = $config->description;
-$data['config']['site_title'] = $config->site_title;
-$data['config']['theme'] = $config->theme;
-$data['config']['page_loader'] = $config->page_loader;
+$_general    = get_settings('general');
+$_siteName   = site_name() ?: $config->site_title;
+$_siteDesc   = $_general->siteDescription ?? $config->description;
+$_metaDesc   = $_general->metaDescription ?? $_siteDesc;
+$_metaKeys   = $_general->metaKeywords ?? '';
+
+$data['config']['title']            = ($pageTitle ?? $_siteName) . ' | ' . $_siteName;
+$data['config']['pageDescription']  = $pageDescription ?? $_siteDesc;
+$data['config']['meta_description'] = $pageDescription ?? $_metaDesc;
+$data['config']['keywords']         = $_metaKeys;
+$data['config']['og_url_site']      = base_url();
+$data['config']['author']           = $config->author;
+$data['config']['robots']           = $config->robots;
+$data['config']['description']      = $_siteDesc;
+$data['config']['site_title']       = $_siteName;
+$data['config']['theme']            = $config->theme;
+$data['config']['page_loader']      = $config->page_loader;
 
 $data['config']['controller'] = $controller ?? null;
 $data['config']['method'] = $controller ?? null;

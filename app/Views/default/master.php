@@ -5,18 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <title><?= $config['title'] ?  $config['title'] : ""; ?></title>
+    <title><?= esc($config['title'] ?? '') ?></title>
 
-    <meta name="description" content="<?= $config['description'] ?  $config['description'] : ""; ?>">
-    <meta name="author" content="<?= $config['author'] ? $config['author'] : ""; ?>">
-    <meta name="robots" content="<?= $config['robots'] ?  $config['robots'] : "noindex, nofollow"; ?>">
+    <meta name="description" content="<?= esc($config['meta_description'] ?? $config['description'] ?? '') ?>">
+    <meta name="keywords" content="<?= esc($config['keywords'] ?? '') ?>">
+    <meta name="author" content="<?= esc($config['author'] ?? '') ?>">
+    <meta name="robots" content="<?= esc($config['robots'] ?? 'noindex, nofollow') ?>">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="<?= $config['title'] ?  $config['title'] : ""; ?>">
-    <meta property="og:site_name" content="ITN Digital - Portal">
-    <meta property="og:description" content="<?= $config['description'] ?  $config['description'] : ""; ?>">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="<?= $config['og_url_site'] ?  $config['og_url_site'] : ""; ?>">
+    <meta property="og:title" content="<?= esc($config['title'] ?? '') ?>">
+    <meta property="og:site_name" content="<?= esc($config['site_title'] ?? '') ?>">
+    <meta property="og:description" content="<?= esc($config['description'] ?? '') ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= esc($config['og_url_site'] ?? '') ?>">
     <meta property="og:image" content="">
 
     <!-- Icons -->
