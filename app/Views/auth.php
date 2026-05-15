@@ -8,7 +8,9 @@ $_siteDesc   = $_general->siteDescription ?? $config->description;
 $_metaDesc   = $_general->metaDescription ?? $_siteDesc;
 $_metaKeys   = $_general->metaKeywords ?? '';
 
-$data['config']['title']            = ($pageTitle ?? $_siteName) . ' | ' . $_siteName;
+$_resolvedTitle = auth_page_title($pageTitle ?? null);
+
+$data['config']['title']            = $_resolvedTitle ? $_resolvedTitle . ' | ' . $_siteName : $_siteName;
 $data['config']['meta_description'] = $pageDescription ?? $_metaDesc;
 $data['config']['keywords']         = $_metaKeys;
 $data['config']['og_url_site']      = base_url();

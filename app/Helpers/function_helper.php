@@ -183,3 +183,27 @@ if (!function_exists('site_name')) {
         return service('settings')->get('App.siteName') ?? '';
     }
 }
+
+if (!function_exists('auth_page_title')) {
+    /**
+     * Returns the authentication page title based on the current URI segment or a provided title.
+     *
+     * @param string|null $pageTitle Optional custom page title.
+     * @return string|null The resolved page title or null if not found.
+     */
+    function auth_page_title(?string $pageTitle = null): ?string
+    {
+        $titles = [
+            'login'           => 'Login',
+            'register'        => 'Register',
+            'magic-link'      => 'Magic Link',
+            'email-activate'  => 'Activate Account',
+            'change-password' => 'Change Password',
+            'set-password'    => 'Set Password',
+        ];
+
+        $segment = service('uri')->getSegment(1);
+
+        return $pageTitle ?? $titles[$segment] ?? null;
+    }
+}
