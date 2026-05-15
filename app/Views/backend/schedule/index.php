@@ -80,13 +80,13 @@
                                         </td>
                                         <td><?= $item['remarks']; ?>
                                         </td>
-                                        <td data-link=<?= $item['link']; ?>>N/A</td>
+                                        <td data-link="<?= $item['link']; ?>">N/A</td>
                                         <td>
                                             <div class="btn-group">
                                                 <a role="button"
                                                     class="btn btn-sm btn-danger"
                                                     id="delete-schedule-item-button"
-                                                    data-schedule="<= $schedule['usched_id']; ?>"
+                                                    data-schedule="<?= $schedule['usched_id']; ?>"
                                                     data-id="<?= $item['scd_id']; ?>"
                                                     href="#"
                                                     data-url="<?= site_url('schedule/delete'); ?>"
