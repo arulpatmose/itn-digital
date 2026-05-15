@@ -586,3 +586,18 @@ jQuery(document).ready(function () {
 function goBack() {
     window.history.back();
 }
+
+// Password show/hide toggle
+$(document).ready(function () {
+    $('input[type="password"]').each(function () {
+        var $input = $(this);
+        $input.wrap('<div class="pw-toggle-wrap"></div>');
+        var $icon = $('<i class="pw-toggle-icon fa fa-eye"></i>');
+        $input.after($icon);
+        $icon.on('click', function () {
+            var isHidden = $input.attr('type') === 'password';
+            $input.attr('type', isHidden ? 'text' : 'password');
+            $icon.toggleClass('fa-eye', !isHidden).toggleClass('fa-eye-slash', isHidden);
+        });
+    });
+});

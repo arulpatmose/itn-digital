@@ -49,3 +49,32 @@ html.dark .select2-container--default .select2-search--inline .select2-search__f
 html.dark .select2-container--default .select2-search--inline .select2-search__field::placeholder {
     color: #637998;
 }
+
+/* Password toggle floating icon */
+.pw-toggle-wrap {
+    position: relative;
+}
+
+.pw-toggle-wrap input[type="password"],
+.pw-toggle-wrap input[type="text"] {
+    padding-right: 2.5rem;
+}
+
+.pw-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    line-height: 1;
+    z-index: 5;
+}
+
+.pw-toggle-icon:hover {
+    color: #343a40;
+}
+
+html.dark .pw-toggle-icon:hover {
+    color: #e4e7ed;
+}
