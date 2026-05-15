@@ -111,6 +111,11 @@ class Settings extends BaseController
                     'label' => 'Google reCAPTCHA Secret',
                     'placeholder' => 'Enter Captcha Secret'
                 ],
+                'scheduleCutoffTime' => [
+                    'type' => 'time',
+                    'label' => 'Schedule Cutoff Time',
+                    'placeholder' => '16:30'
+                ],
             ],
 
             'auth' => [

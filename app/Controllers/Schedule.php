@@ -28,6 +28,13 @@ class Schedule extends BaseController
         $this->programModel = new ProgramModel();
     }
 
+    private function getCutoffTime(): Time
+    {
+        $raw = get_settings('system', true)['scheduleCutoffTime'] ?? '16:30';
+        [$hour, $minute] = array_map('intval', explode(':', $raw));
+        return Time::today()->setTime($hour, $minute);
+    }
+
     public function index($id)
     {
         if (!auth()->user()->can('schedule.access')) {
@@ -81,6 +88,15 @@ class Schedule extends BaseController
                 array_push($disabledDates, $item['sched_date']);
             }
 
+            // Disable today if past the schedule cutoff time
+            $now      = Time::now();
+            $cutoff   = $this->getCutoffTime();
+            $todayStr = Time::today()->toDateString();
+
+            if ($now->isAfter($cutoff) && !in_array($todayStr, $disabledDates)) {
+                array_push($disabledDates, $todayStr);
+            }
+
             $data['schedule'] = $schedule;
             $data['program'] = $this->programModel->find($schedule['program']);
 
@@ -121,6 +137,15 @@ class Schedule extends BaseController
             }
 
             $scheduleID = $schedule['sched_id'];
+
+            // Block scheduling today's date after the cutoff time
+            $now      = Time::now();
+            $cutoff   = $this->getCutoffTime();
+            $todayStr = Time::today()->toDateString();
+
+            if ($now->isAfter($cutoff) && in_array($todayStr, $dates)) {
+                return redirect()->back()->with('error', "Today's schedule cannot be modified after 4:30 PM.");
+            }
 
             // Prepare data to insert by selected dates
             if (isset($dates)) {
@@ -194,9 +219,7 @@ class Schedule extends BaseController
         }
 
         $scheduleDate = $scheduleItem['sched_date'];
-        $cutoffTime = Time::today()->setTime(16, 30); // Today 4:30 PM
-        $isPublished = $scheduleItem['published'] === '1';
-
+        $isPublished  = $scheduleItem['published'] === '1';
         $isPrivileged = $user->inGroup('superadmin', 'admin');
 
         if (!$isPrivileged) {
@@ -207,12 +230,24 @@ class Schedule extends BaseController
                 ]);
             }
 
-            $scheduledDate = Time::parse($scheduleDate);
+            $now           = Time::now();
+            $cutoff        = $this->getCutoffTime();
+            $todayStr      = Time::today()->toDateString();
+            $scheduledStr  = Time::parse($scheduleDate)->toDateString();
 
-            if ($scheduledDate->isBefore($cutoffTime)) {
+            // Block past dates
+            if ($scheduledStr < $todayStr) {
                 return $this->response->setJSON([
                     'status' => 'error',
-                    'message' => '<span class="my-3 d-block">Only future schedules (after 4.30 PM today) can be deleted.</span><small>Please contact the Administrator.</small>'
+                    'message' => '<span class="my-3 d-block">Past schedule items cannot be deleted.</span><small>Please contact the Administrator.</small>'
+                ]);
+            }
+
+            // Block today after 4:30 PM
+            if ($scheduledStr === $todayStr && $now->isAfter($cutoff)) {
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => '<span class="my-3 d-block">Today\'s schedule items cannot be deleted after 4:30 PM.</span><small>Please contact the Administrator.</small>'
                 ]);
             }
         }

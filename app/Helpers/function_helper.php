@@ -33,7 +33,8 @@ if (!function_exists('get_settings')) {
             'system' => [
                 'youtubeDataGoogleApi',
                 'captchaSiteKey',
-                'captchaSecret'
+                'captchaSecret',
+                'scheduleCutoffTime',
             ],
         ];
 
