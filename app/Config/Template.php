@@ -467,8 +467,15 @@ class Template extends BaseConfig
                     'name'       => 'Add User',
                     'url'        => 'users/add',
                     'permission' => 'users.create',
-                )
+                ),
             )
+        ),
+        array(
+            'type'       => 'nav-item',
+            'name'       => 'Roles & Permissions',
+            'icon'       => 'fa fa-shield-alt',
+            'url'        => 'roles',
+            'permission' => 'admin.settings',
         )
     );
 }

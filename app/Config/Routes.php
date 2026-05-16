@@ -172,6 +172,16 @@ $routes->group('daily-schedule', ['filter' => 'permission:daily_schedule.access'
 
 /*
 | --------------------------------------------------------------------
+| Roles & Permissions Routes
+| --------------------------------------------------------------------
+*/
+$routes->get('roles', 'Roles::index', ['filter' => 'permission:admin.settings']);
+$routes->post('roles/sync', 'Roles::syncMatrix', ['filter' => 'permission:admin.settings']);
+$routes->get('roles/(:segment)', 'Roles::show/$1', ['filter' => 'permission:admin.settings']);
+$routes->post('roles/(:segment)/update', 'Roles::update/$1', ['filter' => 'permission:admin.settings']);
+
+/*
+| --------------------------------------------------------------------
 | System Settings Routes
 | --------------------------------------------------------------------
 */
