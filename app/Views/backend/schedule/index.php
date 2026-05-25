@@ -219,9 +219,11 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('other-scripts') ?>
+<!-- TEMP DISABLED: datatable export scripts
 <script src="<?= base_url('assets/js/plugins/datatables-buttons-jszip/jszip.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/plugins/datatables-buttons/buttons.print.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/plugins/datatables-buttons/buttons.html5.min.js'); ?>"></script>
+-->
 
 <script>
     // Datatable for Schedule Item
@@ -311,82 +313,13 @@
                         targets: ['views'],
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            const platform = row[4]?.toLowerCase() || '';
-                            const link = row[13];
-                            let videoId = getYouTubeVideoId(link);
-
-                            if (platform.includes('youtube') && videoId) {
-                                // For export or hidden rendering
-                                if (type !== 'display') {
-                                    return viewCache[videoId] ? formatNumberWithCommas(viewCache[videoId]) : 'Pending';
-                                }
-
-                                const placeholderId = `yt-views-${meta.row}`;
-
-                                if (viewCache[videoId] !== undefined) {
-                                    return `<span id="${placeholderId}">${formatNumberWithCommas(viewCache[videoId])}</span>`;
-                                } else {
-                                    setTimeout(() => {
-                                        fetchYouTubeViews(videoId, function(views) {
-                                            viewCache[videoId] = views;
-                                            $(`#${placeholderId}`).text(formatNumberWithCommas(views));
-                                        });
-                                    }, 0);
-
-                                    return `<span id="${placeholderId}">Loading...</span>`;
-                                }
-                            }
-
-                            return type === 'display' ? 'N/A' : '';
+                            // TEMP DISABLED: YouTube views extraction
+                            return 'N/A';
                         }
                     }
                 ],
-                dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>>" +
-                    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                buttons: [{
-                        extend: 'copy',
-                        text: 'Copy',
-                        title: 'ITN Digital Schedule',
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13]
-                        }
-                    },
-                    {
-                        extend: 'excel',
-                        text: 'Excel',
-                        title: 'ITN Digital Schedule',
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13]
-                        },
-                        filename: function() {
-                            return getExportFileName()
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: 'Print',
-                        orientation: 'landscape',
-                        pageSize: 'A4',
-                        title: 'ITN Digital Schedule',
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13]
-                        },
-                        filename: function() {
-                            return getExportFileName()
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'CSV',
-                        title: 'ITN Digital Schedule',
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13]
-                        },
-                        filename: function() {
-                            return getExportFileName()
-                        }
-                    }
-                ],
+                // TEMP DISABLED: datatable export buttons
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             });
         }
     });
